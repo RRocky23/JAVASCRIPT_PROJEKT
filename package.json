@@ -1,0 +1,19 @@
+{
+  "name": "kieszonkowe_potwory",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RRocky23/JAVASCRIPT_PROJEKT.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RRocky23/JAVASCRIPT_PROJEKT/issues"
+  },
+  "homepage": "https://github.com/RRocky23/JAVASCRIPT_PROJEKT#readme"
+}
