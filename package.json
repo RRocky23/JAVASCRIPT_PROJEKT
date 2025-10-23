@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/RRocky23/JAVASCRIPT_PROJEKT/issues"
   },
-  "homepage": "https://github.com/RRocky23/JAVASCRIPT_PROJEKT#readme"
+  "homepage": "https://github.com/RRocky23/JAVASCRIPT_PROJEKT#readme",
+  "dependencies": {
+    "express": "5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.10"
+  }
 }
