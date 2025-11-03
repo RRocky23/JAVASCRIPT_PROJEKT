@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const user_pokemonSchema = new Schema({
+const userPokemonSchema = new Schema({
     id: {
         type: Number,
         required: true
@@ -47,5 +47,5 @@ const user_pokemonSchema = new Schema({
     }
 });
 
-const User_pokemon = mongoose.model("User_pokemon", user_pokemonSchema);
-export default User_pokemon;
+const UserPokemon = mongoose.model("UserPokemon", userPokemonSchema);
+export default UserPokemon;

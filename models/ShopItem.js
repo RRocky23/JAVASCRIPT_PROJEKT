@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const shop_itemSchema = new Schema({
+const shopItemSchema = new Schema({
     id: {
         type: Number,
         required: true
@@ -35,5 +35,5 @@ const shop_itemSchema = new Schema({
     }
 });
 
-const Shop_item = mongoose.model("Shop_item", shop_itemSchema);
-export default Shop_item;
+const ShopItem = mongoose.model("ShopItem", shopItemSchema);
+export default ShopItem;

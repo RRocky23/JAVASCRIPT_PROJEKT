@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const pokemon_locationSchema = new Schema({
+const pokemonLocationSchema = new Schema({
     id: {
         type: Number,
         required: true
@@ -39,5 +39,5 @@ const pokemon_locationSchema = new Schema({
     }
 });
 
-const Pokemon_location = mongoose.model("Pokemon_location", pokemon_locationSchema);
-export default Pokemon_location;
+const PokemonLocation = mongoose.model("PokemonLocation", pokemonLocationSchema);
+export default PokemonLocation;

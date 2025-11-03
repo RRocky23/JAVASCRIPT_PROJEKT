@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const catch_attemptSchema = new Schema({
+const catchAttemptSchema = new Schema({
     id: {
         type: Number,
         required: true
@@ -35,5 +35,5 @@ const catch_attemptSchema = new Schema({
     }
 });
 
-const Catch_attempt = mongoose.model("Catch_attempt", catch_attemptSchema);
-export default Catch_attempt;
+const CatchAttempt = mongoose.model("CatchAttempt", catchAttemptSchema);
+export default CatchAttempt;
