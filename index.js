@@ -1,7 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
+
+import account from "./routes/account.js"
+import profile from "./routes/profile.js";
 import User from "./models/User.js";
+
 
 const ConnectToDB = async() => {
     try {
@@ -45,6 +49,9 @@ const StartServer = async() => {
 
 const app = express();
 
+app.use("/account", account)
+app.use("/profile", profile)
+
 app.get("/", (req, res) => {
     res.send("Catch them all!");
 });
@@ -55,7 +62,7 @@ app.get("/pokemons", (req, res) => {
 
 app.listen(process.env.PORT, () => {
     console.log('Kieszonkowe potwory are running on http://localhost:' + process.env.PORT);
-});
+});     
 
 //Test db
 StartServer();
