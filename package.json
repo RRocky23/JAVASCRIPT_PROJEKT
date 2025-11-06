@@ -2,9 +2,8 @@
   "name": "kieszonkowe_potwory",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
   },
   "repository": {
     "type": "git",
@@ -16,12 +15,7 @@
     "url": "https://github.com/RRocky23/JAVASCRIPT_PROJEKT/issues"
   },
   "homepage": "https://github.com/RRocky23/JAVASCRIPT_PROJEKT#readme",
-  "dependencies": {
-    "dotenv": "17.2.3",
-    "express": "5.1.0",
-    "mongoose": "8.19.2"
-  },
   "devDependencies": {
-    "nodemon": "3.1.10"
+    "concurrently": "9.2.1"
   }
 }

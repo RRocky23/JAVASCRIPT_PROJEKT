@@ -2,6 +2,16 @@ import express from "express";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /account/register:
+ *   get:
+ *     summary: Account register page
+ *     tags: [Account]
+ *     responses:
+ *       200:
+ *         description: Returns register form
+ */
 router.get("/register", (req, res) =>  {
     res.send("Register GET page");
 });
