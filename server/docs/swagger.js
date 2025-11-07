@@ -15,8 +15,9 @@ export const swaggerDocs = (app, port) => {
       ]
     },
     tags: [
-      { name: "Account", description: "Account management routes" },
-      { name: "Profile", description: "Profile info routes" }
+      { name: "Root", description: "Root endpoints" },
+      { name: "Account", description: "Account endpoints" },
+      { name: "Profile", description: "Profile endpoints" }
     ],
     apis: ["./routes/*.js"],
   };

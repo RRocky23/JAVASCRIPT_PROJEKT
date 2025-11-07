@@ -10,6 +10,7 @@ export default ({ mode }) => {
     server: {
       port: env.VITE_PORT,
       proxy: {
+        '/api': env.VITE_API_URL,
         '/api/account': env.VITE_API_URL,
         '/api/profile': env.VITE_API_URL
       }

@@ -1,5 +1,5 @@
 {
-  "name": "kieszonkowe_potwory_backend",
+  "name": "kieszonkowe_potwory_server",
   "version": "1.0.0",
   "private": true,
   "main": "server.js",
