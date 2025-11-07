@@ -4,7 +4,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /account/register:
+ * /api/account/register:
  *   get:
  *     summary: Account register page
  *     tags: [Account]

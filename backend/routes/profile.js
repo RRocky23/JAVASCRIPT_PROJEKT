@@ -4,7 +4,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /profile/list:
+ * /api/profile/list:
  *   get:
  *     summary: Profile list page
  *     tags: [Profile]
@@ -18,7 +18,7 @@ router.get("/list", (req, res) => {
 
 /**
  * @swagger
- * /profile/details:
+ * /api/profile/details:
  *   get:
  *     summary: Profile details page
  *     tags: [Profile]
