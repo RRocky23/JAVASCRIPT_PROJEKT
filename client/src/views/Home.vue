@@ -7,8 +7,8 @@
             Explore, train, and fight battles to become a true Master of the campus!
         </p>
         <div class="d-flex justify-content-between mt-3">
-            <router-link to="/account/register" class="btn btn-primary flex-grow-1 me-2">Sign Up</router-link>
-            <router-link to="/account/login" class="btn btn-success flex-grow-1 ms-2">Sign In</router-link>
+            <router-link to="/account/register" class="btn btn-secondary flex-grow-1 me-2">Sign Up</router-link>
+            <router-link to="/account/login" class="btn btn-primary flex-grow-1 ms-2">Sign In</router-link>
         </div>
     </div>
 </template>

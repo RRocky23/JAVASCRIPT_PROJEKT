@@ -1,4 +1,5 @@
 import express from "express";
+import { getUsers } from "../controllers/profileController.js";
 
 const router = express.Router();
 
@@ -12,8 +13,15 @@ const router = express.Router();
  *       200:
  *         description: Returns list of user profiles
  */
-router.get("/list", (req, res) => {
-    res.send("List GET page");
+router.get("/list", async (req, res) => {
+    try {
+        const users = await getUsers();
+        res.status(200).json(users);
+    } 
+    catch(err) {
+        console.error(err);
+        res.status(500).json({ message: 'Something went wrong' });
+    }
 });
 
 /**
