@@ -1,10 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const userSchema = new Schema({
-    id: {
-        type: Number,
-        required: true
-    },
     name: {
         type: String,
         required: true
@@ -29,29 +25,40 @@ const userSchema = new Schema({
         type: Date,
         required: true
     },
+    role: {
+        type: String,
+        required: true,
+        default: 'User'
+    },
     experiencePoints: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     level: {
         type: Number,
-        required: true
+        required: true,
+        default: 1
     },
     currentLocationLat: {
         type: Number,
-        required: true
+        required: true,
+        default: 0.0
     },
     currentLocationLng: {
         type: Number,
-        required: true
+        required: true,
+        default: 0.0
     },
     createdAt: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now()
     },
     updatedAt: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now()
     }
 });
 
