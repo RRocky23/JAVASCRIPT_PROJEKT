@@ -1,8 +1,8 @@
 <template>
     <div class="text-center mt-5 p-4 shadow-lg box-opaque" style="max-width:600px; margin:auto;">
         <h1>Something went wrong</h1>
-        <p v-if="errorMessage">{{ errorMessage }}</p>
-        <p v-else>{{ defaultMessage }}</p>
+        <h4 v-if="errorMessage">{{ errorMessage }}</h4>
+        <h4 v-else>{{ defaultMessage }}</h4>
         <p v-if="status">Status code: {{ status }}</p>
         <router-link to="/home" class="btn btn-primary mt-3">Go Home</router-link>
     </div>

@@ -1,37 +1,12 @@
 <template>
     <div class="text-center p-4 shadow-lg box-opaque">
         <form method="post" @submit.prevent="handleSubmit">
-            <h2 class="mb-4">Sign Up</h2>
-
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="name" class="form-label">Name</label>
-                    <input v-model="userModel.name" type="text" id="name" class="form-control" placeholder="Enter your name" required />
-                    <small v-if="fieldErrors.name" class="text-danger">{{ fieldErrors.name }}</small>
-                </div>
-                <div class="col-md-6">
-                    <label for="surname" class="form-label">Surname</label>
-                    <input v-model="userModel.surname" type="text" id="surname" class="form-control" placeholder="Enter your surname" required />
-                    <small v-if="fieldErrors.surname" class="text-danger">{{ fieldErrors.surname }}</small>
-                </div>
-            </div>
+            <h2 class="mb-4">Sign In</h2>
 
             <div class="mb-3 text-start">
-                <label for="username" class="form-label">Username</label>
-                <input v-model="userModel.username" type="text" id="username" class="form-control" placeholder="Enter your username" required />
-                <small v-if="fieldErrors.username" class="text-danger">{{ fieldErrors.username }}</small>
-            </div>
-
-            <div class="mb-3 text-start">
-                <label for="birthdate" class="form-label">Birth Date</label>
-                <input v-model="userModel.birthDate" type="date" id="birthdate" class="form-control" required />
-                <small v-if="fieldErrors.birthDate" class="text-danger">{{ fieldErrors.birthDate }}</small>
-            </div>
-
-            <div class="mb-3 text-start">
-                <label for="email" class="form-label">Email</label>
-                <input v-model="userModel.email" type="email" id="email" class="form-control" placeholder="Enter your email" required />
-                <small v-if="fieldErrors.email" class="text-danger">{{ fieldErrors.email }}</small>
+                <label for="userIdentifier" class="form-label">User identifier</label>
+                <input v-model="userModel.username" type="text" id="userIdentifier" class="form-control" placeholder="Enter your email or username" required />
+                <small v-if="fieldErrors.userIdentifier" class="text-danger">{{ fieldErrors.userIdentifier }}</small>
             </div>
 
             <div class="mb-4 text-start">
@@ -46,7 +21,7 @@
 
             <div class="d-flex justify-content-between mt-3">
                 <router-link to="/home" class="btn btn-secondary flex-grow-1 me-2">Cancel</router-link>
-                <button type="submit" class="btn btn-primary flex-grow-1 ms-2">Sign Up</button>
+                <button type="submit" class="btn btn-primary flex-grow-1 ms-2">Sign In</button>
             </div>
         </form>
     </div>
@@ -60,11 +35,7 @@
     const router = useRouter();
 
     const userModel = reactive({
-        username: '',
-        name: '',
-        surname: '',
-        birthDate: '',
-        email: '',
+        userIdentifier: '',
         password: ''
     });
 
@@ -76,9 +47,9 @@
         generalError.value = "";
 
         try {
-            const response = await axios.post("/api/account/register", userModel);
-            console.log("Registered:", response.data);
-            router.push("/account/login");
+            const response = await axios.post("/api/account/login", userModel);
+            console.log("Login:", response.data);
+            router.push("/home");
         } 
         catch(err) {
             const { response } = err;
