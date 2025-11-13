@@ -3,59 +3,58 @@ import User from "../models/User.js";
 
 export const registerUser = async (userData) => {
     const { username, name, surname, birthDate, email, password } = userData;
-
     const errors = {};
 
     const latinNameRegex = /^[\p{Script=Latin}\s'-]+$/u;
 
     if(!username) {
-        errors.username = "Username is required.";
+        errors.username = 'Username is required.';
     } 
     else if(username.length < 2 || username.length > 20) {
-        errors.username = "Username must be between 2 and 20 characters.";
+        errors.username = 'Username must be between 2 and 20 characters.';
     }
 
     if(!name) {
-        errors.name = "Name is required.";
+        errors.name = 'Name is required.';
     } 
     else if (!latinNameRegex.test(name)) {
-        errors.name = "Name can only contain letters, spaces, apostrophes, and hyphens.";
+        errors.name = 'Name can only contain letters, spaces, apostrophes, and hyphens.';
     }
 
     if(!surname) {
-        errors.surname = "Surname is required.";
+        errors.surname = 'Surname is required.';
     } 
     else if (!latinNameRegex.test(surname)) {
-        errors.surname = "Surname can only contain letters, spaces, apostrophes, and hyphens.";
+        errors.surname = 'Surname can only contain letters, spaces, apostrophes, and hyphens.';
     }
 
     if(!birthDate) {
-        errors.birthDate = "Birth date is required.";
+        errors.birthDate = 'Birth date is required.';
     } 
     else {
         const birth = new Date(birthDate);
         const now = new Date();
         
         if(birth > now) {
-            errors.birthDate = "Birth date cannot be in the future.";
+            errors.birthDate = 'Birth date cannot be in the future.';
         }
     }
 
     if(!email) {
-        errors.email = "Email is required.";
+        errors.email = 'Email is required.';
     } 
     else if(!/^[\w.-]+@[A-Za-z\d.-]+\.[A-Za-z]{2,}$/.test(email)) {
-        errors.email = "Invalid email address format.";
+        errors.email = 'Invalid email address format.';
     }
 
     if(!password) {
-        errors.password = "Password is required.";
+        errors.password = 'Password is required.';
     } 
     else if(password.length < 8 || password.length > 30) {
-        errors.password = "Password must be between 8 and 30 characters.";
+        errors.password = 'Password must be between 8 and 30 characters.';
     } 
     else if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}/.test(password)) {
-        errors.password = "Password must contain at least one uppercase letter, one number, and one special character.";
+        errors.password = 'Password must contain at least one uppercase letter, one number, and one special character.';
     }
 
     if(Object.keys(errors).length > 0) {
@@ -64,12 +63,12 @@ export const registerUser = async (userData) => {
 
     const usedUsername = await User.findOne({ username });
     if(usedUsername) { 
-        errors.username = "Username already used.";
+        errors.username = 'Username already used.';
     }
 
     const usedEmail = await User.findOne({ email });
     if(usedEmail) {
-         errors.email = "Email already used.";
+         errors.email = 'Email already used.';
     }
 
     if(Object.keys(errors).length > 0) {
@@ -82,4 +81,43 @@ export const registerUser = async (userData) => {
     await newUser.save();
 
     return { success: true, status: 201, message: 'User registered successfully' };
+}
+
+export const loginUser = async (userData) => {
+    const { userIdentifier, password } = userData;
+    const errors = {};
+
+    if(!userIdentifier) {
+        errors.userIdentifier = 'User identifier is required.';
+    }
+
+    if(!password) {
+        errors.password = 'Password is required.';
+    }
+
+    if(Object.keys(errors).length > 0) {
+        return { success: false, status: 400, errors };
+    }
+
+    const user = await User.findOne({username: userIdentifier});
+
+    if(!user) {
+        user = await User.findOne({email: userIdentifier});
+
+        if(!user) {
+            errors.password = 'Invalid user identifier or password.';
+            return { success: false, status: 400, errors };
+        }
+    }
+
+    const passwordCheck = await bcrypt.compare(password, user.passwordHash);
+
+    if(!passwordCheck) {
+        errors.password = 'Invalid user identifier or password.';
+        return { success: false, status: 400, errors };
+    }
+
+    return { success: true, status: 200, message: 'User logged in successfully' };
+
+    //Add JWT token
 }

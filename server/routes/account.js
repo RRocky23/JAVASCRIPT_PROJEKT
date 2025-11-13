@@ -1,6 +1,6 @@
 import express from "express";
 
-import { registerUser } from "../controllers/accountController.js";
+import { registerUser, loginUser } from "../controllers/accountController.js";
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const router = express.Router();
  *       200:
  *         description: Returns register form
  */
-router.get("/register", (req, res) => {
+router.get('/register', (req, res) => {
     res.status(200).json({ message: 'Register GET Page' });
 });
 
@@ -33,6 +33,7 @@ router.get("/register", (req, res) => {
  *             required:
  *               - name
  *               - surname
+ *               - username
  *               - birthDate
  *               - email
  *               - password
@@ -43,6 +44,9 @@ router.get("/register", (req, res) => {
  *               surname:
  *                 type: string
  *                 example: Doe
+ *               username:
+ *                  type: string
+ *                  example: JoeDoe
  *               birthDate:
  *                 type: string
  *                 format: date
@@ -53,46 +57,61 @@ router.get("/register", (req, res) => {
  *               password:
  *                 type: string
  *                 format: password
- *                 example: joeDoe123
+ *                 example: joeDoe123!
  *     responses:
  *       201:
  *         description: User registered successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
  *       400:
  *         description: Missing or invalid input
  *       409:
- *         description: User already registered
+ *         description: Email or username already used
  *       500:
  *         description: Something went wrong
  */
-router.post("/register", async (req, res) => {
+router.post('/register', async (req, res) => {
     try {
         const result = await registerUser(req.body);
 
         if(!result.success) {
-            return res.status(result.status).json({ message: result.message || "Validation failed", fieldErrors: result.errors || {} });
+            return res.status(result.status).json({ message: result.message || 'Validation failed', fieldErrors: result.errors || {} });
         }
 
         res.status(result.status).json({ message: result.message });
     } 
-    catch (err) {
+    catch(err) {
         console.error('Error registering user:', err);
         res.status(500).json({ message: 'Something went wrong' });
     }
 });
 
-router.get("/login", (req, res) => {
-    res.send("Login GET page");
+/**
+ * @swagger
+ * /api/account/login:
+ *   get:
+ *     summary: Account login page
+ *     tags: [Account]
+ *     responses:
+ *       200:
+ *         description: Returns login form
+ */
+router.get('/login', (req, res) => {
+    res.status(200).json({ message: 'Login GET Page' });
 });
 
-router.post("/login", (req, res) => {
-    res.send("Login POST page");
+router.post("/login", async (req, res) => {
+    try {
+        const result = await loginUser(req.body);
+
+        if(!result.success) {
+            return res.status(result.status).json({ message: result.message || 'Validation failed', fieldErrors: result.errors || {} });
+        }
+
+        res.status(result.status).json({ message: result.message });
+    }
+    catch(err) {
+        console.error('Error logging user:', err);
+        res.status(500).json({ message: 'Something went wrong' });
+    }
 });
 
 router.get("/edit", (req, res) => {

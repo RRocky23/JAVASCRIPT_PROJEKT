@@ -5,7 +5,7 @@
 
             <div class="mb-3 text-start">
                 <label for="userIdentifier" class="form-label">User identifier</label>
-                <input v-model="userModel.username" type="text" id="userIdentifier" class="form-control" placeholder="Enter your email or username" required />
+                <input v-model="userModel.userIdentifier" type="text" id="userIdentifier" class="form-control" placeholder="Enter your email or username" required />
                 <small v-if="fieldErrors.userIdentifier" class="text-danger">{{ fieldErrors.userIdentifier }}</small>
             </div>
 
