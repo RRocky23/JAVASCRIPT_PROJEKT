@@ -1,59 +1,51 @@
 import mongoose, { Schema } from "mongoose";
 
-const userSchema = new Schema({
+const battleSchema = new Schema({
     id: {
         type: Number,
         required: true
     },
-    name: {
-        type: String,
-        required: true
-    },
-    surname: {
-        type: String,
-        required: true
-    },
-    username: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    passwordHash: {
-        type: String,
-        required: true
-    },
-    birthDate: {
-        type: Date,
-        required: true
-    },
-    experiencePoints: {
+    userId: {
         type: Number,
         required: true
     },
-    level: {
+    wildPokemonId: {
         type: Number,
         required: true
     },
-    currentLocationLat: {
+    userPokemonId: {
         type: Number,
         required: true
     },
-    currentLocationLng: {
+    battleType: {
+        type: String,
+        required: true
+    },
+    result: {
+        type: String,
+        required: true
+    },
+    userPokemonHpRemaining: {
+        type: Number,
+        required: true
+    },
+    wildPokemonHpRemaining: {
+        type: Number,
+        required: true
+    },
+    experienceGained: {
+        type: Number,
+        required: true
+    },
+    battleDuration: {
         type: Number,
         required: true
     },
     createdAt: {
         type: Date,
         required: true
-    },
-    updatedAt: {
-        type: Date,
-        required: true
     }
 });
 
-const User = mongoose.model("User", userSchema);
-export default User;
+const Battle = mongoose.model("Battle", battleSchema);
+export default Battle;
