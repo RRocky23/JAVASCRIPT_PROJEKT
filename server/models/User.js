@@ -28,7 +28,12 @@ const userSchema = new Schema({
     role: {
         type: String,
         required: true,
-        default: 'User'
+        default: 'user'
+    },
+    refreshToken: {
+        type: String,
+        required: false,
+        default: null
     },
     experiencePoints: {
         type: Number,

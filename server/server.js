@@ -1,27 +1,63 @@
 import express from "express";
 import path from "path";
-import { fileURLToPath } from "url";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
 import "dotenv/config";
 
+import { fileURLToPath } from "url";
+import { authRequired, apiOnly, adminOnly } from "./middlewares/auth.js";
 import { connectToDatabase } from "./utils/db.js";
 import { swaggerDocs } from "./docs/swagger.js";
 
-import root from "./routes/root.js";
-import account from "./routes/account.js";
-import profile from "./routes/profile.js";
+import rootRoutes from "./routes/root.js";
+import accountRoutes from "./routes/account.js";
+import profileRoutes from "./routes/profile.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = [
+  process.env.CLIENT_URL || 'http://localhost:8080',
+  'http://localhost:' + process.env.PORT,
+  'http://127.0.0.1:' + process.env.PORT
+];
 
-app.use('/api', root);
-app.use('/api/account', account);
-app.use('/api/profile', profile);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if(!origin) {
+        return callback(null, true);
+    }
+    
+    if(allowedOrigins.includes(origin)) {
+        return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'), false);
+  },
+  credentials: true,
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'Accept',
+    'Origin',
+    'X-Requested-With'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser());
+
+app.use('/api', apiOnly);
+app.use('/api-docs', adminOnly);
+
+app.use('/api', rootRoutes);
+app.use('/api/account', accountRoutes);
+app.use('/api/profile', authRequired, profileRoutes);
 
 swaggerDocs(app, process.env.PORT);
 
