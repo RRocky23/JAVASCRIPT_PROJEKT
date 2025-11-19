@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import * as BootstrapVueNext from "bootstrap-vue-next";
+import { createBootstrap} from "bootstrap-vue-next";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -11,5 +11,5 @@ import router from "./router/router.js";
 
 const app = createApp(App);
 app.use(router);
-app.use(BootstrapVueNext);
+app.use(createBootstrap);
 app.mount("#app");

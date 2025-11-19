@@ -55,7 +55,7 @@
 <script setup>
     import { ref, reactive } from "vue";
     import { useRouter } from "vue-router";
-    import axios from "../../api/axios.js";
+    import axios from "../../utils/axios.js";
 
     const router = useRouter();
 

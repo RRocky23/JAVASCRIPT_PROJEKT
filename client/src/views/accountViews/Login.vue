@@ -5,14 +5,21 @@
 
             <div class="mb-3 text-start">
                 <label for="userIdentifier" class="form-label">User identifier</label>
-                <input v-model="userModel.userIdentifier" type="text" id="userIdentifier" class="form-control" placeholder="Enter your email or username" required />
+                <input v-model="userModel.userIdentifier" type="text" id="userIdentifier" class="form-control" placeholder="Enter your email or username" required :disabled="loading"/>
                 <small v-if="fieldErrors.userIdentifier" class="text-danger">{{ fieldErrors.userIdentifier }}</small>
             </div>
 
             <div class="mb-4 text-start">
                 <label for="password" class="form-label">Password</label>
-                <input v-model="userModel.password" type="password" id="password" class="form-control" placeholder="Enter your password" required />
+                <input v-model="userModel.password" type="password" id="password" class="form-control" placeholder="Enter your password" required :disabled="loading"/>
                 <small v-if="fieldErrors.password" class="text-danger">{{ fieldErrors.password }}</small>
+            </div>
+
+            <div class="mb-4 text-start">
+                <div class="form-check">
+                    <input v-model="userModel.rememberMe" type="checkbox" id="rememberMe" class="form-check-input" :disabled="loading"/>
+                    <label for="rememberMe" class="form-check-label">Remember me</label>
+                </div>
             </div>
 
             <div v-if="generalError" class="alert alert-danger mt-3" role="alert">
@@ -20,23 +27,25 @@
             </div>
 
             <div class="d-flex justify-content-between mt-3">
-                <router-link to="/home" class="btn btn-secondary flex-grow-1 me-2">Cancel</router-link>
-                <button type="submit" class="btn btn-primary flex-grow-1 ms-2">Sign In</button>
+                <router-link to="/home" class="btn btn-secondary flex-grow-1 me-2" :disabled="loading">Cancel</router-link>
+                <button type="submit" class="btn btn-primary flex-grow-1 ms-2" :disabled="loading">Sign In</button>
             </div>
         </form>
     </div>
 </template>
 
 <script setup>
-    import { ref, reactive } from "vue";
+    import { reactive, ref } from 'vue';
     import { useRouter } from "vue-router";
-    import axios from "../../api/axios.js";
+    import { useAuth } from "../../composables/useAuth.js";
 
     const router = useRouter();
+    const { login, loading } = useAuth();
 
     const userModel = reactive({
         userIdentifier: '',
-        password: ''
+        password: '',
+        rememberMe: false
     });
 
     const fieldErrors = reactive({});
@@ -47,13 +56,12 @@
         generalError.value = "";
 
         try {
-            const response = await axios.post("/api/account/login", userModel);
-            console.log("Login:", response.data);
+            await login(userModel.userIdentifier, userModel.password, userModel.rememberMe);
             router.push("/home");
         } 
         catch(err) {
             const { response } = err;
-            
+        
             if(!response) {
                 generalError.value = "Network error, please try again.";
                 return;

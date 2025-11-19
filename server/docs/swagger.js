@@ -10,6 +10,16 @@ export const swaggerDocs = (app, port) => {
         version: "1.0.0",
         description: "API documentation for Pocket Monsters project"
       },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT"
+          }
+        }
+      },
+      security: [],
       servers: [
         { url: `http://localhost:${port}` }
       ]

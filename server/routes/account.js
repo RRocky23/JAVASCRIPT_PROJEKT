@@ -1,6 +1,6 @@
 import express from "express";
 
-import { registerUser, loginUser } from "../controllers/accountController.js";
+import { registerController, loginController, refreshController, logoutController } from "../controllers/accountController.js";
 
 const router = express.Router();
 
@@ -68,21 +68,7 @@ router.get('/register', (req, res) => {
  *       500:
  *         description: Something went wrong
  */
-router.post('/register', async (req, res) => {
-    try {
-        const result = await registerUser(req.body);
-
-        if(!result.success) {
-            return res.status(result.status).json({ message: result.message || 'Validation failed', fieldErrors: result.errors || {} });
-        }
-
-        res.status(result.status).json({ message: result.message });
-    } 
-    catch(err) {
-        console.error('Error registering user:', err);
-        res.status(500).json({ message: 'Something went wrong' });
-    }
-});
+router.post('/register', registerController);
 
 /**
  * @swagger
@@ -98,21 +84,10 @@ router.get('/login', (req, res) => {
     res.status(200).json({ message: 'Login GET Page' });
 });
 
-router.post("/login", async (req, res) => {
-    try {
-        const result = await loginUser(req.body);
+router.post("/login", loginController);
 
-        if(!result.success) {
-            return res.status(result.status).json({ message: result.message || 'Validation failed', fieldErrors: result.errors || {} });
-        }
-
-        res.status(result.status).json({ message: result.message });
-    }
-    catch(err) {
-        console.error('Error logging user:', err);
-        res.status(500).json({ message: 'Something went wrong' });
-    }
-});
+router.post("/refresh", refreshController);
+router.post("/logout", logoutController);
 
 router.get("/edit", (req, res) => {
     res.send("Edit GET page");
