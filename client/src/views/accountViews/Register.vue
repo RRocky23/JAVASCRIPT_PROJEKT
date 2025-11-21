@@ -93,13 +93,14 @@
                 return;
             }
 
-            if(response.data?.fieldErrors) {
-                Object.assign(fieldErrors, response.data.fieldErrors);
+            if(response.data?.errors) {
+                Object.assign(fieldErrors, response.data.errors);
             } 
             else if(response.data?.message) {
                 generalError.value = response.data.message;
             } 
             else {
+                console.log(response.data);
                 generalError.value = "Something went wrong.";
             }
         }

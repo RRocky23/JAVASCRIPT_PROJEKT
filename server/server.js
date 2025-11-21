@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:8080',
+  process.env.CLIENT_URL || 'http://localhost:8001',
   'http://localhost:' + process.env.PORT,
   'http://127.0.0.1:' + process.env.PORT
 ];
