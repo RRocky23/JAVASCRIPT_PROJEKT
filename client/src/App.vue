@@ -6,17 +6,19 @@
           <div class="collapse navbar-collapse">
             <a class="navbar-brand" href="/home">Pocket Monsters</a>
           </div>
-
-          <div class="ms-auto">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <router-link class="nav-link" to="/account/register">Sign Up</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link class="nav-link" to="/account/login">Sign In</router-link>
-              </li>
-            </ul>
-          </div>
+            <div class="ms-auto">
+              <ul class="navbar-nav">
+                <li v-if="!isLoggedIn" class="nav-item">
+                  <router-link class="nav-link" to="/account/register">Sign Up</router-link>
+                </li>
+                <li v-if="!isLoggedIn" class="nav-item">
+                  <router-link class="nav-link" to="/account/login">Sign In</router-link>
+                </li>
+                <li v-if="isLoggedIn" class="nav-item">
+                  <button class="nav-link btn btn-link text-danger" @click="logout">Sign Out</button>
+                </li>
+              </ul>
+            </div>
         </nav>
 
         <main class="flex-grow-1 my-4 d-flex justify-content-center align-items-center">
@@ -35,6 +37,8 @@
 </template>
 
 <script setup>
+import { useAuth } from "./composables/useAuth.js";
+const { isLoggedIn, logout } = useAuth();
 </script>
 
 <style scoped>
@@ -64,42 +68,37 @@
 }
 
 /* MOBILE */
-@media (max-width: 1024px), (pointer: coarse) {
+@media (max-width: 1024px) {
   html, body {
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+    background: white !important;
   }
 
   .app-background {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100vw !important;
+    height: 100vh !important;
     background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important; /* najważniejsze: usuwa centrowanie */
   }
 
   .app-phone-frame {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-    box-shadow: none;
-    background: white;
-
-    display: flex;
-    flex-direction: column;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
   }
 
   .app-content {
+    height: 100vh !important;
     display: flex;
     flex-direction: column;
-    height: 100%;
-  }
-
-  nav.navbar {
-    flex: 0 0 auto;
   }
 
   main {
@@ -107,10 +106,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  footer {
-    flex: 0 0 auto;
   }
 }
 
