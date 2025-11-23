@@ -1,10 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const shopItemSchema = new Schema({
-    id: {
-        type: Number,
-        required: true
-    },
     itemName: {
         type: String,
         required: true

@@ -1,10 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const userPokemonSchema = new Schema({
-    id: {
-        type: Number,
-        required: true
-    },
     userId: {
         type: Number,
         required: true

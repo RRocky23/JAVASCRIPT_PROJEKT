@@ -1,10 +1,6 @@
 import mongoose, { Shchema } from "mongoose";
 
 const pokemonStatSchema = new Schema ({
-    id: {
-        type: Number,
-        required: true
-    },
     pokemonId: {
         type: Number,
         required: true
