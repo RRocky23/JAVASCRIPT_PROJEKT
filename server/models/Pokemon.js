@@ -1,10 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const pokemonSchema = new Schema ({
-    id: {
-        type: Number,
-        required: true
-    },
     pokedexNumber: {
         type: Number,
         required: true
@@ -59,7 +55,7 @@ const pokemonSchema = new Schema ({
     },
     evolvesFrom: {
         type: String,
-        required: true
+        required: false
     },
     evolutionMinLevel: {
         type: Number,
