@@ -76,7 +76,7 @@ export function useAuth() {
         accessToken.value = null;
         user.value = null;
         tokenService.removeAccessToken();
-        window.location.href = '/login';
+        window.location.href = '/home';
     };
 
     return {
