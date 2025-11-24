@@ -84,7 +84,7 @@ const { isLoggedIn, logout } = useAuth();
     background: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    display: block !important; /* najważniejsze: usuwa centrowanie */
+    display: block !important;
   }
 
   .app-phone-frame {
