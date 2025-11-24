@@ -108,7 +108,7 @@ const pokemonDataSeeder = async () => {
             }
         }
 
-        console.log('\nPokémon eeding complete!');
+        console.log('\nPokémon seeding complete!');
 
     } catch (err) {
         console.error("Seeder error:", err);
