@@ -24,8 +24,7 @@ console.log('CLIENT_URL:', process.env.CLIENT_URL);
 const allowedOrigins = [
   process.env.CLIENT_URL || 'http://localhost:8080',
   'http://localhost:' + process.env.PORT,
-  'http://127.0.0.1:' + process.env.PORT,
-  'https://tgfwrvxf-8001.euw.devtunnels.ms'
+  'http://127.0.0.1:' + process.env.PORT
 ];
 
 const corsOptions = {

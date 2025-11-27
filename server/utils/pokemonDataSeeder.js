@@ -40,7 +40,7 @@ const pokemonDataSeeder = async () => {
     try {
         console.log('Checking for missing Pokémon...');
 
-        const existing = await Pokemon.find({}, { pokedexNumber: 1, _id: 0 });
+        const existing = await Pokemon.find({}, { pokedexNumber: 1});
         const existingIds = new Set(existing.map(p => p.pokedexNumber));
 
         const missingIds = [];
