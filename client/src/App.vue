@@ -4,7 +4,7 @@
       <div class="app-content d-flex flex-column">
         <nav class="navbar navbar-expand-lg navbar-opaque">
           <div class="collapse navbar-collapse">
-            <a class="navbar-brand" href="/home">Pocket Monsters</a>
+            <router-link class="navbar-brand pocket-nav" to="/home">Pocket Monsters</router-link>
           </div>
             <div class="ms-auto">
               <ul class="navbar-nav">
@@ -67,8 +67,13 @@ const { isLoggedIn, logout } = useAuth();
   flex-direction: column;
 }
 
+.ms-auto {
+  display: none !important;
+}
+
 /* MOBILE */
 @media (max-width: 1024px) {
+
   html, body {
     margin: 0 !important;
     padding: 0 !important;
@@ -76,28 +81,45 @@ const { isLoggedIn, logout } = useAuth();
     height: 100%;
     overflow: hidden;
     background: white !important;
+    font-size: 1.2rem !important;
   }
 
+  nav.navbar {
+    justify-content: center !important;
+  }
+
+  .navbar-brand {
+    display: block !important;
+    font-size: 2.4rem !important;
+    font-weight: 900;
+    text-align: center !important;
+    width: 100%;
+    margin: 0 auto;
+    padding: 12px 0;
+    color: black !important;
+  }
+
+  /* tło mobilne */
   .app-background {
     width: 100vw !important;
     height: 100vh !important;
     background: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    display: block !important; /* najważniejsze: usuwa centrowanie */
+    display: block !important;
   }
 
+  /* pełny ekran */
   .app-phone-frame {
     width: 100vw !important;
     height: 100vh !important;
     border-radius: 0 !important;
-    box-shadow: none !important;
-    background: white !important;
   }
 
   .app-content {
     height: 100vh !important;
     display: flex;
+    font-size: 1.1rem;
     flex-direction: column;
   }
 
@@ -108,5 +130,6 @@ const { isLoggedIn, logout } = useAuth();
     align-items: center;
   }
 }
+
 
 </style>
