@@ -11,7 +11,6 @@
     </div>
 </template>
 
-
 <script setup>
     import { ref, onMounted } from "vue";
     import axios from "../../utils/axios.js";
@@ -29,6 +28,7 @@
         background-color: rgba(255, 255, 255, 0.85);
         border-radius: 20px;
     }
+
     .scroll-container {
         max-height: 400px;
         min-width: 300px;
@@ -40,5 +40,4 @@
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 1rem;
     }
-
 </style>
