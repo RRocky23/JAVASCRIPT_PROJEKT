@@ -3,9 +3,6 @@
     <div class="app-phone-frame">
       <div class="app-content d-flex flex-column">
         <nav class="navbar navbar-expand-lg navbar-opaque">
-          <div class="collapse navbar-collapse">
-            
-          </div>
             <div class="ms-auto">
               <ul class="navbar-nav">
                 <li v-if="!isLoggedIn" class="nav-item">
