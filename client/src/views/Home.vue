@@ -1,12 +1,12 @@
 <template>
-    <div class="text-center p-4 shadow-lg box-opaque">
+    <div class="welcome-big box-opaque">
         <h2 class="mb-3">Welcome to Pocket Monsters</h2>
         <p class="mb-4">
             Start your adventure to catch 'em all at <strong>Bialystok University of Technology</strong>!
             <br>
             Explore, train and fight battles to become a true Master of the campus!
         </p>
-        <div class="d-flex justify-content-between mt-3">
+        <div class="d-flex justify-content-between mt-3 buttons">
             <router-link v-if="!isLoggedIn" to="/account/register" class="btn btn-secondary flex-grow-1 me-2">Sign Up</router-link>
             <router-link v-if="!isLoggedIn" to="/account/login" class="btn btn-primary flex-grow-1 ms-2">Sign In</router-link>
             <button v-if="isLoggedIn" @click="logout" class="btn btn-danger flex-grow-1">Sign Out</button>
@@ -60,15 +60,67 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* przezroczyste białe tło */
 .box-opaque {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
 }
 
-button.btn {
-  transition: transform 0.2s;
+/* OGROMNY WIDOK WELCOME */
+.welcome-big {
+  width: 50vw;
+  max-width: 700px;
+  padding: 40px 25px;
+  font-size: 1.1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 32px;
 }
-button.btn:hover {
-  transform: scale(1.05);
+
+.welcome-big h2 {
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.welcome-big p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+}
+
+.buttons button,
+.buttons .btn {
+  font-size: 1.1rem !important;
+  padding: 10px 16px !important;
+}
+
+.ms-auto,
+  nav .nav-item {
+    display: none !important;
+  }
+
+/* na telefonach jeszcze większe */
+@media (max-width: 1024px) {
+  .welcome-big {
+    width: 95vw !important;
+    max-width: 100vw !important;
+    padding: 70px 20px !important;
+    font-size: 2rem !important;
+  }
+
+  .welcome-big h2 {
+    font-size: 3.2rem !important;
+  }
+
+  .welcome-big p {
+    font-size: 2rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .buttons .btn {
+    font-size: 2rem !important;
+    padding: 18px 26px !important;
+  }
 }
 </style>
