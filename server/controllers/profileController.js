@@ -1,12 +1,13 @@
+import Pokemon from '../models/Pokemon.js';
 import User from '../models/User.js'
 
 export const getUsers = async () => {
   try {
-    const users = await User.find();
-    return users
+    const pokemons = await Pokemon.find();
+    return pokemons
   } 
   catch(err) {
-    console.error('Error fetching users:', err);
+    console.error('Error fetching pokemons:', err);
     throw err;
   }
 }
