@@ -4,7 +4,7 @@
       <div class="app-content d-flex flex-column">
         <nav class="navbar navbar-expand-lg navbar-opaque">
           <div class="collapse navbar-collapse">
-            <router-link class="navbar-brand pocket-nav" to="/home">Pocket Monsters</router-link>
+            
           </div>
             <div class="ms-auto">
               <ul class="navbar-nav">
