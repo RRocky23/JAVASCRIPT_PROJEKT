@@ -5,12 +5,14 @@ import ErrorPage from "../views/Error.vue";
 
 import accountRoutes from "./accountRoutes.js";
 import profileRoutes from "./profileRoutes.js";
+import starterRoutes from "./starterRoutes.js";
 
 const routes = [
-  { path: '/', redirect: '/home' },
+  { path: '/', redirect: '/starter/onboarding1' },
   { path: '/home', name: 'Home', component: HomePage },
   ...accountRoutes,
   ...profileRoutes,
+  ...starterRoutes,
   { path: '/:pathMatch(.*)*', name: 'Error', component: ErrorPage }
 ];
 
