@@ -16,7 +16,7 @@
         <div class="progress-fill"></div>
       </div>
 
-      <button class="continue-btn" @click="$router.push('/home')">
+      <button class="continue-btn" @click="$router.push('/starter/onboarding4')">
         Continue
       </button>
 

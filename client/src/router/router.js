@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import * as tokenService from "../utils/tokenService.js";
 
 import HomePage from "../views/Home.vue";
 import ErrorPage from "../views/Error.vue";
@@ -8,7 +9,7 @@ import profileRoutes from "./profileRoutes.js";
 import starterRoutes from "./starterRoutes.js";
 
 const routes = [
-  { path: '/', redirect: '/starter/onboarding1' },
+  { path: '/', name: 'Root', component: HomePage },
   { path: '/home', name: 'Home', component: HomePage },
   ...accountRoutes,
   ...profileRoutes,
@@ -19,6 +20,19 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const token = tokenService.getAccessToken();
+  
+  if (to.path === '/') {
+    if (token) {
+      return next({ path: '/home', replace: true });
+    }
+    return next({ path: '/starter/onboarding1', replace: true });
+  }
+
+  next();
 });
 
 export default router;
