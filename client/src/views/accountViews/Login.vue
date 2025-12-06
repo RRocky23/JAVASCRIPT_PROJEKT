@@ -27,7 +27,7 @@
             </div>
 
             <div class="d-flex justify-content-between mt-4 login-buttons">
-                <router-link to="/home" class="btn btn-secondary flex-grow-1 me-2 login-button" :disabled="loading">Cancel</router-link>
+                <router-link to="/starter/onboarding4" class="btn btn-secondary flex-grow-1 me-2 login-button" :disabled="loading">Cancel</router-link>
                 <button type="submit" class="btn btn-primary flex-grow-1 ms-2 login-button" :disabled="loading">Sign In</button>
             </div>
         </form>
