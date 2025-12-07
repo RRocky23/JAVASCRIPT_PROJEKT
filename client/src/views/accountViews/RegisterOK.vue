@@ -8,7 +8,7 @@
 
     <div class="content">
       <div class="trainer-image">
-        <img src="../../../public/trainer-success.png" alt="Trainer" />
+        <img src="../../../public/register-success-trainer.png" alt="Trainer" />
       </div>
 
       <div class="title">Welcome Home!</div>
@@ -88,8 +88,8 @@ const goBack = () => {
 }
 
 .trainer-image {
-  width: 200px;
-  height: 200px;
+  height: auto;
+  max-height: 250px;
   margin-bottom: 40px;
 }
 
