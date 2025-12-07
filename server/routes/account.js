@@ -1,6 +1,6 @@
 import express from "express";
 
-import { registerController, loginController, refreshController, logoutController } from "../controllers/accountController.js";
+import { registerController, loginController, refreshController, logoutController, checkUsernameController, checkEmailController } from "../controllers/accountController.js";
 
 const router = express.Router();
 
@@ -247,5 +247,9 @@ router.post("/edit", (req, res) => {
 router.get("/details", (req, res) => {
     res.send("Details GET page");
 });
+
+router.get("/check-username", checkUsernameController);
+
+router.get("/check-email", checkEmailController);
 
 export default router;
