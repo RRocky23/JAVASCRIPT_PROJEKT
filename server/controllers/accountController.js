@@ -7,42 +7,17 @@ const signRefreshToken = (payload, expiresIn) => jwt.sign(payload, process.env.J
 
 export const registerController = async (req, res) => {
     try {
-        const { username, name, surname, birthDate, email, password } = req.body;
+        const { username, email, password } = req.body;
         const errors = {};
 
-        const latinNameRegex = /^[\p{Script=Latin}\s'-]+$/u;
-
         if(!username) {
-             errors.username = 'Username is required.';
+            errors.username = 'Username is required.';
         }
         else if(username.length < 2 || username.length > 20) {
             errors.username = 'Username must be between 2 and 20 characters.';
         }
-
-        if(!name) {
-            errors.name = 'Name is required.';
-        }
-        else if(!latinNameRegex.test(name)) {
-            errors.name = 'Name can only contain letters, spaces, apostrophes, and hyphens.';
-        }
-
-        if(!surname) {
-            errors.surname = 'Surname is required.';
-        }
-        else if(!latinNameRegex.test(surname)) {
-            errors.surname = 'Surname can only contain letters, spaces, apostrophes, and hyphens.';
-        }
-        
-        if(!birthDate) {
-            errors.birthDate = 'Birth date is required.';
-        }
-        else {
-            const birth = new Date(birthDate);
-            const now = new Date();
-
-            if(birth > now) {
-                errors.birthDate = 'Birth date cannot be in the future.';
-            }
+        else if(!/^[a-zA-Z0-9_]+$/.test(username)) {
+            errors.username = 'Username can only contain letters, numbers, and underscores.';
         }
 
         if(!email) {
@@ -85,9 +60,6 @@ export const registerController = async (req, res) => {
 
         const newUser = new User({
             username,
-            name,
-            surname,
-            birthDate,
             email,
             passwordHash,
         });
@@ -98,6 +70,62 @@ export const registerController = async (req, res) => {
     } 
     catch(err) {
         console.error('Register error', err);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const checkUsernameController = async (req, res) => {
+    try {
+        const { username } = req.query;
+
+        if(!username) {
+            return res.status(400).json({ message: 'Username is required' });
+        }
+
+        if(username.length < 2 || username.length > 20) {
+            return res.status(400).json({ message: 'Username must be between 2 and 20 characters' });
+        }
+
+        if(!/^[a-zA-Z0-9_]+$/.test(username)) {
+            return res.status(400).json({ message: 'Username can only contain letters, numbers, and underscores' });
+        }
+
+        const existingUser = await User.findOne({ username });
+
+        if(existingUser) {
+            return res.status(409).json({ available: false, message: 'Username already taken' });
+        }
+
+        return res.status(200).json({ available: true, message: 'Username available' });
+    }
+    catch(err) {
+        console.error('Check username error', err);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const checkEmailController = async (req, res) => {
+    try {
+        const { email } = req.query;
+
+        if(!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
+
+        if(!/^[\w.-]+@[A-Za-z\d.-]+\.[A-Za-z]{2,}$/.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format' });
+        }
+
+        const existingUser = await User.findOne({ email });
+
+        if(existingUser) {
+            return res.status(409).json({ available: false, message: 'Email already in use' });
+        }
+
+        return res.status(200).json({ available: true, message: 'Email available' });
+    }
+    catch(err) {
+        console.error('Check email error', err);
         return res.status(500).json({ message: 'Server error' });
     }
 };

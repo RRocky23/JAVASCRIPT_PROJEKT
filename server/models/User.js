@@ -1,28 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    surname: {
-        type: String,
-        required: true
-    },
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     passwordHash: {
         type: String,
-        required: true
-    },
-    birthDate: {
-        type: Date,
         required: true
     },
     role: {
@@ -58,12 +48,12 @@ const userSchema = new Schema({
     createdAt: {
         type: Date,
         required: true,
-        default: Date.now()
+        default: Date.now
     },
     updatedAt: {
         type: Date,
         required: true,
-        default: Date.now()
+        default: Date.now
     }
 });
 

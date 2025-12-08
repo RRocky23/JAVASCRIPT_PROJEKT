@@ -75,7 +75,7 @@ export function useAuth() {
         accessToken.value = null;
         user.value = null;
         tokenService.removeAccessToken();
-        window.location.href = '/home';
+        window.location.href = '/starter/onboarding1';
     };
 
     return {
