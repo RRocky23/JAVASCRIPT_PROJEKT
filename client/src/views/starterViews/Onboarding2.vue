@@ -16,7 +16,7 @@
         <div class="progress-fill"></div>
       </div>
 
-      <button class="continue-btn" @click="$router.push('/starter/onboarding3')">
+      <button class="cta-btn" @click="$router.push('/starter/onboarding3')">
         Continue
       </button>
 
@@ -69,14 +69,51 @@
   height: 100%;
 }
 
-.continue-btn {
-  background-color: #ffd84d;
-  padding: 12px 40px;
-  border-radius: 10px;
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+
+.cta-btn {
+  width: 328px;
+  height: 58px;
+
+  background: #FEC41B;
   border: none;
-  font-weight: bold;
-  font-size: 1rem;
+  outline: none;
+  border-radius: 6px;
+
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-align: center;
+
+  cursor: pointer;
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.cta-btn:hover {
+  background: #e5b017;
+}
+
+/* --- efekt wciśnięcia --- */
+.cta-btn:active {
+  transform: translateY(2px);
+
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
+}
+
 
 /* ----- MOBILE MODE ----- */
 @media (max-width: 1024px) {
