@@ -1,5 +1,12 @@
 <template>
   <div class="register-email">
+
+    <div class="header">
+      <button class="back-btn" @click="router.push('/account/register')">‹</button>
+      <div class="header-title">Create account</div>
+      <div class="header-spacer"></div>
+    </div>
+
     <div class="content">
       <div class="title">
         What is your email<br />address?
@@ -132,11 +139,39 @@ const handleContinue = () => {
 
 <style scoped>
 .register-email {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: #1A1A1A;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.header-spacer {
+  width: 36px;
 }
 
 .content {
@@ -145,12 +180,13 @@ const handleContinue = () => {
   flex-direction: column;
   justify-content: center;
   padding: 40px 24px;
+  overflow-y: auto;
   align-items: center;
   text-align: center;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 900;
   color: #1A1A1A;
   margin-bottom: 30px;
@@ -166,10 +202,11 @@ const handleContinue = () => {
 }
 
 .input-group {
+  position: relative;
   border: 2px solid #E0E0E0;
   border-radius: 10px;
   transition: border-color 0.2s, background-color 0.2s;
-  background: #fff;
+  background-color: #fff;
 }
 
 .input-group.focused {
@@ -195,15 +232,15 @@ const handleContinue = () => {
   font-size: 1rem;
   border: none;
   outline: none;
-  border-radius: 10px;
   background: transparent;
+  border-radius: 10px;
 }
 
 .hint {
   font-size: 0.9rem;
-  color: #4F4F4F;
   min-height: 18px;
   text-align: center;
+  color: #4F4F4F;
 }
 
 .hint.error {
@@ -247,7 +284,15 @@ const handleContinue = () => {
 
 @media (max-width: 1024px) {
   .title {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
+  }
+
+  .back-btn {
+    font-size: 2rem;
+  }
+
+  .header-title {
+    font-size: 1.7rem;
   }
 
   .input-group input {
