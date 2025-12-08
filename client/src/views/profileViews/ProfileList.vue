@@ -2,8 +2,8 @@
     <div class="text-center p-4 shadow-lg box-opaque">
         <div class="scroll-container">
             <ul>
-                <li v-for="pokemon in pokemons" :key="pokemon._id">
-                    <img :src="pokemon.spriteURL" alt="pokemon sprite" />
+                <li v-for="pokemon in pokemons" :key="pokemon._id"> <br/>
+                    <img :src="pokemon.frontSprite" :alt="pokemon.name" /> <br/>
                     <p>{{ pokemon.name }} #{{pokemon.pokedexNumber}}</p>
                 </li>
             </ul>

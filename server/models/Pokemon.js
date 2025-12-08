@@ -61,14 +61,6 @@ const pokemonSchema = new Schema ({
         type: Number,
         required: true
     },
-    spriteURL: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
     generation: {
         type: Number,
         required: true
