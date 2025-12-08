@@ -29,6 +29,9 @@
   </div>
 </template>
 
+<script setup>
+</script>
+
 <style scoped>
 /* ----- DESKTOP (default) ----- */
 .welcome-container {

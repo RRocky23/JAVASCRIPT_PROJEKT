@@ -25,6 +25,9 @@
   </div>
 </template>
 
+<script setup>
+</script>
+
 <style scoped>
 /* ----- DESKTOP (default) ----- */
 .welcome-container {
@@ -64,7 +67,7 @@
 }
 
 .progress-fill {
-  width: 95%;
+  width: 100%;
   background: #f4b400;
   height: 100%;
 }
