@@ -7,6 +7,7 @@ import ErrorPage from "../views/Error.vue";
 import accountRoutes from "./accountRoutes.js";
 import profileRoutes from "./profileRoutes.js";
 import starterRoutes from "./starterRoutes.js";
+import pokedexRoutes from "./pokedexRoutes.js";
 
 const routes = [
   { path: '/', name: 'Root', component: HomePage },
@@ -14,6 +15,7 @@ const routes = [
   ...accountRoutes,
   ...profileRoutes,
   ...starterRoutes,
+  ...pokedexRoutes,
   { path: '/:pathMatch(.*)*', name: 'Error', component: ErrorPage }
 ];
 

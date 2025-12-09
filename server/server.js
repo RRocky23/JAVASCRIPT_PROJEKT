@@ -13,6 +13,7 @@ import { swaggerDocs } from "./docs/swagger.js";
 import rootRoutes from "./routes/root.js";
 import accountRoutes from "./routes/account.js";
 import profileRoutes from "./routes/profile.js";
+import pokedexRoutes from "./routes/pokedex.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,6 +61,7 @@ app.use('/api-docs', adminOnly);
 app.use('/api', rootRoutes);
 app.use('/api/account', accountRoutes);
 app.use('/api/profile', authRequired, profileRoutes);
+app.use('/api/pokedex', authRequired, pokedexRoutes);
 
 swaggerDocs(app, process.env.PORT);
 
