@@ -1,5 +1,7 @@
 <template>
-    <div class="type-badge" :style="styleObj"></div>
+    <div class="type-badge" :style="styleObj">
+        <img :src="icon" class="type-icon" />
+    </div>
 </template>
 
 <script setup>
@@ -26,9 +28,19 @@ const styleObj = {
 
 <style scoped>
 .type-badge {
-    width: 40px;
-    height: 14px;
-    background: white;
-    border-radius: 4px;
+    min-width: 55px;
+    height: 22px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.type-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }
 </style>

@@ -34,7 +34,7 @@
 
         const main = props.pokemon.types[0];
         const col = TYPE_COLORS[main] || "#aaa";
-        return { background: lightenColor(col, 70) };
+        return { background: lightenColor(col, 30) };
     });
 </script>
 
@@ -42,9 +42,13 @@
 .pokemon-card {
     display: flex;
     align-items: center;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 18px;
     cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.pokemon-card:not(.disabled):hover {
+    transform: scale(1.03);
 }
 
 .pokemon-card.disabled {
@@ -52,8 +56,8 @@
 }
 
 .sprite {
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
 }
 
 .gray {
@@ -61,12 +65,23 @@
 }
 
 .info {
-    margin-left: 10px;
+    margin-left: 16px;
+}
+
+.name {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.number {
+    margin-top: 2px;
+    font-size: 1rem;
+    opacity: 0.8;
 }
 
 .types {
-    margin-top: 6px;
+    margin-top: 8px;
     display: flex;
-    gap: 6px;
+    gap: 8px;
 }
 </style>
