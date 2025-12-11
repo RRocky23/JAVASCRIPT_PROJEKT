@@ -18,7 +18,7 @@
           <span class="google-icon">G</span>
           Continue with google
         </button>
-        <button class="btn btn-primary" @click="goToLoginForm">
+        <button class="cta-btn" @click="goToLoginForm">
           Continue with an e-mail
         </button>
       </div>
@@ -41,6 +41,8 @@ const goToLoginForm = () => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+
 .login-select {
   width: 100%;
   height: 100%;
@@ -68,9 +70,9 @@ const goToLoginForm = () => {
 }
 
 .header-title {
-  font-family: var(--font-pixel);
+  font-family: "Kode Mono", monospace;
   font-size: 1.2rem;
-  font-weight: 900;
+  font-weight: 600;
   color: #fff;
 }
 
@@ -103,9 +105,9 @@ const goToLoginForm = () => {
 }
 
 .title {
-  font-family: var(--font-pixel);
-  font-size: 2rem;
-  font-weight: 900;
+  font-family: "Kode Mono", monospace;
+  font-size: 1.8rem;
+  font-weight: 600;
   color: #1A1A1A;
   text-align: center;
   margin-bottom: 50px;
@@ -120,27 +122,22 @@ const goToLoginForm = () => {
   align-items: center;
 }
 
-.btn {
-  width: 240px;
-  padding: 14px 0;
-  font-family: var(--font-pixel);
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.2s ease;
-  text-align: center;
-}
-
 .btn-google {
+  width: 328px;
+  height: 58px;
   background-color: #fff;
-  color: #ffd84d;
-  border: 2px solid #ffd84d;
+  color: #FEC41B;
+  border: 2px solid #FEC41B;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: not-allowed;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
+  opacity: 0.6;
 }
 
 .google-icon {
@@ -148,13 +145,40 @@ const goToLoginForm = () => {
   font-weight: bold;
 }
 
-.btn-primary {
-  background-color: #ffd84d;
-  color: #1A1A1A;
+.cta-btn {
+  width: 328px;
+  height: 58px;
+  background: #FEC41B;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.btn-primary:hover {
-  background-color: #eac14a;
+.cta-btn:hover {
+  background: #e5b017;
+}
+
+.cta-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
 }
 
 @media (max-width: 1024px) {
@@ -168,11 +192,11 @@ const goToLoginForm = () => {
     font-size: 2.5rem;
   }
 
-  .btn {
+  .btn-google,
+  .cta-btn {
     width: 80%;
     font-size: 1.8rem;
-    padding: 18px 0;
-    border-radius: 14px;
+    height: 70px;
   }
 }
 </style>

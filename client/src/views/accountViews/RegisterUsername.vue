@@ -49,7 +49,7 @@
 
         <button 
           type="submit" 
-          class="btn btn-primary" 
+          class="cta-btn" 
           :class="{ active: isAvailable && !hasError && !isSubmitting }"
           :disabled="!isAvailable || hasError || isSubmitting"
         >
@@ -201,6 +201,8 @@ const goBack = () => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+
 .register-username {
   width: 100%;
   height: 100%;
@@ -213,7 +215,7 @@ const goBack = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 22px;
+  padding: 16px 24px;
   background-color: #1A1A1A;
   flex-shrink: 0;
 }
@@ -222,9 +224,9 @@ const goBack = () => {
   background: none;
   border: none;
   color: #fff;
-  font-size: 22px;
+  font-size: 24px;
   cursor: pointer;
-  padding: 6px;
+  padding: 8px;
   transition: opacity 0.2s;
 }
 
@@ -234,8 +236,9 @@ const goBack = () => {
 }
 
 .header-title {
+  font-family: "Kode Mono", monospace;
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #fff;
 }
 
@@ -254,8 +257,9 @@ const goBack = () => {
 }
 
 .title {
+  font-family: "Kode Mono", monospace;
   font-size: 1.8rem;
-  font-weight: 900;
+  font-weight: 600;
   color: #1A1A1A;
   margin-bottom: 40px;
   line-height: 1.4;
@@ -269,7 +273,7 @@ const goBack = () => {
 
 .input-group {
   border: 2px solid #E0E0E0;
-  border-radius: 10px;
+  border-radius: 6px;
   padding: 2px;
   transition: all 0.25s ease;
   background-color: #fff;
@@ -294,7 +298,8 @@ const goBack = () => {
 .input-group input {
   width: 100%;
   padding: 16px;
-  font-size: 1.1rem;
+  font-family: "Kode Mono", monospace;
+  font-size: 1rem;
   border: none;
   outline: none;
   background: transparent;
@@ -307,6 +312,7 @@ const goBack = () => {
 }
 
 .hint {
+  font-family: "Kode Mono", monospace;
   font-size: 0.9rem;
   color: #555;
   min-height: 20px;
@@ -328,36 +334,61 @@ const goBack = () => {
   color: #ffd84d;
 }
 
-.btn {
-  width: 100%;
-  padding: 14px 0;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: all 0.25s;
-  border-radius: 10px;
+.alert-error {
   margin-top: 10px;
+  padding: 14px;
+  background-color: rgba(235, 87, 87, 0.1);
+  border: 1px solid #EB5757;
+  border-radius: 6px;
+  color: #EB5757;
+  font-family: "Kode Mono", monospace;
+  font-size: 0.9rem;
   text-align: center;
 }
 
-.btn-primary {
-  background-color: #E0E0E0;
-  color: #BDBDBD;
+.cta-btn {
+  width: 100%;
+  height: 58px;
+  background: #FEC41B;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
 }
 
-.btn-primary.active {
-  background-color: #ffd84d;
-  color: #1A1A1A;
+.cta-btn:hover:not(:disabled) {
+  background: #e5b017;
 }
 
-.btn-primary.active:hover:not(:disabled) {
-  background-color: #e9c23f;
+.cta-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
 }
 
-.btn-primary:disabled {
+.cta-btn:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+  background: #E0E0E0;
+  color: #BDBDBD;
+  box-shadow: none;
 }
 
 .spinner {
@@ -374,17 +405,6 @@ const goBack = () => {
   to { transform: rotate(360deg); }
 }
 
-.alert-error {
-  margin-top: 20px;
-  padding: 14px;
-  background-color: rgba(235, 87, 87, 0.1);
-  border: 1px solid #EB5757;
-  border-radius: 10px;
-  color: #EB5757;
-  font-size: 0.9rem;
-  text-align: center;
-}
-
 @media (max-width: 1024px) {
   .title {
     font-size: 2.3rem;
@@ -395,10 +415,9 @@ const goBack = () => {
     padding: 20px;
   }
 
-  .btn {
+  .cta-btn {
     font-size: 1.6rem;
-    padding: 18px 0;
-    border-radius: 14px;
+    height: 70px;
   }
 
   .hint {

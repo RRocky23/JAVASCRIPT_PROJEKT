@@ -65,7 +65,7 @@
 
         <button 
           type="submit" 
-          class="btn btn-primary" 
+          class="cta-btn" 
           :class="{ active: isValid && !hasError }"
           :disabled="!isValid || hasError"
         >
@@ -133,25 +133,7 @@ const goBack = () => {
 </script>
 
 <style scoped>
-
-.password-rules {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-  font-size: 0.9rem;
-  margin-top: -10px;
-}
-
-.password-rules li {
-  color: #EB5757;
-  margin-bottom: 6px;
-  transition: 0.2s;
-}
-
-.password-rules li.ok {
-  color: #27AE60;
-}
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
 
 .register-password {
   width: 100%;
@@ -174,14 +156,15 @@ const goBack = () => {
   background: none;
   border: none;
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 24px;
   cursor: pointer;
   padding: 8px;
 }
 
 .header-title {
+  font-family: "Kode Mono", monospace;
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 600;
   color: #fff;
 }
 
@@ -201,8 +184,9 @@ const goBack = () => {
 }
 
 .title {
+  font-family: "Kode Mono", monospace;
   font-size: 1.8rem;
-  font-weight: 900;
+  font-weight: 600;
   color: #1A1A1A;
   margin-bottom: 30px;
 }
@@ -218,7 +202,7 @@ const goBack = () => {
 .input-group {
   position: relative;
   border: 2px solid #E0E0E0;
-  border-radius: 10px;
+  border-radius: 6px;
   transition: border-color 0.2s, background-color 0.2s;
 }
 
@@ -239,11 +223,12 @@ const goBack = () => {
   width: 100%;
   padding: 16px;
   padding-right: 50px;
+  font-family: "Kode Mono", monospace;
   font-size: 1rem;
   border: none;
   outline: none;
   background: transparent;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
 .toggle-password {
@@ -258,6 +243,7 @@ const goBack = () => {
 }
 
 .hint {
+  font-family: "Kode Mono", monospace;
   font-size: 0.9rem;
   color: #4F4F4F;
   text-align: center;
@@ -272,31 +258,69 @@ const goBack = () => {
   color: #27AE60;
 }
 
-.btn {
+.password-rules {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-family: "Kode Mono", monospace;
+  font-size: 0.9rem;
+  margin-top: -10px;
+}
+
+.password-rules li {
+  color: #EB5757;
+  margin-bottom: 6px;
+  transition: 0.2s;
+}
+
+.password-rules li.ok {
+  color: #27AE60;
+}
+
+.cta-btn {
   width: 100%;
-  padding: 14px 0;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 10px;
+  height: 58px;
+  background: #FEC41B;
   border: none;
+  outline: none;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 10px;
 }
 
-.btn-primary {
-  background-color: #E0E0E0;
-  color: #BDBDBD;
+.cta-btn:hover:not(:disabled) {
+  background: #e5b017;
 }
 
-.btn-primary.active {
-  background-color: #ffd84d;
-  color: #1A1A1A;
+.cta-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
 }
 
-.btn-primary:disabled {
+.cta-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background: #E0E0E0;
+  color: #BDBDBD;
+  box-shadow: none;
 }
 
 @media (max-width: 1024px) {
@@ -325,10 +349,9 @@ const goBack = () => {
     font-size: 1.2rem;
   }
 
-  .btn {
+  .cta-btn {
     font-size: 1.6rem;
-    padding: 20px 0;
-    border-radius: 14px;
+    height: 70px;
   }
 
   .form {

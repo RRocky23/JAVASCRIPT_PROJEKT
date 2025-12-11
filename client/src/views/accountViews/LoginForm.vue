@@ -67,7 +67,7 @@
         
         <button 
           type="submit" 
-          class="btn btn-primary"
+          class="cta-btn"
           :class="{ active: isFormValid && !loading }"
           :disabled="!isFormValid || loading"
         >
@@ -161,13 +161,13 @@ const handleSubmit = async () => {
       fieldErrors.userIdentifier = 'Invalid credentials';
       fieldErrors.password = 'Invalid credentials';
     }
-
-    
   }
 };
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+
 .login-form {
   width: 100%;
   height: 100%;
@@ -195,9 +195,9 @@ const handleSubmit = async () => {
 }
 
 .header-title {
-  font-family: var(--font-pixel);
+  font-family: "Kode Mono", monospace;
   font-size: 1.2rem;
-  font-weight: 900;
+  font-weight: 600;
   color: #fff;
 }
 
@@ -217,9 +217,9 @@ const handleSubmit = async () => {
 }
 
 .title {
-  font-family: var(--font-pixel);
-  font-size: 2rem;
-  font-weight: 900;
+  font-family: "Kode Mono", monospace;
+  font-size: 1.8rem;
+  font-weight: 600;
   color: #1A1A1A;
   margin-bottom: 40px;
   line-height: 1.4;
@@ -236,7 +236,7 @@ const handleSubmit = async () => {
 .input-group {
   position: relative;
   border: 2px solid #E0E0E0;
-  border-radius: 10px;
+  border-radius: 6px;
   transition: border-color 0.25s ease;
   background-color: #fff;
 }
@@ -258,8 +258,8 @@ const handleSubmit = async () => {
   width: 100%;
   padding: 16px;
   padding-right: 50px;
-  font-family: var(--font-pixel);
-  font-size: 1.1rem;
+  font-family: "Kode Mono", monospace;
+  font-size: 1rem;
   border: none;
   outline: none;
   background: transparent;
@@ -283,8 +283,8 @@ const handleSubmit = async () => {
 }
 
 .hint {
-  font-family: var(--font-pixel);
-  font-size: 1rem;
+  font-family: "Kode Mono", monospace;
+  font-size: 0.9rem;
   color: #444;
   text-align: center;
   transition: all 0.25s;
@@ -299,56 +299,62 @@ const handleSubmit = async () => {
   color: #27AE60;
 }
 
-.hint.warning {
-  color: #ffd84d;
-}
-
 .alert-error {
   margin-top: 10px;
   padding: 12px 16px;
   background-color: rgba(235, 87, 87, 0.1);
   border: 1px solid #EB5757;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #EB5757;
-  font-family: var(--font-pixel);
+  font-family: "Kode Mono", monospace;
   font-size: 0.9rem;
   text-align: center;
 }
 
-.btn {
+.cta-btn {
   width: 100%;
   max-width: 400px;
-  padding: 14px 0;
-  font-family: var(--font-pixel);
-  font-size: 1rem;
-  font-weight: bold;
+  height: 58px;
+  background: #FEC41B;
   border: none;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.2s ease;
-  margin-top: 20px;
+  outline: none;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
   text-align: center;
-  min-height: 48px;
-  position: relative;
+  cursor: pointer;
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
-.btn-primary {
-  background-color: #E0E0E0;
-  color: #BDBDBD;
+.cta-btn:hover:not(:disabled) {
+  background: #e5b017;
 }
 
-.btn-primary.active {
-  background-color: #ffd84d;
-  color: #1A1A1A;
+.cta-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
 }
 
-.btn-primary.active:hover:not(:disabled) {
-  background-color: #eac14a;
-}
-
-.btn-primary:disabled {
+.cta-btn:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+  background: #E0E0E0;
+  color: #BDBDBD;
+  box-shadow: none;
 }
 
 .spinner {
@@ -376,10 +382,9 @@ const handleSubmit = async () => {
     padding-right: 60px;
   }
 
-  .btn {
+  .cta-btn {
     font-size: 1.8rem;
-    padding: 18px 0;
-    border-radius: 14px;
+    height: 70px;
   }
 
   .hint {
