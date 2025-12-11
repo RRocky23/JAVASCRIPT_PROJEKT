@@ -13,17 +13,6 @@
         HAVE FUN WITH YOUR LOVED ONES, REGARDLESS OF AGE.<br>
         INVITE YOUR FRIENDS ON A JOINT ADVENTURE!
       </p>
-
-      <!-- Pasek postępu -->
-      <div class="progress-bar">
-        <div class="progress-fill"></div>
-      </div>
-
-      <!-- Przycisk -->
-      <button class="cta-btn" @click="$router.push('/starter/onboarding2')">
-        Continue
-      </button>
-
     </div>
 
   </div>
@@ -61,70 +50,6 @@
   margin-top: 10px;
 }
 
-.progress-bar {
-  width: 60%;
-  height: 14px;
-  background: #eee;
-  border-radius: 8px;
-  margin: 20px 0;
-  overflow: hidden;
-}
-
-.progress-fill {
-  width: 33%;
-  background: #f4b400;
-  height: 100%;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
-
-.cta-btn {
-  width: 328px;
-  height: 58px;
-
-  background: #FEC41B;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  color: #FFFFFF;
-  text-align: center;
-
-  cursor: pointer;
-  transition: 
-    background 0.15s ease,
-    transform 0.1s ease,
-    box-shadow 0.1s ease;
-
-  /* Cienie z Figmy */
-  box-shadow:
-    inset -6px 6px 0 #FFDA5D,
-    inset 6px -6px 0 rgba(0,0,0,0.25);
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cta-btn:hover {
-  background: #e5b017; /* trochę ciemniejszy żółty */
-}
-
-/* --- ACTIVE: efekt wciśnięcia --- */
-.cta-btn:active {
-  transform: translateY(2px);
-
-  box-shadow:
-    inset -3px 3px 0 #FFDA5D,
-    inset 3px -3px 0 rgba(0,0,0,0.25);
-}
-
-
-
-
 /* ----- MOBILE GIANT MODE ----- */
 @media (max-width: 1024px) {
 
@@ -149,19 +74,6 @@
     font-size: 1.5rem !important;
     line-height: 2rem !important;
     max-width: 90% !important;
-  }
-
-  .progress-bar {
-    width: 80% !important;
-    height: 24px !important;
-    border-radius: 12px !important;
-  }
-
-  .continue-btn {
-    width: 85% !important;
-    padding: 20px !important;
-    font-size: 2rem !important;
-    border-radius: 14px !important;
   }
 }
 
