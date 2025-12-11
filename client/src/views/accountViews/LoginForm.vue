@@ -100,7 +100,7 @@ const isEmailValid = computed(() => {
 });
 
 const isPasswordValid = computed(() => {
-  return password.value.length >= 6;
+  return password.value.length > 0;
 });
 
 const isFormValid = computed(() => {
@@ -148,12 +148,21 @@ const handleSubmit = async () => {
     }
 
     if (response.data?.errors) {
-      Object.assign(fieldErrors, response.data.errors);
-    } else if (response.data?.message) {
-      generalError.value = response.data.message;
-    } else {
-      generalError.value = 'Something went wrong.';
+      fieldErrors.userIdentifier = response.data.errors.userIdentifier || 'Invalid credentials';
+      fieldErrors.password = response.data.errors.password || 'Invalid credentials';
     }
+
+    else if (response.data?.message) {
+      fieldErrors.userIdentifier = 'Invalid credentials';
+      fieldErrors.password = 'Invalid credentials';
+    }
+
+    else {
+      fieldErrors.userIdentifier = 'Invalid credentials';
+      fieldErrors.password = 'Invalid credentials';
+    }
+
+    
   }
 };
 </script>

@@ -7,9 +7,7 @@
     </div>
 
     <div class="content">
-      <div class="title">
-        And now<br />a password:
-      </div>
+      <div class="title">And now<br />a password:</div>
 
       <form class="form" @submit.prevent="handleContinue">
         <div 
@@ -47,6 +45,24 @@
           {{ hintMessage }}
         </div>
 
+        <ul v-if="password.length > 0" class="password-rules">
+          <li :class="{ ok: passwordRules.minLength }">
+            {{ passwordRules.minLength ? '✔️' : '✖️' }} minimum 8 characters
+          </li>
+          <li :class="{ ok: passwordRules.maxLength }">
+            {{ passwordRules.maxLength ? '✔️' : '✖️' }} maximum 30 characters
+          </li>
+          <li :class="{ ok: passwordRules.uppercase }">
+            {{ passwordRules.uppercase ? '✔️' : '✖️' }} at least 1 uppercase letter
+          </li>
+          <li :class="{ ok: passwordRules.number }">
+            {{ passwordRules.number ? '✔️' : '✖️' }} at least 1 number
+          </li>
+          <li :class="{ ok: passwordRules.special }">
+            {{ passwordRules.special ? '✔️' : '✖️' }} at least 1 special character
+          </li>
+        </ul>
+
         <button 
           type="submit" 
           class="btn btn-primary" 
@@ -78,34 +94,30 @@ onMounted(() => {
   }
 });
 
+const passwordRules = computed(() => ({
+  minLength: password.value.length >= 8,
+  maxLength: password.value.length <= 30,
+  uppercase: /[A-Z]/.test(password.value),
+  number: /\d/.test(password.value),
+  special: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password.value)
+}));
+
 const isValid = computed(() => {
-  return password.value.length >= 8 && 
-         password.value.length <= 30 &&
-         /(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/.test(password.value);
+  return Object.values(passwordRules.value).every(v => v === true);
 });
 
 const hintMessage = computed(() => {
   if (!password.value) {
     return 'MAKE IT STRONG LIKE TAUROS';
   }
-  if (password.value.length < 8) {
+  if (!isValid.value) {
     return 'DID YOU FORGET SOMETHING?';
   }
-  if (hasError.value) {
-    return 'DID YOU FORGET SOMETHING?';
-  }
-  if (isValid.value) {
-    return "I WON'T TELL ANYONE";
-  }
-  return 'DID YOU FORGET SOMETHING?';
+  return "I WON'T TELL ANYONE";
 });
 
 const validatePassword = () => {
-  if (password.value.length > 0) {
-    hasError.value = !isValid.value;
-  } else {
-    hasError.value = false;
-  }
+  hasError.value = password.value.length > 0 && !isValid.value;
 };
 
 const handleContinue = () => {
@@ -121,6 +133,26 @@ const goBack = () => {
 </script>
 
 <style scoped>
+
+.password-rules {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-size: 0.9rem;
+  margin-top: -10px;
+}
+
+.password-rules li {
+  color: #EB5757;
+  margin-bottom: 6px;
+  transition: 0.2s;
+}
+
+.password-rules li.ok {
+  color: #27AE60;
+}
+
 .register-password {
   width: 100%;
   height: 100%;
