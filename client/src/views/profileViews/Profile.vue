@@ -1,10 +1,10 @@
 <template>
   <div class="profile-page">
-    <header class="header">
+    <div class="header">
       <div class="header-spacer"></div>
-      <h1 class="header-title">Account</h1>
+      <div class="header-title">Account</div>
       <div class="header-spacer"></div>
-    </header>
+    </div>
 
     <div class="content">
       <div v-if="loading" class="loading-state">
@@ -64,19 +64,7 @@
       </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-      <button class="nav-item">
-        <span class="nav-icon">📦</span>
-      </button>
-      <button class="nav-item">
-        <span class="nav-icon">❤️</span>
-      </button>
-      <button class="nav-item active">
-        <span class="nav-icon">👤</span>
-        <span class="nav-label">Profile</span>
-      </button>
-    </nav>
+    <BottomNavigation />
   </div>
 </template>
 
@@ -84,18 +72,17 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '../../composables/useAuth.js';
+import BottomNavigation from './BottomNavigation.vue';
 
 const router = useRouter();
 const { user, logout, fetchUser, isLoggedIn } = useAuth();
 const loading = ref(true);
 
 const userAvatar = computed(() => {
-  // Placeholder avatar - możesz zamienić na własny
   return `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.value?.username || 'default'}`;
 });
 
 onMounted(async () => {
-  // Sprawdź czy użytkownik jest zalogowany
   if (!isLoggedIn.value) {
     router.push('/starter/onboarding4');
     return;
@@ -135,11 +122,12 @@ const handleDelete = () => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
 
 .profile-page {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -156,11 +144,10 @@ const handleDelete = () => {
 }
 
 .header-title {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #000;
-  margin: 0;
 }
 
 .header-spacer {
@@ -187,7 +174,7 @@ const handleDelete = () => {
   height: 40px;
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top-color: #1A1A1A;
+  border-top-color: #FEC41B;
   animation: spin 1s ease-in-out infinite;
 }
 
@@ -225,7 +212,7 @@ const handleDelete = () => {
 }
 
 .username {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.5rem;
   font-weight: 600;
   color: #1A1A1A;
@@ -238,7 +225,7 @@ const handleDelete = () => {
 }
 
 .section-title {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.3rem;
   font-weight: 600;
   color: #1A1A1A;
@@ -276,14 +263,14 @@ const handleDelete = () => {
 }
 
 .info-label {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 0.85rem;
   color: #666;
   font-weight: 400;
 }
 
 .info-value {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1rem;
   color: #1A1A1A;
   font-weight: 400;
@@ -305,7 +292,7 @@ const handleDelete = () => {
 .action-btn {
   width: 100%;
   padding: 14px 20px;
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1rem;
   font-weight: 600;
   border: none;
@@ -315,13 +302,15 @@ const handleDelete = () => {
 }
 
 .logout-btn {
-  background-color: #fff;
-  color: #000;
-  border: 2px solid #010101;
+  background-color: #FEC41B;
+  color: #fff;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
 }
 
 .logout-btn:hover {
-  background-color: #e3e3e3;
+  background-color: #e5b017;
 }
 
 .delete-btn {
@@ -335,65 +324,14 @@ const handleDelete = () => {
 }
 
 .delete-warning {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 0.75rem;
   color: #EB5757;
   text-align: center;
   margin: 4px 0 0 0;
 }
 
-/* BOTTOM NAVIGATION */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 12px 20px;
-  background-color: #fff;
-  border-top: 1px solid #E0E0E0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px 16px;
-  transition: all 0.2s;
-}
-
-.nav-icon {
-  font-size: 1.5rem;
-}
-
-.nav-label {
-  font-family: "Kode Mono", monospace;
-  font-size: 0.75rem;
-  color: #1A1A1A;
-  font-weight: 600;
-}
-
-.nav-item.active {
-  color: #FEC41B;
-}
-
-.nav-item.active .nav-label {
-  color: #FEC41B;
-}
-
-/* RESPONSIVE */
 @media (max-width: 1024px) {
-  .header-title {
-    font-size: 1.5rem;
-  }
-
   .username {
     font-size: 1.8rem;
   }
@@ -416,14 +354,6 @@ const handleDelete = () => {
   }
 
   .delete-warning {
-    font-size: 0.9rem;
-  }
-
-  .nav-icon {
-    font-size: 1.8rem;
-  }
-
-  .nav-label {
     font-size: 0.9rem;
   }
 }

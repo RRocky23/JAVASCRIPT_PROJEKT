@@ -1,4 +1,4 @@
-import mongoose, { Shchema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const pokemonStatSchema = new Schema ({
     pokemonId: {

@@ -8,7 +8,7 @@
 
     <div class="content">
       <div class="trainer-image">
-        <img src="../../../public/register-success-trainer.png" alt="Trainer" />
+        <img src="/register-success-trainer.png" alt="Trainer" />
       </div>
 
       <div class="title">Welcome Home!</div>
