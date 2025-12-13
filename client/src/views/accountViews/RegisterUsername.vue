@@ -202,6 +202,7 @@ const goBack = () => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 .register-username {
   width: 100%;
@@ -216,15 +217,16 @@ const goBack = () => {
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  background-color: #1A1A1A;
+  background-color: #fff;
   flex-shrink: 0;
 }
 
 .back-btn {
+  font-family: "Press Start 2P", system-ui;
   background: none;
   border: none;
-  color: #fff;
-  font-size: 24px;
+  color: #000;
+  font-size: 1.8rem;
   cursor: pointer;
   padding: 8px;
   transition: opacity 0.2s;
@@ -236,10 +238,10 @@ const goBack = () => {
 }
 
 .header-title {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.2rem;
-  font-weight: 600;
-  color: #fff;
+  font-weight: 500;
+  color: #000;
 }
 
 .header-spacer {
@@ -257,9 +259,9 @@ const goBack = () => {
 }
 
 .title {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #1A1A1A;
   margin-bottom: 40px;
   line-height: 1.4;

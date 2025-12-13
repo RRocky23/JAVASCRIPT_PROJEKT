@@ -167,6 +167,8 @@ const handleSubmit = async () => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Press+Start+2P&display=swap');
 
 .login-form {
   width: 100%;
@@ -181,24 +183,26 @@ const handleSubmit = async () => {
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  background-color: #1A1A1A;
+  background-color: #fff;
   flex-shrink: 0;
 }
 
 .back-btn {
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 0;
   background: none;
   border: none;
-  color: #fff;
-  font-size: 24px;
+  color: #000;
+  font-size: 1.8rem;
   cursor: pointer;
   padding: 8px;
 }
 
 .header-title {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.2rem;
-  font-weight: 600;
-  color: #fff;
+  font-weight: 500;
+  color: #000;
 }
 
 .header-spacer {
@@ -217,9 +221,9 @@ const handleSubmit = async () => {
 }
 
 .title {
-  font-family: "Kode Mono", monospace;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.8rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #1A1A1A;
   margin-bottom: 40px;
   line-height: 1.4;
