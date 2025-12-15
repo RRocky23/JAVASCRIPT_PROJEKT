@@ -1,6 +1,5 @@
 <template>
   <div class="register-email">
-
     <div class="header">
       <button class="back-btn" @click="router.push('/account/register')">‹</button>
       <div class="header-title">Create account</div>
@@ -45,7 +44,7 @@
 
         <button 
           type="submit" 
-          class="btn btn-primary" 
+          class="cta-btn" 
           :class="{ active: isAvailable && !hasError }"
           :disabled="!isAvailable || hasError"
         >
@@ -138,6 +137,9 @@ const handleContinue = () => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
 .register-email {
   width: 100%;
   height: 100%;
@@ -151,23 +153,25 @@ const handleContinue = () => {
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  background-color: #1A1A1A;
+  background-color: #fff;
   flex-shrink: 0;
 }
 
 .back-btn {
+  font-family: "Press Start 2P", system-ui;
   background: none;
   border: none;
-  color: #fff;
-  font-size: 1.4rem;
+  color: #000;
+  font-size: 1.8rem;
   cursor: pointer;
   padding: 8px;
 }
 
 .header-title {
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff;
+  font-weight: 600;
+  color: #000;
 }
 
 .header-spacer {
@@ -186,8 +190,9 @@ const handleContinue = () => {
 }
 
 .title {
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.8rem;
-  font-weight: 900;
+  font-weight: 500;
   color: #1A1A1A;
   margin-bottom: 30px;
   line-height: 1.2;
@@ -204,7 +209,7 @@ const handleContinue = () => {
 .input-group {
   position: relative;
   border: 2px solid #E0E0E0;
-  border-radius: 10px;
+  border-radius: 6px;
   transition: border-color 0.2s, background-color 0.2s;
   background-color: #fff;
 }
@@ -229,14 +234,16 @@ const handleContinue = () => {
 .input-group input {
   width: 100%;
   padding: 16px;
+  font-family: "Kode Mono", monospace;
   font-size: 1rem;
   border: none;
   outline: none;
   background: transparent;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
 .hint {
+  font-family: "Kode Mono", monospace;
   font-size: 0.9rem;
   min-height: 18px;
   text-align: center;
@@ -255,31 +262,49 @@ const handleContinue = () => {
   color: #F2C94C;
 }
 
-.btn {
+.cta-btn {
   width: 100%;
-  padding: 14px 0;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 10px;
+  height: 58px;
+  background: #FEC41B;
   border: none;
+  outline: none;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 10px;
 }
 
-.btn-primary {
-  background-color: #E0E0E0;
-  color: #BDBDBD;
+.cta-btn:hover:not(:disabled) {
+  background: #e5b017;
 }
 
-.btn-primary.active {
-  background-color: #ffd84d;
-  color: #1A1A1A;
+.cta-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
 }
 
-.btn-primary:disabled {
+.cta-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background: #E0E0E0;
+  color: #BDBDBD;
+  box-shadow: none;
 }
 
 @media (max-width: 1024px) {
@@ -304,10 +329,9 @@ const handleContinue = () => {
     font-size: 1.2rem;
   }
 
-  .btn {
+  .cta-btn {
     font-size: 1.6rem;
-    padding: 20px 0;
-    border-radius: 14px;
+    height: 70px;
   }
 
   .form {

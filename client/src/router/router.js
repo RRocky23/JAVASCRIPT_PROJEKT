@@ -34,6 +34,10 @@ router.beforeEach((to, from, next) => {
     return next({ path: '/starter/onboarding1', replace: true });
   }
 
+  if (to.meta.requiresAuth && !token) {
+    return next({ path: '/starter/onboarding4', replace: true });
+  }
+
   next();
 });
 

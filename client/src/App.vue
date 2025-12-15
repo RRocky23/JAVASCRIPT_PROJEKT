@@ -3,9 +3,6 @@
     <div class="app-phone-frame">
       <div class="app-content d-flex flex-column">
         <nav class="navbar navbar-expand-lg navbar-opaque">
-          <div class="collapse navbar-collapse">
-            <router-link class="navbar-brand pocket-nav" to="/home">Pocket Monsters</router-link>
-          </div>
             <div class="ms-auto">
               <ul class="navbar-nav">
                 <li v-if="!isLoggedIn" class="nav-item">
@@ -22,7 +19,7 @@
         </nav>
 
         <main class="flex-grow-1 my-4 d-flex justify-content-center align-items-center">
-          <router-view></router-view>
+          <router-view /> 
         </main>
 
         <footer class="text-dark py-2 footer-opaque">
@@ -130,6 +127,25 @@ const { isLoggedIn, logout } = useAuth();
     align-items: center;
   }
 }
+<style>
+.transition-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
 
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
 </style>
