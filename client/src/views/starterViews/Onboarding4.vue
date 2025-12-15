@@ -99,7 +99,6 @@ onMounted(async () => {
   color: #444;
 }
 
-/* === PRZYCISK GŁÓWNY (Create account) === */
 .continue-btn {
   width: 328px;
   height: 58px;
@@ -122,18 +121,15 @@ onMounted(async () => {
   cursor: pointer;
   transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
 
-  /* pixel-art inner shadows */
   box-shadow:
     inset -6px 6px 0 #FFDA5D,
     inset 6px -6px 0 rgba(0,0,0,0.25);
 }
 
-/* --- hover = lekkie przyciemnienie --- */
 .continue-btn:hover {
   background: #e0b017;
 }
 
-/* --- active = wciśnięcie --- */
 .continue-btn:active {
   transform: translateY(2px);
   box-shadow:
@@ -142,7 +138,6 @@ onMounted(async () => {
 }
 
 
-/* === PRZYCISK DRUGORZĘDNY (link do loginu) === */
 .secondary-btn {
   width: 328px;
   height: 58px;
@@ -164,13 +159,11 @@ onMounted(async () => {
   transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
 }
 
-/* --- hover = delikatne wypełnienie + jaśniejszy outline --- */
 .secondary-btn:hover {
   background: rgba(254,196,27,0.1);
   border-color: #ffd654;
 }
 
-/* --- active = mini wciśnięcie --- */
 .secondary-btn:active {
   transform: translateY(2px);
 }
