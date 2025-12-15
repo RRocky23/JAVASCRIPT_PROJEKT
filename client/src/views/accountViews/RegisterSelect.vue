@@ -1,6 +1,5 @@
 <template>
   <div class="register-select">
-
     <div class="header">
       <button class="back-btn" @click="router.push('/starter/onboarding4')">‹</button>
       <div class="header-title">Create account</div>
@@ -21,7 +20,7 @@
           <span class="google-icon">G</span>
           Continue with Google
         </button>
-        <router-link to="/account/register/email" class="btn btn-primary">
+        <router-link to="/account/register/email" class="cta-btn">
           Continue with an e-mail
         </router-link>
       </div>
@@ -30,41 +29,14 @@
 </template>
 
 <script setup>
-  import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
-  const router = useRouter();
-// Google OAuth 
+const router = useRouter();
 </script>
 
 <style scoped>
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  background-color: #1A1A1A;
-  flex-shrink: 0;
-}
-
-.back-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.4rem;
-  cursor: pointer;
-  padding: 8px;
-}
-
-.header-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff;
-}
-
-.header-spacer {
-  width: 36px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 .register-select {
   width: 100vw;
@@ -72,6 +44,36 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: #fff;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  font-family: "Press Start 2P", system-ui;
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.header-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #000;
+}
+
+.header-spacer {
+  width: 36px;
 }
 
 .content {
@@ -98,8 +100,9 @@
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: 900;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 1.8rem;
+  font-weight: 500;
   color: #1A1A1A;
   margin-bottom: 50px;
   line-height: 1.4;
@@ -107,44 +110,70 @@
 
 .buttons {
   width: 100%;
-  max-width: 280px;
+  max-width: 328px;
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-.btn {
-  display: block;
-  width: 100%;
-  padding: 14px 0;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
-  text-align: center;
-}
-
 .btn-google {
+  width: 100%;
+  height: 58px;
   background-color: transparent;
-  color: #ffd84d;
-  border: 2px solid #ffd84d;
+  color: #FEC41B;
+  border: 2px solid #FEC41B;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: not-allowed;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
+  opacity: 0.6;
 }
 
 .google-icon {
-  font-size: 1.3rem;
+  font-size: 20px;
   font-weight: bold;
 }
 
-.btn-primary {
-  background-color: #ffd84d;
-  color: #1A1A1A;
+.cta-btn {
+  width: 100%;
+  height: 58px;
+  background: #FEC41B;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.cta-btn:hover {
+  background: #e5b017;
+}
+
+.cta-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
 }
 
 @media (max-width: 1024px) {
@@ -158,10 +187,10 @@
     margin-bottom: 60px;
   }
 
-  .btn {
+  .btn-google,
+  .cta-btn {
     font-size: 1.8rem;
-    padding: 20px 0;
-    border-radius: 14px;
+    height: 70px;
   }
 
   .buttons {
