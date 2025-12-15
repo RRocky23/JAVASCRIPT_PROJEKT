@@ -13,6 +13,7 @@ import { swaggerDocs } from "./docs/swagger.js";
 import rootRoutes from "./routes/root.js";
 import accountRoutes from "./routes/account.js";
 import profileRoutes from "./routes/profile.js";
+import pokedexRoutes from "./routes/pokedex.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,11 +31,11 @@ const allowedOrigins = [
 const corsOptions = {
   origin: (origin, callback) => {
     if(!origin) {
-        return callback(null, true);
+      return callback(null, true);
     }
     
     if(allowedOrigins.includes(origin)) {
-        return callback(null, true);
+      return callback(null, true);
     }
 
     return callback(new Error('Not allowed by CORS'), false);
@@ -60,17 +61,18 @@ app.use('/api-docs', adminOnly);
 app.use('/api', rootRoutes);
 app.use('/api/account', accountRoutes);
 app.use('/api/profile', authRequired, profileRoutes);
+app.use('/api/pokedex', authRequired, pokedexRoutes);
 
 swaggerDocs(app, process.env.PORT);
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 app.listen(process.env.PORT, async () => {
-    await connectToDatabase();
-    console.log('Pocket Monsters server is running on http://localhost:' + process.env.PORT);
-    console.log('Swagger docs avaiable at http://localhost:' + process.env.PORT + '/api-docs');
+  await connectToDatabase();
+  console.log('Pocket Monsters server is running on http://localhost:' + process.env.PORT);
+  console.log('Swagger docs avaiable at http://localhost:' + process.env.PORT + '/api-docs');
 });

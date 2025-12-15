@@ -32,7 +32,11 @@ const pokemonStatSchema = new Schema ({
     baseExperience: {
         type: Number,
         required: true
-    }
+    },
+    catchRate: {
+        type: Number,
+        required: true
+    },
 });
 
 const PokemonStat = mongoose.model("PokemonStat", pokemonStatSchema);

@@ -1,10 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const pokemonMoveSchema = new Schema({
-    pokemonId: {
-        type: Number,
-        required: true
-    },
     moveName: {
         type: String,
         required: true
