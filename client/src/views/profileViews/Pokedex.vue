@@ -35,7 +35,7 @@
             :style="{ backgroundColor: getPokemonColor(pokemon.color) }"
             @click="goToPokemonDetail(pokemon.pokedexNumber)"
           >
-            <img :src="pokemon.spriteURL" :alt="pokemon.name" class="pokemon-sprite" />
+            <img :src="pokemon.sprite" :alt="pokemon.name" class="pokemon-sprite" />
             <div class="pokemon-info">
               <h3 class="pokemon-name">{{ pokemon.name }}</h3>
               <p class="pokemon-number">N°{{ String(pokemon.pokedexNumber).padStart(3, '0') }}</p>
@@ -71,9 +71,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuth } from '../../composables/useAuth.js';
 import axiosInstance from '../../utils/axios.js';
 import BottomNavigation from './BottomNavigation.vue';
 
+const { fetchUser, isLoggedIn } = useAuth();
 const router = useRouter();
 const pokemons = ref([]);
 const searchQuery = ref('');
@@ -81,8 +83,21 @@ const loading = ref(true);
 const favorites = ref(JSON.parse(localStorage.getItem('pokemonFavorites') || '[]'));
 
 onMounted(async () => {
+  if(!isLoggedIn.value) {
+    router.push('/starter/onboarding4');
+    return;
+  }
+
+  try {
+    await fetchUser();
+  }catch(error) {
+    console.error('Failed to fetch user:', error);
+    router.push('/starter/onboarding4');
+  }
+
   try {
     const response = await axiosInstance.get('/api/profile/pokedex');
+    console.log(response.data);
     pokemons.value = response.data;
   } catch (error) {
     console.error('Error loading pokemons:', error);
@@ -92,12 +107,19 @@ onMounted(async () => {
 });
 
 const filteredPokemons = computed(() => {
-  if (!searchQuery.value) return pokemons.value;
+  if(!Array.isArray(pokemons.value)) {
+    return [];
+  }
   
+  if(!searchQuery.value) {
+    //return pokemons.value;
+  }
   return pokemons.value.filter(pokemon => 
     pokemon.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+  ).map(pokemon => ({...pokemon, name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1).toLowerCase()}))
 });
+
+console.log(filteredPokemons);
 
 const handleSearch = () => {
 

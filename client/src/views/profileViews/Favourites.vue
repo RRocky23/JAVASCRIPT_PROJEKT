@@ -32,7 +32,7 @@
             :style="{ backgroundColor: getPokemonColor(pokemon.color) }"
             @click="goToPokemonDetail(pokemon.pokedexNumber)"
           >
-            <img :src="pokemon.spriteURL" :alt="pokemon.name" class="pokemon-sprite" />
+            <img :src="pokemon.sprite" :alt="pokemon.name" class="pokemon-sprite" />
             <div class="pokemon-info">
               <h3 class="pokemon-name">{{ pokemon.name }}</h3>
               <p class="pokemon-number">N°{{ String(pokemon.pokedexNumber).padStart(3, '0') }}</p>
@@ -77,11 +77,14 @@ const favorites = ref(JSON.parse(localStorage.getItem('pokemonFavorites') || '[]
 const loading = ref(true);
 
 const favouritePokemons = computed(() => {
+  if(!Array.isArray(allPokemons.value)) {
+    return [];
+  }
+
   return allPokemons.value
     .filter(p => favorites.value.includes(p.pokedexNumber))
     .map(pokemon => ({
-      ...pokemon,
-      displayStats: generateDisplayStats()
+      ...pokemon, name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1).toLowerCase(), displayStats: generateDisplayStats()
     }));
 });
 

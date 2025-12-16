@@ -1,4 +1,5 @@
 import Pokemon from '../models/Pokemon.js';
+import PokemonSprite from '../models/PokemonSprite.js';
 import PokemonStat from '../models/PokemonStat.js';
 import PokemonMove from '../models/PokemonMove.js';
 import PokemonEvolution from '../models/PokemonEvolution.js';
@@ -57,8 +58,20 @@ export const getAllPokemons = async (query = {}) => {
     const sortOrder = order === 'desc' ? -1 : 1;
     const sortObj = { [sort]: sortOrder };
     
-    const pokemons = await Pokemon.find(filter).sort(sortObj);
-    return pokemons;
+    const pokemons = await Pokemon.find(filter).sort(sortObj).lean();
+    const sprites = await PokemonSprite.find().lean();
+    
+    
+    const spriteMap = Object.fromEntries(
+      sprites.map(s => [String(s.pokedexNumber), s])
+    );
+
+    const mergedPokemons = pokemons.map(pokemon => ({
+      ...pokemon,
+      sprite: spriteMap[String(pokemon.pokedexNumber)]?.pokedexFrontSprite || null
+    }));
+
+    return mergedPokemons;
   } 
   catch(err) {
     console.error('Error fetching all pokemons:', err);

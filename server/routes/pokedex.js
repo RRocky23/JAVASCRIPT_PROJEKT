@@ -13,7 +13,7 @@ const router = express.Router();
  *     tags: [Profile]
  *     responses:
  *       200:
- *         description: Returns list of user profiles
+ *         description: Returns list of discovered pokemons
  */
 router.get('/list', async (req, res) => {
     try {
