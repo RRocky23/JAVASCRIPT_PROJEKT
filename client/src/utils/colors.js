@@ -1,35 +1,49 @@
-export const TYPE_COLORS = {
-    normal: "#919AA2",
-    fire: "#FF9D55",
-    water: "#5090D6",
-    electric: "#F4D23C",
-    grass: "#63BC5A",
-    ice: "#73CEC0",
-    fighting: "#CE416B",
-    poison: "#B567CE",
-    ground: "#D97845",
-    flying: "#89AAE3",
-    psychic: "#FA7179",
-    bug: "#91C12F",
-    rock: "#C5B78C",
-    ghost: "#5269AD",
-    dragon: "#0B6DC3",
-    dark: "#5A5465",
-    steel: "#5A8EA2",
-    fairy: "#EC8FE6"
-};
-
-export function lightenColor(hex, percent = 70) {
-    if(!hex) {
-        return "rgb(200,200,200)";
+export const getPokemonColor = (color, isDiscovered = true) => {
+    const colors = {
+        red: '#FFE0E0',
+        blue: '#E0F0FF',
+        yellow: '#FFF8E0',
+        green: '#E0FFE0',
+        purple: '#F0E0FF',
+        pink: '#FFE0F0',
+        brown: '#F0E8E0',
+        gray: '#F0F0F0',
+        white: '#FFFFFF',
+        black: '#E8E8E8'
+    };
+    
+    if(!isDiscovered) {
+        return '#AAAAAA';
     }
 
-    const num = parseInt(hex.replace("#", ""), 16);
-    const amt = Math.round(2.55 * percent);
+    return colors[color?.toLowerCase()] || '#AAAAAA';
+};
 
-    const r = Math.min(255, (num >> 16) + amt);
-    const g = Math.min(255, ((num >> 8) & 0xff) + amt);
-    const b = Math.min(255, (num & 0xff) + amt);
+export const getTypeBadgeColor = (color, isDiscovered = true) => {
+    const colors = {
+        water: '#6890F0',
+        fire: '#F08030',
+        grass: '#78C850',
+        electric: '#F8D030',
+        psychic: '#F85888',
+        ice: '#98D8D8',
+        dragon: '#7038F8',
+        dark: '#705848',
+        fairy: '#EE99AC',
+        normal: '#A8A878',
+        fighting: '#C03028',
+        flying: '#A890F0',
+        poison: '#A040A0',
+        ground: '#E0C068',
+        rock: '#B8A038',
+        bug: '#A8B820',
+        ghost: '#705898',
+        steel: '#B8B8D0'
+    };
 
-    return `rgb(${r}, ${g}, ${b})`;
+    if(!isDiscovered) {
+        return '#777777';
+    }
+
+    return colors[color?.toLowerCase()] || '#777777';
 }

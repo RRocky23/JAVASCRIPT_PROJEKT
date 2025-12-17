@@ -13,7 +13,7 @@
 <script setup>
     import { ref, onMounted, computed } from "vue";
     import axios from "../../utils/axios.js";
-    import PokemonCard from "../../components/PokemonCard.vue";
+    import PokemonCard from "../../components/pokedex/PokemonCard.vue";
 
     const search = ref("");
     const pokemons = ref([]);
