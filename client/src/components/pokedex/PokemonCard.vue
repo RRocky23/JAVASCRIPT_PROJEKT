@@ -1,22 +1,23 @@
 <template>
-    <div class="pokemon-card" :style="{ backgroundColor: getPokemonColor(pokemon.color, isDiscovered) }" @click="emit('click')">
+    <div class="pokemon-card" :style="{ backgroundColor: getPokemonColor(pokemon.color, pokemon.discovered) }" @click="emit('click')">
     
-        <img v-if="isDiscovered" :src="pokemon.sprite" :alt="pokemon.name" class="pokemon-sprite" />
+        <img v-if="pokemon.discovered" :src="pokemon.sprite" :alt="pokemon.name" class="pokemon-sprite" />
         <img v-else :style="undiscoveredMask" class="pokemon-sprite" />
             
         <div class="pokemon-info">
-            <h3 v-if="isDiscovered" class="pokemon-name">{{ pokemon.name }}</h3>
+            <h3 v-if="pokemon.owned && pokemon.customName != null" class="pokemon-name"> {{ pokemon.customName }}</h3>
+            <h3 v-else-if="pokemon.discovered" class="pokemon-name">{{ pokemon.name }}</h3>
             <h3 v-else class="pokemon-name">???</h3>
             
             <p class="pokemon-number">N°{{ String(pokemon.pokedexNumber).padStart(3, '0') }}</p>
               
             <div class="pokemon-types">
-                <TypeBadge v-if="pokemon.typeOne" :type="pokemon.typeOne" :start-flipped="false" :is-discovered="isDiscovered" />
-                <TypeBadge v-if="pokemon.typeTwo" :type="pokemon.typeTwo" :start-flipped="false" :is-discovered="isDiscovered"/>
+                <TypeBadge v-if="pokemon.typeOne" :type="pokemon.typeOne" :start-flipped="false" :is-discovered="pokemon.discovered" />
+                <TypeBadge v-if="pokemon.typeTwo" :type="pokemon.typeTwo" :start-flipped="false" :is-discovered="pokemon.discovered"/>
             </div>
         </div>
         
-        <ToggleFavoriteButton v-if="useFavourites" :pokemon-number="pokemon.pokedexNumber" :favorites="favorites" @update:favorites="updateFavorites" />
+        <ToggleFavoriteButton v-if="useFavourites && pokemon.owned" :pokemon-number="pokemon.pokedexNumber" :favorites="favorites" :is-favorite="pokemon.isFavorite" @update:favorites="updateFavorites" />
 
     </div>
 </template>
@@ -34,7 +35,7 @@
     });
 
     const favorites = ref(JSON.parse(localStorage.getItem('pokemonFavorites') || '[]'));
-    const isDiscovered = false;
+
     const emit = defineEmits(["click"]);
 
     const maskBase = computed(() => ({
@@ -71,6 +72,7 @@
   transition: transform 0.2s;
   position: relative;
   border: 1px solid #E0E0E0;
+  overflow: hidden;
 }
 
 .pokemon-card:hover {
@@ -79,8 +81,8 @@
 }
 
 .pokemon-sprite {
-  width: 60px;
-  height: 60px;
+  width: 140px;
+  height: 140px;
   object-fit: contain;
   margin-right: 16px;
   image-rendering: pixelated;

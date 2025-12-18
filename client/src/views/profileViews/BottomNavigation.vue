@@ -2,11 +2,11 @@
   <nav class="bottom-nav">
     <button 
       class="nav-item" 
-      :class="{ active: isActive('/profile/pokedex') }"
-      @click="$router.push('/profile/pokedex')"
+      :class="{ active: isActive('/profile/myPokemons') }"
+      @click="$router.push('/profile/myPokemons')"
     >
       <span class="nav-icon">📦</span>
-      <span v-if="isActive('/profile/pokedex')" class="nav-label">Pokedex</span>
+      <span v-if="isActive('/profile/myPokemons')" class="nav-label">My pokemons</span>
     </button>
     
     <button 

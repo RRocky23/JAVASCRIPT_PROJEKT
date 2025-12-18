@@ -9,12 +9,13 @@
 
     const props = defineProps({
         pokemonNumber: Number,
-        favorites: Array
+        favorites: Array,
+        isFavorite: Boolean
     });
 
     const emit = defineEmits(["update:favorites"]);
 
-    const isFavorite = ref(props.favorites.includes(props.pokemonNumber));
+    const isFavorite = ref(props.isFavorite);
 
     watch(() => props.favorites, (newVal) => {
         isFavorite.value = newVal.includes(props.pokemonNumber);

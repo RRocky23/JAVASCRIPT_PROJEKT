@@ -1,45 +1,55 @@
 import express from "express";
-
-import Pokemon from "../models/Pokemon.js";
-import PokemonSprite from "../models/PokemonSprite.js";
+import { getAllPokemons, getUserPokemons } from "../controllers/pokedexController.js";
 
 const router = express.Router();
 
 /**
  * @swagger
- * /api/pokedex/list:
+ * /api/pokedex/getAllPokemons:
  *   get:
- *     summary: Pokedex list page
- *     tags: [Profile]
+ *     summary: Pokedex pokemon data
+ *     tags: [Pokedex]
  *     responses:
  *       200:
- *         description: Returns list of discovered pokemons
+ *         description: Returns list of all pokemons
+ *       500:
+ *         description: Erorr with fetching pokemon data
  */
-router.get('/list', async (req, res) => {
+router.get('/getAllPokemons/', async (req, res) => {
     try {
-        const pokemonList = await Pokemon.find().lean();
-        const sprites = await PokemonSprite.find().lean();
-
-        const spriteMap = Object.fromEntries(
-            sprites.map(s => [String(s.pokedexNumber), s])
-        );
-
-        const output = pokemonList.map(p => {
-            const id = String(p.pokedexNumber);
-            return {
-                id,
-                name: p.name || "Unknown",
-                types: [p.typeOne, p.typeTwo].filter(Boolean),
-                sprite: spriteMap[id]?.pokedexFrontSprite || null
-            };
-        });
-
-        return res.status(200).json(output);
-
-    }catch(err) {
-        console.error("Error fetching Pokemons:", err);
-        return res.status(500).json({ error: "Server error" });
+        const pokemons = await getAllPokemons(req.user.id);
+        return res.status(200).json(pokemons);
     }
+    catch(err) {
+        console.error('Error fetching all pokemons:', err);
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/pokedex/getUserPokemons:
+ *   get:
+ *     summary: User pokemon data
+ *     tags: [Pokedex]
+ *     responses:
+ *       200:
+ *         description: Returns list of user pokemons
+ *       500:
+ *         description: Erorr with fetching pokemon data
+ */
+router.get('/getUserPokemons/', async (req, res) => {
+    try {
+        const pokemons = await getUserPokemons(req.user.id);
+        return res.status(200).json(pokemons);
+    }
+    catch(err) {
+        console.error('Error fetching all pokemons:', err);
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+});
+
+router.patch('/changeUserPokemonFavouriteStatus/', async (req, res) => {
 });
 
 export default router;

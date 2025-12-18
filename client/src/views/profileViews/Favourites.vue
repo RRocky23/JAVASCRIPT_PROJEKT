@@ -12,7 +12,7 @@
         <img src="/favourite-empty-substitute.png" alt="Empty" class="empty-image" />
         <h2 class="empty-title">Oops!</h2>
         <p class="empty-text">YOU DON'T HAVE ANY FAVOURITES YET. LET'S CHANGE THAT.</p>
-        <button class="cta-btn" @click="$router.push('/profile/pokedex')">
+        <button class="cta-btn" @click="$router.push('/profile/myPokemons')">
           Search for Pokemons
         </button>
       </div>
