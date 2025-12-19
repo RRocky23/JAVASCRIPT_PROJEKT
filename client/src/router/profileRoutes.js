@@ -1,7 +1,6 @@
-import ProfileList from "../views/profileViews/ProfileList.vue";
 import Profile from "../views/profileViews/Profile.vue";
-import Pokedex from "../views/profileViews/Pokedex.vue";
 import Favourites from "../views/profileViews/Favourites.vue";
+import MyPokemons from "../views/profileViews/MyPokemons.vue";
 // import PokemonDetail from "../views/profileViews/PokemonDetail.vue";
 
 export default [
@@ -12,14 +11,9 @@ export default [
         meta: { requiresAuth: true }
     },
     { 
-        path: '/profile/list', 
-        name: 'ProfileList', 
-        component: ProfileList 
-    },
-    { 
-        path: '/profile/pokedex', 
-        name: 'Pokedex', 
-        component: Pokedex,
+        path: '/profile/myPokemons', 
+        name: 'MyPokemons', 
+        component: MyPokemons,
         meta: { requiresAuth: true }
     },
     { 
