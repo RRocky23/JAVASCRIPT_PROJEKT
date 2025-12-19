@@ -7,7 +7,16 @@
         </div>
 
         <div class="content">
-            <div class="search-container">
+            <div v-if="!loading && filteredPokemons.length === 0" class="empty-state">
+              <img src="/favourite-empty-substitute.png" alt="Empty" class="empty-image" />
+              <h2 class="empty-title">Oops!</h2>
+              <p class="empty-text">YOU DON'T HAVE ANY POKEMONS YET. LET'S CHANGE THAT.</p>
+              <button class="cta-btn" @click="$router.push('/home')">
+                  Catch some Pokemons
+              </button>
+            </div>
+
+            <div v-if="!loading && filteredPokemons.length !== 0" class="search-container">
                 <input v-model="searchQuery" type="text" class="search-input" placeholder="Name of the Pokemon" @input="handleSearch"/>
                 <button class="filter-btn">☰</button>
             </div>
@@ -22,7 +31,8 @@
                     :key="pokemon.pokedexNumber" 
                     :pokemon="pokemon" 
                     :use-favourites="true" 
-                    @click="goToPokemonDetail(pokemon.pokedexNumber)"/>
+                    @click="goToPokemonDetail(pokemon._id)"
+                    @toggle-favorite="toggleFavorite(pokemon._id)"/>
                 </div>
             </div>
         </div>
@@ -43,6 +53,7 @@
   const router = useRouter();
   const pokemons = ref([]);
   const searchQuery = ref('');
+  const favorites = ref(JSON.parse(localStorage.getItem('favoritePokemons') || "[]"));
   const loading = ref(true);
 
   onMounted(async () => {
@@ -68,8 +79,12 @@
 
     try {
       const response = await axiosInstance.get('/api/pokedex/getUserPokemons/');
+      favorites.value = response.data.filter(p => p.isFavorite).map(p => p._id);
+
       pokemons.value = response.data;
-    } catch (error) {
+
+      localStorage.setItem("favoritePokemons", JSON.stringify(favorites))
+    }catch(error) {
       console.error('Error loading pokemons:', error);
     } finally {
       loading.value = false;
@@ -114,6 +129,34 @@
   const goToPokemonDetail = (pokedexNumber) => {
     router.push(`/profile/myPokemons/details/${pokedexNumber}`);
   };
+
+  const toggleFavorite = async (pokemonId) => {
+    const pokemon = pokemons.value.find(p => p._id === pokemonId);
+
+    if(!pokemon) {
+      return;
+    }
+
+    pokemon.isFavourite = !pokemon.isFavourite;
+
+    try {
+      await axiosInstance.patch(`/api/pokedex/changePokemonFavoriteStatus/${pokemonId}/`, { isFavorite: pokemon.isFavourite });
+    }catch(error) {
+      pokemon.isFavourite = !pokemon.isFavourite;
+      console.error("Failed to update favorite", error);
+    }
+
+    if(pokemon.isFavourite) {
+      favorites.value.push(pokemonId);
+      pokemon.deletedFromFavourites = false;
+    }
+    else {
+      favorites.value = favorites.value.filter(_id => _id !== pokemonId);
+      pokemon.deletedFromFavourites = true;
+    }
+
+    localStorage.setItem('favoritePokemons', JSON.stringify(favorites.value));
+  };
 </script>
 
 <style scoped>
@@ -155,6 +198,71 @@
     padding: 20px 24px 0;
     overflow: hidden;
   }
+
+  .empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-image {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 30px;
+  image-rendering: pixelated;
+}
+
+.empty-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #1A1A1A;
+}
+
+.empty-text {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 0 30px 0;
+  max-width: 300px;
+}
+
+.cta-btn {
+  width: 100%;
+  max-width: 300px;
+  height: 58px;
+  background: #FEC41B;
+  border: none;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #FFFFFF;
+  cursor: pointer;
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+  transition: 
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+.cta-btn:hover {
+  background: #e5b017;
+}
+
+.cta-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
+}
 
   .search-container {
     display: flex;

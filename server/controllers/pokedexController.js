@@ -5,6 +5,7 @@ import PokemonMove from '../models/PokemonMove.js';
 import PokemonEvolution from '../models/PokemonEvolution.js';
 import UserPokemon from '../models/UserPokemon.js';
 import UserDiscovery from '../models/UserDiscovery.js';
+import mongoose from 'mongoose';
 
 export const getAllPokemons = async (userId) => {
     try {
@@ -24,7 +25,8 @@ export const getAllPokemons = async (userId) => {
             ...pokemon,
             sprite: spriteMap[String(pokemon.pokedexNumber)]?.pokedexFrontSprite || null,
             discovered: discoveredSet.has(pokemon.pokedexNumber),
-            owned: false
+            owned: false,
+            deletedFromFavourites: false
         }));
 
         return pokemonData;
@@ -50,15 +52,16 @@ export const getUserPokemons = async (userId) => {
         );
 
         const userPokemonData = owned.map(userPokemon => {
-            const pokemon = pokemonMap[userPokemon.pokemonId];
+            const basePokemon = pokemonMap[userPokemon.pokemonId];
             const sprite = spriteMap[userPokemon.pokemonId]?.pokedexFrontSprite || null;
 
             return {
+                ...basePokemon,
                 ...userPokemon,
-                ...pokemon,
                 sprite,
                 discovered: true,
-                owned: true
+                owned: true,
+                deletedFromFavourites: false
             };
         });
 
@@ -67,5 +70,27 @@ export const getUserPokemons = async (userId) => {
     catch(err) {
         console.error('Error fetching all pokemons:', err);
         throw err;
+    }
+};
+
+export const changePokemonFavoriteStatus = async (userId, { pokemonId }, { isFavorite }, res) => {
+    try {
+        if(typeof isFavorite !== 'boolean') {
+            return res.status(400).json({ message: 'isFavorite must be a boolean' });
+        }
+
+        const userPokemon = await UserPokemon.findOne({ _id: new mongoose.Types.ObjectId(pokemonId), userId });
+
+        if(!userPokemon) {
+            return res.status(404).json({ message: 'Pokemon not found for this user' });
+        }
+
+        userPokemon.isFavourite = isFavorite;
+        await userPokemon.save();
+
+        return res.status(200).json({ success: true, pokemonId, isFavorite });
+    }catch(err) {
+        console.error('Favorite toggle error:', err);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };

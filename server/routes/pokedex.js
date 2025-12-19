@@ -1,5 +1,6 @@
 import express from "express";
-import { getAllPokemons, getUserPokemons } from "../controllers/pokedexController.js";
+import { getAllPokemons, getUserPokemons, changePokemonFavoriteStatus } from "../controllers/pokedexController.js";
+import UserPokemon from "../models/UserPokemon.js";
 
 const router = express.Router();
 
@@ -49,7 +50,8 @@ router.get('/getUserPokemons/', async (req, res) => {
     }
 });
 
-router.patch('/changeUserPokemonFavouriteStatus/', async (req, res) => {
+router.patch('/changePokemonFavoriteStatus/:pokemonId/', async (req, res) => {
+    return await changePokemonFavoriteStatus(req.user.id, req.params, req.body, res);
 });
 
 export default router;

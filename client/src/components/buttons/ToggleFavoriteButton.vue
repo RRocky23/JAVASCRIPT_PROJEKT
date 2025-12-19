@@ -1,38 +1,19 @@
 <template>
     <button class="favorite-btn" @click.stop="toggle">
-        {{ isFavorite ? '❤️' : '🤍' }}
+        <img :src="isFavorite ? '/icons/favorite/heart-filled.png' : '/icons/favorite/heart-outline.png'" alt="favorite button"/>
     </button>
 </template>
 
 <script setup>
-    import { ref, watch } from "vue";
-
     const props = defineProps({
-        pokemonNumber: Number,
-        favorites: Array,
+        userPokemonId: String,
         isFavorite: Boolean
     });
 
-    const emit = defineEmits(["update:favorites"]);
-
-    const isFavorite = ref(props.isFavorite);
-
-    watch(() => props.favorites, (newVal) => {
-        isFavorite.value = newVal.includes(props.pokemonNumber);
-    });
+    const emit = defineEmits(["toggle"]);
 
     const toggle = () => {
-        let updatedFavorites = [...props.favorites];
-        const index = updatedFavorites.indexOf(props.pokemonNumber);
-
-        if(index > -1) {
-            updatedFavorites.splice(index, 1);
-        }else {
-            updatedFavorites.push(props.pokemonNumber);
-        }
-
-        emit("update:favorites", updatedFavorites);
-        localStorage.setItem("pokemonFavorites", JSON.stringify(updatedFavorites));
+        emit("toggle", props.userPokemonId);
     };
 </script>
 
@@ -43,7 +24,6 @@
         right: 12px;
         background: none;
         border: none;
-        font-size: 1.5rem;
         cursor: pointer;
         padding: 4px;
     }

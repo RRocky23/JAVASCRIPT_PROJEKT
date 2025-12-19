@@ -1,5 +1,5 @@
 <template>
-    <div class="pokemon-card" :style="{ backgroundColor: getPokemonColor(pokemon.color, pokemon.discovered) }" @click="emit('click')">
+    <div class="pokemon-card" :style="{ backgroundColor: getPokemonColor(pokemon.color, pokemon.discovered, pokemon.deletedFromFavourites) }" @click="emit('click')">
     
         <img v-if="pokemon.discovered" :src="pokemon.sprite" :alt="pokemon.name" class="pokemon-sprite" />
         <img v-else :style="undiscoveredMask" class="pokemon-sprite" />
@@ -8,22 +8,23 @@
             <h3 v-if="pokemon.owned && pokemon.customName != null" class="pokemon-name"> {{ pokemon.customName }}</h3>
             <h3 v-else-if="pokemon.discovered" class="pokemon-name">{{ pokemon.name }}</h3>
             <h3 v-else class="pokemon-name">???</h3>
-            
-            <p class="pokemon-number">N°{{ String(pokemon.pokedexNumber).padStart(3, '0') }}</p>
-              
+            <div class="pokemon-meta">
+              <p class="pokemon-number">N°{{ String(pokemon.pokedexNumber).padStart(3, '0') }}</p>
+              <p v-if="pokemon.owned" class="pokemon-number">Lvl. {{ pokemon.level }}</p>
+            </div>
             <div class="pokemon-types">
                 <TypeBadge v-if="pokemon.typeOne" :type="pokemon.typeOne" :start-flipped="false" :is-discovered="pokemon.discovered" />
                 <TypeBadge v-if="pokemon.typeTwo" :type="pokemon.typeTwo" :start-flipped="false" :is-discovered="pokemon.discovered"/>
             </div>
         </div>
         
-        <ToggleFavoriteButton v-if="useFavourites && pokemon.owned" :pokemon-number="pokemon.pokedexNumber" :favorites="favorites" :is-favorite="pokemon.isFavorite" @update:favorites="updateFavorites" />
+        <ToggleFavoriteButton v-if="useFavourites && pokemon.owned" :user-pokemon-id="pokemon._id" :is-favorite="pokemon.isFavourite" @toggle="emit('toggle-favorite', $event)" />
 
     </div>
 </template>
 
 <script setup>
-    import { ref, computed } from "vue";
+    import { computed } from "vue";
     import { getPokemonColor } from "../../utils/colors.js";
 
     import TypeBadge from "./TypeBadge.vue";
@@ -34,10 +35,7 @@
       useFavourites: { type: Boolean, default: false }
     });
 
-    const favorites = ref(JSON.parse(localStorage.getItem('pokemonFavorites') || '[]'));
-
-    const emit = defineEmits(["click"]);
-
+    const emit = defineEmits(["click", "toggle-favorite"]);
     const maskBase = computed(() => ({
       maskImage: `url(${props.pokemon.sprite})`,
       WebkitMaskImage: `url(${props.pokemon.sprite})`,
@@ -53,10 +51,6 @@
       ...maskBase.value,
       backgroundColor: "#444444"
     }));
-
-    const updateFavorites = (newFavorites) => {
-      favorites.value = newFavorites;
-    };
 </script>
 
 <style scoped>
@@ -98,6 +92,12 @@
   font-weight: 600;
   margin: 0 0 4px 0;
   color: #1A1A1A;
+}
+
+.pokemon-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .pokemon-number {

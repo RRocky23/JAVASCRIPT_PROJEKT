@@ -11,6 +11,10 @@
             <router-link v-if="!isLoggedIn" to="/account/login" class="btn btn-primary flex-grow-1 ms-2">Sign In</router-link>
             <button v-if="isLoggedIn" @click="logout" class="btn btn-danger flex-grow-1">Sign Out</button>
         </div>
+        <div>
+          <router-link to="/pokedex/" class="continue-btn mb-2">Visit Pokedex</router-link>
+          <router-link to="/profile/" class="continue-btn mb-2">Visit Profile</router-link>
+        </div>
     </div>
 </template>
 
@@ -60,6 +64,44 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.continue-btn {
+  width: 328px;
+  height: 58px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #FEC41B;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+
+  box-shadow:
+    inset -6px 6px 0 #FFDA5D,
+    inset 6px -6px 0 rgba(0,0,0,0.25);
+}
+
+.continue-btn:hover {
+  background: #e0b017;
+}
+
+.continue-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset -3px 3px 0 #FFDA5D,
+    inset 3px -3px 0 rgba(0,0,0,0.25);
+}
+
 /* przezroczyste białe tło */
 .box-opaque {
     background-color: rgba(255, 255, 255, 0.95);

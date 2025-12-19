@@ -1,4 +1,4 @@
-export const getPokemonColor = (color, isDiscovered = true) => {
+export const getPokemonColor = (color, isDiscovered = true, deletedFromFavourites = false) => {
     const colors = {
         red: '#FFE0E0',
         blue: '#E0F0FF',
@@ -12,7 +12,7 @@ export const getPokemonColor = (color, isDiscovered = true) => {
         black: '#E8E8E8'
     };
     
-    if(!isDiscovered) {
+    if(!isDiscovered || deletedFromFavourites) {
         return '#AAAAAA';
     }
 
