@@ -7,7 +7,7 @@
         </div>
 
         <div class="content">
-            <div v-if="!loading && filteredPokemons.length === 0" class="empty-state">
+            <div v-if="!loading && pokemons.length === 0" class="empty-state">
               <img src="/favourite-empty-substitute.png" alt="Empty" class="empty-image" />
               <h2 class="empty-title">Oops!</h2>
               <p class="empty-text">YOU DON'T HAVE ANY POKEMONS YET. LET'S CHANGE THAT.</p>
@@ -16,7 +16,7 @@
               </button>
             </div>
 
-            <div v-if="!loading && filteredPokemons.length !== 0" class="search-container">
+            <div v-if="!loading && pokemons.length !== 0" class="search-container">
                 <input v-model="searchQuery" type="text" class="search-input" placeholder="Name of the Pokemon" @input="handleSearch"/>
                 <button class="filter-btn">☰</button>
             </div>
@@ -32,7 +32,7 @@
                     :pokemon="pokemon" 
                     :use-favourites="true" 
                     @click="goToPokemonDetail(pokemon._id)"
-                    @toggle-favorite="toggleFavorite(pokemon._id)"/>
+                    @toggle-favourite="toggleFavourite(pokemon._id)"/>
                 </div>
             </div>
         </div>
@@ -130,7 +130,7 @@
     router.push(`/profile/myPokemons/details/${pokedexNumber}`);
   };
 
-  const toggleFavorite = async (pokemonId) => {
+  const toggleFavourite = async (pokemonId) => {
     const pokemon = pokemons.value.find(p => p._id === pokemonId);
 
     if(!pokemon) {

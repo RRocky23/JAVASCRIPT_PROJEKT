@@ -18,7 +18,7 @@
             </div>
         </div>
         
-        <ToggleFavoriteButton v-if="useFavourites && pokemon.owned" :user-pokemon-id="pokemon._id" :is-favorite="pokemon.isFavourite" @toggle="emit('toggle-favorite', $event)" />
+        <ToggleFavoriteButton v-if="useFavourites && pokemon.owned" :user-pokemon-id="pokemon._id" :is-favourite="pokemon.isFavourite" @toggle="emit('toggle-favourite', $event)" />
 
     </div>
 </template>
@@ -35,7 +35,7 @@
       useFavourites: { type: Boolean, default: false }
     });
 
-    const emit = defineEmits(["click", "toggle-favorite"]);
+    const emit = defineEmits(["click", "toggle-favourite"]);
     const maskBase = computed(() => ({
       maskImage: `url(${props.pokemon.sprite})`,
       WebkitMaskImage: `url(${props.pokemon.sprite})`,

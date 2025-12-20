@@ -31,7 +31,7 @@
               :pokemon="pokemon" 
               :use-favourites="true" 
               @click="goToPokemonDetail(pokemon._id)"
-              @toggle-favorite="toggleFavorite(pokemon._id)"/>
+              @toggle-favourite="toggleFavourite(pokemon._id)"/>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ const goToPokemonDetail = (pokedexNumber) => {
   router.push(`/profile/myPokemons/${pokedexNumber}`);
 };
 
-const toggleFavorite = async (pokemonId) => {
+const toggleFavourite = async (pokemonId) => {
     const pokemon = allPokemons.value.find(p => p._id === pokemonId);
 
     if(!pokemon) {
