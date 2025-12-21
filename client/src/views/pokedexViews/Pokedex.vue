@@ -1,10 +1,6 @@
 <template>
     <div class="pokedex-page">
-        <div class="header">
-            <div class="header-spacer"></div>
-            <div class="header-title">Pokedex</div>
-            <div class="header-spacer"></div>
-        </div>
+        <Header header-title="Pokedex" />
 
         <div class="content">
             <div class="search-container">
@@ -12,9 +8,7 @@
                 <button class="filter-btn">☰</button>
             </div>
 
-            <div v-if="loading" class="loading-state">
-                <div class="spinner"></div>
-            </div>
+            <Spinner v-if="loading" />
 
             <div v-else class="pokemon-list-container">
                 <div class="pokemon-list">
@@ -35,6 +29,8 @@
   import { useAuth } from '../../composables/useAuth.js';
   import axiosInstance from '../../utils/axios.js';
 
+  import Header from '../../components/common/Header.vue';
+  import Spinner from '../../components/common/Spinner.vue';
   import PokemonCard from '../../components/pokedex/PokemonCard.vue';
 
   const { fetchUser, isLoggedIn, refresh } = useAuth();
@@ -126,26 +122,6 @@
     background-color: #fff;
   }
 
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    background-color: #fff;
-    flex-shrink: 0;
-  }
-
-  .header-title {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #000;
-  }
-
-  .header-spacer {
-    width: 36px;
-  }
-
   .content {
     flex: 1;
     display: flex;
@@ -183,26 +159,6 @@
     border-radius: 6px;
     font-size: 1.2rem;
     cursor: pointer;
-  }
-
-  .loading-state {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top-color: #FEC41B;
-    animation: spin 1s ease-in-out infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
   }
 
   .pokemon-list-container {
