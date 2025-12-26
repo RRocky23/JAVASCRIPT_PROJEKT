@@ -28,7 +28,6 @@ const allowedOrigins = new Set([
   'http://localhost:8080',
   process.env.CLIENT_URL,
   process.env.HOST_URL,
-  process.env.SUBDOMAIN_HOST_URL,
 ].filter(Boolean));
 
 const corsOptions = {
