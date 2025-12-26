@@ -1,9 +1,11 @@
 <template>
   <div class="onboarding-layout">
     <div class="animated-content">
-      <Transition name="onboarding" mode="out-in">
-        <router-view :key="$route.path" />
-      </Transition>
+      <router-view v-slot="{ Component }">
+        <Transition name="onboarding" mode="out-in">
+          <component :is="Component" :key="$route.path" />
+        </Transition>
+      </router-view>
     </div>
     <div class="static-footer">
       <div class="progress-bar">

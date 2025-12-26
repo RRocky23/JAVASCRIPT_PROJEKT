@@ -10,10 +10,10 @@ export default ({ mode }) => {
     server: {
       port: env.VITE_PORT,
       proxy: {
-        '/api': env.VITE_API_URL,
-        '/api/account': env.VITE_API_URL,
-        '/api/profile': env.VITE_API_URL,
-        '/api/pokedex': env.VITE_API_URL
+        '/api': {
+          target: env.VITE_API_URL,
+          changeOrigin: true
+        }
       }
     }
   });

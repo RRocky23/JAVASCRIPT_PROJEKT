@@ -27,12 +27,12 @@ axiosInstance.interceptors.response.use(
     if(error.response?.status === 401) {
       original._retry = true;
       try {
-        const refreshRes = await axios.post("/api/account/refresh", {}, { withCredentials: true });
+        const refreshRes = await axios.post("/api/account/refresh/", {}, { withCredentials: true });
         const newAccessToken = refreshRes.data.accessToken;
         if(newAccessToken) {
           tokenService.setAccessToken(newAccessToken, true);
           original.headers.Authorization = `Bearer ${newAccessToken}`;
-          return api(original);
+          return axiosInstance(original);
         }
       } 
       catch (refreshErr) {
