@@ -12,7 +12,7 @@ export function useAuth() {
 
     const fetchUser = async () => {
         try {
-            const res = await axiosInstance.get('/api/profile');
+            const res = await axiosInstance.get('/api/profile/');
             user.value = res.data;
             return user.value;
         } 
@@ -26,7 +26,7 @@ export function useAuth() {
         loading.value = true;
         
         try {
-            const res = await axiosInstance.post('/api/account/login', {
+            const res = await axiosInstance.post('/api/account/login/', {
                 userIdentifier: identifier,
                 password,
                 rememberMe
@@ -49,7 +49,7 @@ export function useAuth() {
 
     const refresh = async () => {
         try {
-            const res = await axiosInstance.post('/api/account/refresh', {}, { 
+            const res = await axiosInstance.post('/api/account/refresh/', {}, { 
                 withCredentials: true 
             });
             const token = res.data.accessToken;
@@ -66,7 +66,7 @@ export function useAuth() {
 
     const logout = async () => {
         try {
-            await axiosInstance.post('/api/account/logout');
+            await axiosInstance.post('/api/account/logout/');
         } 
         catch(err) {
             console.error('Logout error:', err);

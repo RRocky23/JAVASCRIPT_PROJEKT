@@ -22,11 +22,13 @@ const app = express();
 
 console.log('CLIENT_URL:', process.env.CLIENT_URL);
 
-const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:8080',
-  'http://localhost:' + process.env.PORT,
-  'http://127.0.0.1:' + process.env.PORT
-];
+const allowedOrigins = new Set([
+  'http://localhost:8000',
+  'http://127.0.0.1:8000',
+  'http://localhost:8080',
+  process.env.CLIENT_URL,
+  process.env.HOST_URL,
+].filter(Boolean));
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -34,7 +36,7 @@ const corsOptions = {
       return callback(null, true);
     }
     
-    if(allowedOrigins.includes(origin)) {
+    if(allowedOrigins.has(origin)) {
       return callback(null, true);
     }
 
@@ -71,7 +73,7 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
-app.listen(process.env.PORT, async () => {
+app.listen(process.env.PORT, '0.0.0.0', async () => {
   await connectToDatabase();
   console.log('Pocket Monsters server is running on http://localhost:' + process.env.PORT);
   console.log('Swagger docs avaiable at http://localhost:' + process.env.PORT + '/api-docs');

@@ -10,12 +10,8 @@
                         adventure? Lets go!</h2>
 
       <!-- Przyciski -->
-      <router-link to="/account/register" class="continue-btn mb-2">
-        Create account
-      </router-link>
-      <router-link to="/account/login" class="secondary-btn">
-        I already have an account
-      </router-link>
+      <DefaultButton button-route="/account/register" button-text="Create account" :use-outline-style="false" />
+      <DefaultButton button-route="/account/login" button-text="I already have an account" :use-outline-style="true" />
 
     </div>
   </div>
@@ -25,6 +21,8 @@
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../../composables/useAuth.js";
+
+import DefaultButton from "../../components/buttons/DefaultButton.vue";
 
 const { isLoggedIn, logout } = useAuth();
 const router = useRouter();
@@ -97,75 +95,6 @@ onMounted(async () => {
 .subtitle {
   font-size: 1.2rem;
   color: #444;
-}
-
-.continue-btn {
-  width: 328px;
-  height: 58px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: #FEC41B;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  color: #FFFFFF;
-  text-decoration: none;
-
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
-
-  box-shadow:
-    inset -6px 6px 0 #FFDA5D,
-    inset 6px -6px 0 rgba(0,0,0,0.25);
-}
-
-.continue-btn:hover {
-  background: #e0b017;
-}
-
-.continue-btn:active {
-  transform: translateY(2px);
-  box-shadow:
-    inset -3px 3px 0 #FFDA5D,
-    inset 3px -3px 0 rgba(0,0,0,0.25);
-}
-
-
-.secondary-btn {
-  width: 328px;
-  height: 58px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: transparent;
-  border: 3px solid #FEC41B;
-  border-radius: 6px;
-
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  color: #FEC41B;
-  text-decoration: none;
-
-  transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
-}
-
-.secondary-btn:hover {
-  background: rgba(254,196,27,0.1);
-  border-color: #ffd654;
-}
-
-.secondary-btn:active {
-  transform: translateY(2px);
 }
 
 /* MOBILE */

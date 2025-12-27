@@ -1,13 +1,13 @@
 <template>
-    <button class="favorite-btn" @click.stop="toggle">
-        <img :src="isFavorite ? '/icons/favorite/heart-filled-2.png' : '/icons/favorite/heart-outline-2.png'" alt="favorite button"/>
+    <button class="favourite-btn" @click.stop="toggle">
+        <img :src="isFavourite ? '/icons/favourite/heart-filled-2.png' : '/icons/favourite/heart-outline-2.png'" alt="favourite button"/>
     </button>
 </template>
 
 <script setup>
     const props = defineProps({
         userPokemonId: String,
-        isFavorite: Boolean
+        isFavourite: Boolean
     });
 
     const emit = defineEmits(["toggle"]);
@@ -18,7 +18,7 @@
 </script>
 
 <style scoped>
-    .favorite-btn {
+    .favourite-btn {
         width: 35px;
         height: 35px;
         position: absolute;
@@ -29,7 +29,7 @@
         cursor: pointer;
         padding: 4px;
     }
-    .favorite-btn img {
+    .favourite-btn img {
         width: 100%;
         height: 100%;
         display: block; 

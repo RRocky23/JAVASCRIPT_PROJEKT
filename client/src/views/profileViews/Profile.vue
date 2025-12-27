@@ -1,15 +1,9 @@
 <template>
   <div class="profile-page">
-    <div class="header">
-      <div class="header-spacer"></div>
-      <div class="header-title">Account</div>
-      <div class="header-spacer"></div>
-    </div>
+    <Header header-title="Profile" />
 
     <div class="content">
-      <div v-if="loading" class="loading-state">
-        <div class="spinner"></div>
-      </div>
+      <Spinner v-if="loading" />
 
       <div v-else-if="user" class="profile-container">
         <!-- Avatar + Username -->
@@ -74,6 +68,9 @@ import { useRouter } from 'vue-router';
 import { useAuth } from '../../composables/useAuth.js';
 import BottomNavigation from './BottomNavigation.vue';
 
+import Header from '../../components/common/Header.vue';
+import Spinner from '../../components/common/Spinner.vue';
+
 const router = useRouter();
 const { user, logout, fetchUser, isLoggedIn } = useAuth();
 const loading = ref(true);
@@ -133,53 +130,11 @@ const handleDelete = () => {
   background-color: #fff;
 }
 
-/* HEADER */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  background-color: #fff;
-  flex-shrink: 0;
-}
-
-.header-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #000;
-}
-
-.header-spacer {
-  width: 36px;
-}
-
 /* CONTENT */
 .content {
   flex: 1;
   padding: 30px 24px 100px;
   overflow-y: auto;
-}
-
-.loading-state {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.spinner {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top-color: #FEC41B;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 /* PROFILE CONTAINER */

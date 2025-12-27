@@ -16,13 +16,8 @@
       </div>
 
       <div class="buttons">
-        <button class="btn btn-google" disabled>
-          <span class="google-icon">G</span>
-          Continue with Google
-        </button>
-        <router-link to="/account/register/email" class="cta-btn">
-          Continue with an e-mail
-        </router-link>
+        <DefaultButton button-route="/error" button-text="Continue with Google" :use-outline-style="true" :is-disabled="true" :use-google="true" />
+        <DefaultButton button-route="/account/register/email" button-text="Continue with an e-mail" />
       </div>
     </div>
   </div>
@@ -30,6 +25,8 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+
+import DefaultButton from '../../components/buttons/DefaultButton.vue';
 
 const router = useRouter();
 </script>
@@ -114,66 +111,6 @@ const router = useRouter();
   display: flex;
   flex-direction: column;
   gap: 18px;
-}
-
-.btn-google {
-  width: 100%;
-  height: 58px;
-  background-color: transparent;
-  color: #FEC41B;
-  border: 2px solid #FEC41B;
-  border-radius: 6px;
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  cursor: not-allowed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  opacity: 0.6;
-}
-
-.google-icon {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.cta-btn {
-  width: 100%;
-  height: 58px;
-  background: #FEC41B;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  color: #FFFFFF;
-  text-align: center;
-  cursor: pointer;
-  transition: 
-    background 0.15s ease,
-    transform 0.1s ease,
-    box-shadow 0.1s ease;
-  box-shadow:
-    inset -6px 6px 0 #FFDA5D,
-    inset 6px -6px 0 rgba(0,0,0,0.25);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-}
-
-.cta-btn:hover {
-  background: #e5b017;
-}
-
-.cta-btn:active {
-  transform: translateY(2px);
-  box-shadow:
-    inset -3px 3px 0 #FFDA5D,
-    inset 3px -3px 0 rgba(0,0,0,0.25);
 }
 
 @media (max-width: 1024px) {

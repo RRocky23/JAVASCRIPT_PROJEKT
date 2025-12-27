@@ -1,26 +1,17 @@
 <template>
   <div class="favourites-page">
-    <div class="header">
-      <div class="header-spacer"></div>
-      <div class="header-title">Favourites</div>
-      <div class="header-spacer"></div>
-    </div>
+    <Header header-title="Favourites" />
 
     <div class="content">
       <!-- Empty State -->
-      <div v-if="!loading && favouritePokemons.length === 0" class="empty-state">
-        <img src="/favourite-empty-substitute.png" alt="Empty" class="empty-image" />
-        <h2 class="empty-title">Oops!</h2>
-        <p class="empty-text">YOU DON'T HAVE ANY FAVOURITES YET. LET'S CHANGE THAT.</p>
-        <button class="cta-btn" @click="$router.push('/profile/myPokemons')">
-          Search for Pokemons
-        </button>
-      </div>
+      <EmptyState v-if="!loading && favouritePokemons.length === 0" 
+        image-url="/favourite-empty-substitute.png"
+        empty-text="YOU DON'T HAVE ANY FAVOURITES YET. LET'S CHANGE THAT."
+        button-route="/profile/myPokemons"
+        button-text="Search for Pokemons" />
 
       <!-- Loading -->
-      <div v-else-if="loading" class="loading-state">
-        <div class="spinner"></div>
-      </div>
+      <Spinner v-else-if="loading" />
 
       <!-- Favourites List (Scrollable) -->
       <div v-else class="pokemon-list-container">
@@ -31,7 +22,7 @@
               :pokemon="pokemon" 
               :use-favourites="true" 
               @click="goToPokemonDetail(pokemon._id)"
-              @toggle-favorite="toggleFavorite(pokemon._id)"/>
+              @toggle-favourite="toggleFavourite(pokemon._id)"/>
           </div>
         </div>
       </div>
@@ -47,6 +38,9 @@ import { useRouter } from 'vue-router';
 import { useAuth } from '../../composables/useAuth.js';
 import axiosInstance from '../../utils/axios.js';
 
+import Header from '../../components/common/Header.vue';
+import EmptyState from '../../components/common/EmptyState.vue';
+import Spinner from '../../components/common/Spinner.vue';
 import PokemonCard from '../../components/pokedex/PokemonCard.vue';
 import BottomNavigation from './BottomNavigation.vue';
 
@@ -104,7 +98,7 @@ const goToPokemonDetail = (pokedexNumber) => {
   router.push(`/profile/myPokemons/${pokedexNumber}`);
 };
 
-const toggleFavorite = async (pokemonId) => {
+const toggleFavourite = async (pokemonId) => {
     const pokemon = allPokemons.value.find(p => p._id === pokemonId);
 
     if(!pokemon) {
@@ -145,117 +139,12 @@ const toggleFavorite = async (pokemonId) => {
   background-color: #fff;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  background-color: #fff;
-  flex-shrink: 0;
-}
-
-.header-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #000;
-}
-
-.header-spacer {
-  width: 36px;
-}
-
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px 24px 0;
   overflow: hidden;
-}
-
-.empty-state {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.empty-image {
-  width: 200px;
-  height: 200px;
-  margin-bottom: 30px;
-  image-rendering: pixelated;
-}
-
-.empty-title {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 2rem;
-  font-weight: 600;
-  margin: 0 0 16px 0;
-  color: #1A1A1A;
-}
-
-.empty-text {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0 0 30px 0;
-  max-width: 300px;
-}
-
-.cta-btn {
-  width: 100%;
-  max-width: 300px;
-  height: 58px;
-  background: #FEC41B;
-  border: none;
-  border-radius: 6px;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #FFFFFF;
-  cursor: pointer;
-  box-shadow:
-    inset -6px 6px 0 #FFDA5D,
-    inset 6px -6px 0 rgba(0,0,0,0.25);
-  transition: 
-    background 0.15s ease,
-    transform 0.1s ease,
-    box-shadow 0.1s ease;
-}
-
-.cta-btn:hover {
-  background: #e5b017;
-}
-
-.cta-btn:active {
-  transform: translateY(2px);
-  box-shadow:
-    inset -3px 3px 0 #FFDA5D,
-    inset 3px -3px 0 rgba(0,0,0,0.25);
-}
-
-.loading-state {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top-color: #FEC41B;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 /* SCROLLABLE CONTAINER */

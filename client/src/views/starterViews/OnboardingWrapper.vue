@@ -1,15 +1,17 @@
 <template>
   <div class="onboarding-layout">
     <div class="animated-content">
-      <Transition name="onboarding" mode="out-in">
-        <router-view :key="$route.path" />
-      </Transition>
+      <router-view v-slot="{ Component }">
+        <Transition name="onboarding" mode="out-in">
+          <component :is="Component" :key="$route.path" />
+        </Transition>
+      </router-view>
     </div>
     <div class="static-footer">
       <div class="progress-bar">
         <div class="progress-fill" :style="{ width: progressWidth }"></div>
       </div>
-      <button class="continue-btn" @click="goToOnboarding4">Continue</button>
+      <DefaultButton button-route="/starter/onboarding4" button-text="Continue" :use-outline-style="false" />
     </div>
   </div>
 </template>
@@ -18,6 +20,8 @@
 import { computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useOnboardingAutoRotate } from "../../composables/useOnboardingAutoRotate.js";
+
+import DefaultButton from '../../components/buttons/DefaultButton.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -75,75 +79,6 @@ const goToOnboarding4 = () => {
   height: 100%;
   background: #f4b400;
   transition: width 300ms ease;
-}
-
-.continue-btn {
-  width: 328px;
-  height: 58px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: #FEC41B;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  color: #FFFFFF;
-  text-decoration: none;
-
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
-
-  box-shadow:
-    inset -6px 6px 0 #FFDA5D,
-    inset 6px -6px 0 rgba(0,0,0,0.25);
-}
-
-.continue-btn:hover {
-  background: #e0b017;
-}
-
-.continue-btn:active {
-  transform: translateY(2px);
-  box-shadow:
-    inset -3px 3px 0 #FFDA5D,
-    inset 3px -3px 0 rgba(0,0,0,0.25);
-}
-
-
-.secondary-btn {
-  width: 328px;
-  height: 58px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: transparent;
-  border: 3px solid #FEC41B;
-  border-radius: 6px;
-
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  color: #FEC41B;
-  text-decoration: none;
-
-  transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
-}
-
-.secondary-btn:hover {
-  background: rgba(254,196,27,0.1);
-  border-color: #ffd654;
-}
-
-.secondary-btn:active {
-  transform: translateY(2px);
 }
 
 .onboarding-enter-active,
