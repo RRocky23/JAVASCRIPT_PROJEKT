@@ -50,6 +50,7 @@ const goToOnboarding4 = () => {
 }
 
 .animated-content {
+  height: 60vh;
   flex: 1 1 auto;
   min-height: 0;
   display: flex;

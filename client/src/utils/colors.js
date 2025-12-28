@@ -47,3 +47,28 @@ export const getTypeBadgeColor = (color, isDiscovered = true) => {
 
     return colors[color?.toLowerCase()] || '#777777';
 }
+
+export const getSearchTypeColor = (color) => {
+    const colors = {
+        bug: '#91C12F',
+        dark: '#5A5465',
+        dragon: '#0B6DC3',
+        electric: '#F4D23C',
+        fairy: '#EC8FE6',
+        fighting: '#CE416B',
+        fire: '#FF9D55',
+        flying: '#89AAE3',
+        ghost: '#5269AD',
+        grass: '#63BC5A',
+        ground: '#D97845',
+        ice: '#73CEC0',
+        normal: '#919AA2',
+        poison: '#B567CE',
+        psychic: '#FA7179',
+        rock: '#C5B78C',
+        steel: '#5A8EA2',
+        water: '#5090D6'
+    };
+
+    return colors[color?.toLowerCase()] || '#777777';
+}

@@ -9,16 +9,15 @@
             button-route="/home"
             button-text="Catch some Pokemons" />
 
-            <div v-if="!loading && pokemons.length !== 0" class="search-container">
-                <input v-model="searchQuery" type="text" class="search-input" placeholder="Name of the Pokemon" @input="handleSearch"/>
-                <button class="filter-btn">☰</button>
-            </div>
+            <PokemonSearch v-if="!loading && pokemons.length !== 0" v-model:searchQuery="searchState.searchQuery.value" @search="handleSearch" @toggleFilter="toggleFilterPanel" />
+            <PokemonFilter :isOpen="isFilterOpen" :filters="searchState.filters.value" :type-resources="typeResources" :search-mode="searchMode"
+                           :engine="engineType" @close="closeFilterPanel" @update:filters="handleFilterUpdate" />
 
             <Spinner v-if="loading" />
 
             <div v-else class="pokemon-list-container">
                 <div class="pokemon-list">
-                    <PokemonCard v-for="pokemon in filteredPokemons" 
+                    <PokemonCard v-for="pokemon in searchState.processedData.value"
                     :key="pokemon.pokedexNumber" 
                     :pokemon="pokemon" 
                     :use-favourites="true" 
@@ -26,21 +25,27 @@
                     @toggle-favourite="toggleFavourite(pokemon._id)"/>
                 </div>
             </div>
+            <ConfirmFavouriteChange v-if="showConfirmBar" :count="pendingChanges.size" @cancel="cancelFavouriteChanges" @save="saveFavouriteChanges" />
         </div>
         <BottomNavigation/>
     </div>
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { useAuth } from '../../composables/useAuth.js';
+  import { useSearch, SEARCH_MODES, SEARCH_ENGINES } from '../../composables/useSearch.js';
+  import { getPokemonTypes } from '../../utils/pokemonTypes.js';
   import axiosInstance from '../../utils/axios.js';
 
   import Header from '../../components/common/Header.vue';
   import EmptyState from '../../components/common/EmptyState.vue';
+  import PokemonSearch from '../../components/search/PokemonSearch.vue';
+  import PokemonFilter from '../../components/search/PokemonFilter.vue';
   import Spinner from '../../components/common/Spinner.vue';
   import PokemonCard from '../../components/pokedex/PokemonCard.vue';
+  import ConfirmFavouriteChange from '../../components/buttons/ConfirmFavouriteChange.vue';
   import BottomNavigation from './BottomNavigation.vue';
 
   const { fetchUser, isLoggedIn, refresh } = useAuth();
@@ -49,6 +54,19 @@
   const searchQuery = ref('');
   const favorites = ref(JSON.parse(localStorage.getItem('favoritePokemons') || "[]"));
   const loading = ref(true);
+  const isFilterOpen = ref(false);
+  const searchMode = SEARCH_MODES.ALL_POKEMONS;
+  const engineType = SEARCH_ENGINES.POKEMON_WITH_USER;
+  const typeResources = ref(getPokemonTypes());
+  const pendingChanges = ref(new Map());
+  const showConfirmBar = ref(false);
+
+  const searchState = useSearch({
+    mode: searchMode,
+    engine: engineType,
+    data: pokemons,
+    typeResources: typeResources
+  });
 
   onMounted(async () => {
     if(!isLoggedIn.value) {
@@ -85,72 +103,87 @@
     }
 });
 
-  const filteredPokemons = computed(() => {
-    if(!Array.isArray(pokemons.value)) {
-      return [];
-    }
+  const handleSearch = (query) => {
+  searchState.searchQuery.value = query;
+};
 
-    const capitalize = (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+const handleFilterUpdate = (newFilters) => {
+  searchState.updateFilters(newFilters);
+}
 
-    if(!searchQuery.value) {
-      return pokemons.value.map((pokemon) => ({
-        ...pokemon,
-        name: capitalize(pokemon.name),
-      }));
-    }
+const toggleFilterPanel = () => {
+  isFilterOpen.value = !isFilterOpen.value;
+};
 
-    if(searchQuery.value.startsWith("showAll")) {
-      const parts = searchQuery.value.split("-");
-      const actualQuery = parts[1] ? parts[1].toLowerCase() : "";
-
-    return pokemons.value.filter((pokemon) => actualQuery ? pokemon.name.toLowerCase().includes(actualQuery) : true)
-      .map((pokemon) => ({
-        ...pokemon,
-        name: capitalize(pokemon.name),
-        discovered: true
-      }));
-  }
-
-    return pokemons.value.filter((pokemon) => pokemon.discovered)
-    .filter((pokemon) => pokemon.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
-    .map((pokemon) => ({ ...pokemon, name: capitalize(pokemon.name) }));
-  });
-
-  const handleSearch = () => {
-
-  };
+const closeFilterPanel = () => {
+  isFilterOpen.value = false;
+};
 
   const goToPokemonDetail = (pokedexNumber) => {
     router.push(`/profile/myPokemons/details/${pokedexNumber}`);
   };
 
-  const toggleFavourite = async (pokemonId) => {
-    const pokemon = pokemons.value.find(p => p._id === pokemonId);
+const toggleFavourite = (pokemonId) => {
+  const pokemon = pokemons.value.find(p => p._id === pokemonId);
+  if(!pokemon) {
+    return;
+  }
+  
+  const prev = pokemon.isFavourite;
+  const newValue = !prev;
 
+  pokemon.isFavourite = newValue;
+  pokemon.deletedFromFavourites = !newValue;
+  pendingChanges.value.set(pokemonId, { previous: prev, newValue });
+  showConfirmBar.value = pendingChanges.value.size > 0;
+};
+
+const cancelFavouriteChanges = () => {
+  pendingChanges.value.forEach(({ previous }, pokemonId) => {
+    const pokemon = pokemons.value.find(p => p._id === pokemonId);
     if(!pokemon) {
       return;
     }
+    
+    pokemon.isFavourite = previous;
+    pokemon.deletedFromFavourites = !previous;
+  });
 
-    pokemon.isFavourite = !pokemon.isFavourite;
+  pendingChanges.value.clear();
+  showConfirmBar.value = false;
+};
+
+const saveFavouriteChanges = async () => {
+  for(const [pokemonId, { newValue }] of pendingChanges.value) {
+    const pokemon = pokemons.value.find(p => p._id === pokemonId);
+    if(!pokemon) {
+      continue;
+    }
+
+    pokemon.deletedFromFavourites = false;
 
     try {
-      await axiosInstance.patch(`/api/pokedex/changePokemonFavoriteStatus/${pokemonId}/`, { isFavorite: pokemon.isFavourite });
-    }catch(error) {
-      pokemon.isFavourite = !pokemon.isFavourite;
-      console.error("Failed to update favorite", error);
-    }
+      await axiosInstance.patch(
+        `/api/pokedex/changePokemonFavoriteStatus/${pokemonId}/`,
+        { isFavorite: newValue }
+      );
 
-    if(pokemon.isFavourite) {
-      favorites.value.push(pokemonId);
-      pokemon.deletedFromFavourites = false;
-    }
-    else {
-      favorites.value = favorites.value.filter(_id => _id !== pokemonId);
-      pokemon.deletedFromFavourites = true;
-    }
+      if(newValue) {
+        if(!favorites.value.includes(pokemonId)) favorites.value.push(pokemonId);
+      } 
+      else {
+        favorites.value = favorites.value.filter(id => id !== pokemonId);
+      }
 
-    localStorage.setItem('favoritePokemons', JSON.stringify(favorites.value));
-  };
+    }catch(err) {
+      console.error('Failed to update favourite', err);
+    }
+  }
+
+  localStorage.setItem('favoritePokemons', JSON.stringify(favorites.value));
+  pendingChanges.value.clear();
+  showConfirmBar.value = false;
+};
 </script>
 
 <style scoped>

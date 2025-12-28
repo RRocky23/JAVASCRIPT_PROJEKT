@@ -3,16 +3,15 @@
         <Header header-title="Pokedex" />
 
         <div class="content">
-            <div class="search-container">
-                <input v-model="searchQuery" type="text" class="search-input" placeholder="Name of the Pokemon" @input="handleSearch"/>
-                <button class="filter-btn">☰</button>
-            </div>
+            <PokemonSearch v-if="!loading" v-model:searchQuery="searchState.searchQuery.value" @search="handleSearch" @toggleFilter="toggleFilterPanel" />
+            <PokemonFilter :isOpen="isFilterOpen" :filters="searchState.filters.value" :type-resources="typeResources" :search-mode="searchMode"
+                           :engine="engineType" @close="closeFilterPanel" @update:filters="handleFilterUpdate" />
 
             <Spinner v-if="loading" />
 
             <div v-else class="pokemon-list-container">
                 <div class="pokemon-list">
-                    <PokemonCard v-for="pokemon in filteredPokemons" 
+                    <PokemonCard v-for="pokemon in searchState.processedData.value" 
                     :key="pokemon.pokedexNumber" 
                     :pokemon="pokemon" 
                     :use-favourites="false" 
@@ -24,20 +23,36 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { useAuth } from '../../composables/useAuth.js';
+  import { useSearch, SEARCH_MODES, SEARCH_ENGINES } from '../../composables/useSearch.js';
+  import { getPokemonTypes } from '../../utils/pokemonTypes.js';
+
   import axiosInstance from '../../utils/axios.js';
 
   import Header from '../../components/common/Header.vue';
+  import PokemonSearch from '../../components/search/PokemonSearch.vue';
+  import PokemonFilter from '../../components/search/PokemonFilter.vue';
   import Spinner from '../../components/common/Spinner.vue';
   import PokemonCard from '../../components/pokedex/PokemonCard.vue';
 
   const { fetchUser, isLoggedIn, refresh } = useAuth();
   const router = useRouter();
+
   const pokemons = ref([]);
-  const searchQuery = ref('');
+  const typeResources = ref(getPokemonTypes());
   const loading = ref(true);
+  const isFilterOpen = ref(false);
+  const searchMode = SEARCH_MODES.ALL_POKEMONS;
+  const engineType = SEARCH_ENGINES.POKEMON_ONLY;
+
+  const searchState = useSearch({
+    mode: searchMode,
+    engine: engineType,
+    data: pokemons,
+    typeResources: typeResources
+  });
 
   onMounted(async () => {
     if(!isLoggedIn.value) {
@@ -70,40 +85,21 @@
     }
 });
 
-  const filteredPokemons = computed(() => {
-    if(!Array.isArray(pokemons.value)) {
-      return [];
-    }
+  const handleSearch = (query) => {
+  searchState.searchQuery.value = query;
+};
 
-    const capitalize = (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+const handleFilterUpdate = (newFilters) => {
+  searchState.updateFilters(newFilters);
+}
 
-    if(!searchQuery.value) {
-      return pokemons.value.map((pokemon) => ({
-        ...pokemon,
-        name: capitalize(pokemon.name),
-      }));
-    }
+const toggleFilterPanel = () => {
+  isFilterOpen.value = !isFilterOpen.value;
+};
 
-    if(searchQuery.value.startsWith("showAll")) {
-      const parts = searchQuery.value.split("-");
-      const actualQuery = parts[1] ? parts[1].toLowerCase() : "";
-
-    return pokemons.value.filter((pokemon) => actualQuery ? pokemon.name.toLowerCase().includes(actualQuery) : true)
-      .map((pokemon) => ({
-        ...pokemon,
-        name: capitalize(pokemon.name),
-        discovered: true
-      }));
-  }
-
-    return pokemons.value.filter((pokemon) => pokemon.discovered)
-    .filter((pokemon) => pokemon.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
-    .map((pokemon) => ({ ...pokemon, name: capitalize(pokemon.name) }));
-  });
-
-  const handleSearch = () => {
-
-  };
+const closeFilterPanel = () => {
+  isFilterOpen.value = false;
+};
 
   const goToPokemonDetail = (pokedexNumber) => {
     router.push(`/pokedex/details/${pokedexNumber}`);

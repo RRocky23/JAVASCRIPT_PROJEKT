@@ -27,8 +27,9 @@
 
 <style scoped>
     .btn-defaults {
-        width: 328px;
-        height: 58px;
+        width: 100%;
+        max-width: 400px;
+        height: 60px;
 
         display: flex;
         justify-content: center;
@@ -111,5 +112,5 @@
         font-size: 20px;
         font-weight: bold;
         margin: 0 15px 0 0;
-    }
+    }   
 </style>
