@@ -127,7 +127,7 @@ const { isLoggedIn, logout } = useAuth();
     align-items: center;
   }
 }
-<style>
+
 .transition-container {
   position: relative;
   width: 100%;
