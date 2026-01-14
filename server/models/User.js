@@ -35,6 +35,11 @@ const userSchema = new Schema({
         required: true,
         default: 1
     },
+    currency: {
+        type: Number,
+        required: true,
+        default: 100
+    },
     currentLocationLat: {
         type: Number,
         required: true,
