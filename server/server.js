@@ -17,6 +17,7 @@ import pokedexRoutes from "./routes/pokedex.js";
 import exchangeRoutes from "./routes/exchange.js";
 import shopRoutes from "./routes/shop.js";
 import inventoryRoutes from "./routes/inventory.js";
+import friendsRoutes from "./routes/friends.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,6 +71,7 @@ app.use('/api/pokedex', authRequired, pokedexRoutes);
 app.use('/api/exchange', authRequired, exchangeRoutes);
 app.use('/api/shop', authRequired, shopRoutes);
 app.use('/api/inventory', authRequired, inventoryRoutes);
+app.use('/api/friends', authRequired, friendsRoutes);
 
 swaggerDocs(app, process.env.PORT);
 
