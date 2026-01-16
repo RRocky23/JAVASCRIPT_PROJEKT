@@ -35,6 +35,11 @@ const userSchema = new Schema({
         required: true,
         default: 1
     },
+    currency: {
+        type: Number,
+        required: true,
+        default: 100
+    },
     currentLocationLat: {
         type: Number,
         required: true,
@@ -45,6 +50,14 @@ const userSchema = new Schema({
         required: true,
         default: 0.0
     },
+    friends: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    friendRequests: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     createdAt: {
         type: Date,
         required: true,
