@@ -12,7 +12,7 @@ import { ref, watch } from 'vue';
 
 const props = defineProps({
   searchQuery: { type: String, default: '' },
-  placeholder: { type: String, default: 'Search Pokémon by name or type "showAll"' }
+  placeholder: { type: String, default: 'Search Pokemon' }
 });
 
 const emit = defineEmits(['update:searchQuery', 'search', 'toggleFilter']);
