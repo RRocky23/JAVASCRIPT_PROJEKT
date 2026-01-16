@@ -2,10 +2,15 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import http from "http";
 
 import "dotenv/config";
 
 import { fileURLToPath } from "url";
+import { Server } from "socket.io";
+import { initSockets } from "./socket.js"
+import { startWeatherLoop } from "./game/weatherService.js"
+import { spawnLoop } from "./game/spawnManager.js"
 import { authRequired, apiOnly, adminOnly } from "./middlewares/auth.js";
 import { connectToDatabase } from "./utils/db.js";
 import { swaggerDocs } from "./docs/swagger.js";
@@ -81,8 +86,18 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
-app.listen(process.env.PORT, '0.0.0.0', async () => {
-  await connectToDatabase();
+const server = http.createServer(app);
+const io = new Server(server, {
+  transports: ['websocket', 'polling'],
+  allowEIO3: true
+});
+
+initSockets(io);
+await connectToDatabase();
+
+
+
+server.listen(process.env.PORT, '0.0.0.0', async () => {
   console.log('Pocket Monsters server is running on http://localhost:' + process.env.PORT);
   console.log('Swagger docs avaiable at http://localhost:' + process.env.PORT + '/api-docs');
 });
