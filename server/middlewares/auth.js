@@ -68,7 +68,7 @@ export const apiOnly = (req, res, next) => {
 export const adminOnly = (req, res, next) => {
     try {
         const token = extractAccessToken(req);
-    
+
         if(!token) {
             if(req.headers.accept?.includes('text/html')) {
                 return res.redirect(pageNotFoundRedirect);
@@ -76,25 +76,48 @@ export const adminOnly = (req, res, next) => {
 
             return res.redirect(pageNotFoundRedirect);
         }
-        
+
         const payload = jwt.verify(token, process.env.JWT_SECRET);
-        
+
         if(payload.role !== 'admin') {
             if(req.headers.accept?.includes('text/html')) {
                 return res.redirect(pageNotFoundRedirect);
             }
-      
+
             return res.redirect(pageNotFoundRedirect);
         }
 
         req.user = payload;
         next();
-    } 
+    }
     catch(err) {
         if(req.headers.accept?.includes('text/html')) {
              return res.redirect(pageNotFoundRedirect);
         }
-        
+
         return res.redirect(pageNotFoundRedirect);
+    }
+};
+
+export const authenticateToken = (req, res, next) => {
+    try {
+        const token = extractAccessToken(req);
+
+        if(!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Authorization token required'
+            });
+        }
+
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = payload;
+        next();
+    }
+    catch(err) {
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid or expired token'
+        });
     }
 };

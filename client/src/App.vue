@@ -3,6 +3,10 @@
     <div class="app-phone-frame">
       <div class="app-content d-flex flex-column">
         <nav class="navbar navbar-expand-lg navbar-opaque">
+            <div v-if="isLoggedIn" class="currency-display">
+              <span class="currency-icon">💰</span>
+              <span class="currency-amount">{{ currency }}</span>
+            </div>
             <div class="ms-auto">
               <ul class="navbar-nav">
                 <li v-if="!isLoggedIn" class="nav-item">
@@ -34,8 +38,24 @@
 </template>
 
 <script setup>
+import { onMounted, watch } from 'vue';
 import { useAuth } from "./composables/useAuth.js";
+import { useCurrency } from "./composables/useCurrency.js";
+
 const { isLoggedIn, logout } = useAuth();
+const { currency, fetchCurrency } = useCurrency();
+
+onMounted(async () => {
+  if (isLoggedIn.value) {
+    await fetchCurrency();
+  }
+});
+
+watch(isLoggedIn, async (newValue) => {
+  if (newValue) {
+    await fetchCurrency();
+  }
+});
 </script>
 
 <style scoped>
@@ -147,5 +167,42 @@ const { isLoggedIn, logout } = useAuth();
 .slide-fade-leave-to {
   transform: translateX(20px);
   opacity: 0;
+}
+
+.currency-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  border-radius: 20px;
+  margin-left: 16px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.currency-icon {
+  font-size: 1.2rem;
+}
+
+.currency-amount {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #333;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@media (max-width: 1024px) {
+  .currency-display {
+    margin: 8px auto;
+    padding: 10px 20px;
+  }
+
+  .currency-icon {
+    font-size: 1.4rem;
+  }
+
+  .currency-amount {
+    font-size: 1.3rem;
+  }
 }
 </style>

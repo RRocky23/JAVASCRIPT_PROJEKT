@@ -14,6 +14,9 @@
         <div>
           <router-link to="/pokedex/" class="continue-btn mb-2">Visit Pokedex</router-link>
           <router-link to="/profile/" class="continue-btn mb-2">Visit Profile</router-link>
+          <router-link v-if="isLoggedIn" to="/shop" class="continue-btn mb-2">Visit Shop</router-link>
+          <router-link v-if="isLoggedIn" to="/inventory" class="continue-btn mb-2">Visit Inventory</router-link>
+          <router-link v-if="isLoggedIn" to="/profile/friends" class="continue-btn mb-2">Visit Friends</router-link>
         </div>
     </div>
 </template>

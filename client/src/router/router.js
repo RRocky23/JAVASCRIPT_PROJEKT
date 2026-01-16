@@ -8,6 +8,7 @@ import accountRoutes from "./accountRoutes.js";
 import profileRoutes from "./profileRoutes.js";
 import starterRoutes from "./starterRoutes.js";
 import pokedexRoutes from "./pokedexRoutes.js";
+import shopRoutes from "./shopRoutes.js";
 
 const routes = [
   { path: '/', name: 'Root', component: HomePage },
@@ -16,6 +17,7 @@ const routes = [
   ...profileRoutes,
   ...starterRoutes,
   ...pokedexRoutes,
+  ...shopRoutes,
   { path: '/:pathMatch(.*)*', name: 'Error', component: ErrorPage }
 ];
 
