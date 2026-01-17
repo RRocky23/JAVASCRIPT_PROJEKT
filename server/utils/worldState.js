@@ -1,0 +1,1 @@
+export const worldPokemon = new Map();

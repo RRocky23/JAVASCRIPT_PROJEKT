@@ -8,9 +8,9 @@ import "dotenv/config";
 
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
-import { initSockets } from "./socket.js"
-import { startWeatherLoop } from "./game/weatherService.js"
-import { spawnLoop } from "./game/spawnManager.js"
+import { initSockets } from "./middlewares/socket.js"
+import { startWeatherLoop } from "./utils/weather.js"
+import { startSpawnLoop } from "./utils/spawnManager.js"
 import { authRequired, apiOnly, adminOnly } from "./middlewares/auth.js";
 import { connectToDatabase } from "./utils/db.js";
 import { swaggerDocs } from "./docs/swagger.js";
@@ -93,9 +93,11 @@ const io = new Server(server, {
 });
 
 initSockets(io);
+
 await connectToDatabase();
+await startWeatherLoop();
 
-
+startSpawnLoop();
 
 server.listen(process.env.PORT, '0.0.0.0', async () => {
   console.log('Pocket Monsters server is running on http://localhost:' + process.env.PORT);

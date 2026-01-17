@@ -1,4 +1,4 @@
-const WEATHER_BOOSTS = {
+export const WEATHER_BOOSTS = {
     clear: [],
     rain: ["water"],
     snowy: ["ice"],

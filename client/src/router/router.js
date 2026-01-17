@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import * as tokenService from "../utils/tokenService.js";
 
 import HomePage from "../views/Home.vue";
+import MapPage from "../views/Map.vue"
 import ErrorPage from "../views/Error.vue";
 
 import accountRoutes from "./accountRoutes.js";
@@ -12,7 +13,8 @@ import shopRoutes from "./shopRoutes.js";
 
 const routes = [
   { path: '/', name: 'Root', component: HomePage },
-  { path: '/home', name: 'Home', component: HomePage },
+  { path: '/home', name: 'Home', component: HomePage, meta: { requiresAuth: true } },
+  { path: '/map', name: 'Map', component: MapPage,  meta: { requiresAuth: true } },
   ...accountRoutes,
   ...profileRoutes,
   ...starterRoutes,
