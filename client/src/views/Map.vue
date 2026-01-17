@@ -7,6 +7,8 @@
       </button>
     </div>
 
+    <div v-if="geolocationError" class="geo-error">{{ geolocationError }}</div>
+
     <div id="map" ref="mapElement"></div>
 
     <div v-if="selectedPokemon" class="catch-modal">
@@ -87,6 +89,7 @@ const watchId = ref(null);
 const playerMarker = ref(null);
 const accuracyCircle = ref(null);
 const pokemonMarkers = ref(new Map());
+const geolocationError = ref(null);
 
 const isPointInPolygon = (point, polygon) => {
   const [lat, lng] = point;
@@ -340,6 +343,20 @@ onMounted(async () => {
   });
 
   if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        updatePlayerPosition(latitude, longitude);
+        geolocationError.value = null;
+      },
+      (error) => {
+        geolocationError.value = `Geolocation error: ${error.message || error.code}`;
+        console.error('Geolocation getCurrentPosition error:', error);
+      },
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+    );
+
+    // Then start watching position
     watchId.value = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -362,7 +379,8 @@ onMounted(async () => {
           socket.value.emit('player:move', { lat: GAME_CENTER[0], lng: GAME_CENTER[1] });
         }
 
-        console.error('Geolocation error:', error);
+        geolocationError.value = `Geolocation watch error: ${error.message || error.code}`;
+        console.error('Geolocation watch error:', error);
       },
       {
         enableHighAccuracy: true,
@@ -559,6 +577,19 @@ onUnmounted(() => {
 
 .nav-item.active .nav-icon {
   filter: drop-shadow(0 2px 4px rgba(254, 196, 27, 0.3));
+}
+
+.geo-error {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+  background: rgba(0,0,0,0.75);
+  color: #FFDADA;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
 }
 
 @media (max-width: 1024px) {
