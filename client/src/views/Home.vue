@@ -1,171 +1,238 @@
 <template>
-    <div class="welcome-big box-opaque">
-        <h2 class="mb-3">Welcome to Pocket Monsters</h2>
-        <p class="mb-4">
-            Start your adventure to catch 'em all at <strong>Bialystok University of Technology</strong>!
-            <br>
-            Explore, train and fight battles to become a true Master of the campus!
-        </p>
-        <div class="d-flex justify-content-between mt-3 buttons">
-            <router-link v-if="!isLoggedIn" to="/account/register" class="btn btn-secondary flex-grow-1 me-2">Sign Up</router-link>
-            <router-link v-if="!isLoggedIn" to="/account/login" class="btn btn-primary flex-grow-1 ms-2">Sign In</router-link>
-            <button v-if="isLoggedIn" @click="logout" class="btn btn-danger flex-grow-1">Sign Out</button>
+  <div class="home-container">
+    <div class="home-content">
+      <div class="welcome-section">
+        <h1>Welcome back, {{ user?.username || 'Trainer' }}! 👋</h1>
+        <p class="subtitle">Ready to catch some Pokemon?</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ pokemonCount }}</div>
+            <div class="stat-label">Pokemon Caught</div>
+          </div>
         </div>
-        <div>
-          <router-link to="/pokedex/" class="continue-btn mb-2">Visit Pokedex</router-link>
-          <router-link to="/profile/" class="continue-btn mb-2">Visit Profile</router-link>
-          <router-link v-if="isLoggedIn" to="/shop" class="continue-btn mb-2">Visit Shop</router-link>
-          <router-link v-if="isLoggedIn" to="/inventory" class="continue-btn mb-2">Visit Inventory</router-link>
-          <router-link v-if="isLoggedIn" to="/profile/friends" class="continue-btn mb-2">Visit Friends</router-link>
+
+        <div class="stat-card">
+          <div class="stat-icon">📖</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ discoveryCount }}</div>
+            <div class="stat-label">Discoveries</div>
+          </div>
         </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ level || 1 }}</div>
+            <div class="stat-label">Trainer Level</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-cards">
+        <router-link to="/map" class="action-card primary">
+          <div class="action-icon">🗺️</div>
+          <div class="action-content">
+            <h3>Explore Campus</h3>
+            <p>Find and catch Pokemon around campus</p>
+          </div>
+        </router-link>
+
+        <router-link to="/profile/myPokemons" class="action-card">
+          <div class="action-icon">📦</div>
+          <div class="action-content">
+            <h3>My Pokemon</h3>
+            <p>View your collection</p>
+          </div>
+        </router-link>
+
+        <router-link to="/pokedex" class="action-card">
+          <div class="action-icon">📖</div>
+          <div class="action-content">
+            <h3>Pokedex</h3>
+            <p>Browse all Pokemon</p>
+          </div>
+        </router-link>
+
+        <router-link to="/inventory" class="action-card">
+          <div class="action-icon">🎒</div>
+          <div class="action-content">
+            <h3>Inventory</h3>
+            <p>Manage your items</p>
+          </div>
+        </router-link>
+      </div>
     </div>
+
+    <BottomNav />
+  </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useAuth } from "../composables/useAuth.js";
+import { ref, onMounted } from 'vue';
+import { useAuth } from '../composables/useAuth.js';
+import axiosInstance from '../utils/axios.js';
+import BottomNav from '../components/Buttons/BottomNav.vue';
 
-const { isLoggedIn, logout } = useAuth();
-const router = useRouter();
+const { user, fetchUser } = useAuth();
+const pokemonCount = ref(0);
+const discoveryCount = ref(0);
+const level = ref(1);
 
 onMounted(async () => {
-    const hasAccessCookie = document.cookie.includes("accessToken=");
-    const hasRefreshCookie = document.cookie.includes("refreshToken=");
-
-    if (!hasAccessCookie && !hasRefreshCookie) {
-        return;
-    }
-
-    try {
-        const verify = await fetch("/api/user/me", {
-            method: "GET",
-            credentials: "include",
-            headers: { "Accept": "application/json" }
-        });
-
-        if (verify.ok) {
-            return router.push("/account/profile");
-        }
-
-        const refresh = await fetch("/api/account/refresh", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Accept": "application/json" }
-        });
-
-        if (refresh.ok) {
-            return router.push("/account/profile");
-        }
-
-        console.warn("Auto-login failed (refresh rejected)");
-
-    } catch (err) {
-        console.error("Auto-login error:", err);
-    }
+  await fetchUser();
+  
+  try {
+    const [pokemonRes, discoveryRes] = await Promise.all([
+      axiosInstance.get('/api/profile/pokemon/count'),
+      axiosInstance.get('/api/profile/discoveries/count')
+    ]);
+    
+    pokemonCount.value = pokemonRes.data.count || 0;
+    discoveryCount.value = discoveryRes.data.count || 0;
+    
+    level.value = Math.floor(pokemonCount.value / 10) + 1;
+  } catch (err) {
+    console.error('Error fetching stats:', err);
+  }
 });
 </script>
 
 <style scoped>
-.continue-btn {
-  width: 328px;
-  height: 58px;
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600;700&display=swap');
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: #FEC41B;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-
+.home-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px 20px 100px 20px;
   font-family: "Kode Mono", monospace;
-  font-weight: 600;
-  font-size: 18px;
-  color: #FFFFFF;
-  text-decoration: none;
-
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
-
-  box-shadow:
-    inset -6px 6px 0 #FFDA5D,
-    inset 6px -6px 0 rgba(0,0,0,0.25);
 }
 
-.continue-btn:hover {
-  background: #e0b017;
+.home-content {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.continue-btn:active {
-  transform: translateY(2px);
-  box-shadow:
-    inset -3px 3px 0 #FFDA5D,
-    inset 3px -3px 0 rgba(0,0,0,0.25);
-}
-
-/* przezroczyste białe tło */
-.box-opaque {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-}
-
-/* OGROMNY WIDOK WELCOME */
-.welcome-big {
-  width: 50vw;
-  max-width: 700px;
-  padding: 40px 25px;
-  font-size: 1.1rem;
+.welcome-section {
+  color: white;
+  margin-bottom: 30px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin-top: 32px;
 }
 
-.welcome-big h2 {
+.welcome-section h1 {
   font-size: 2rem;
-  font-weight: 900;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
-.welcome-big p {
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.action-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.action-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.action-card.primary {
+  background: linear-gradient(135deg, #FEC41B 0%, #FFB800 100%);
+  color: white;
+}
+
+.action-card.primary h3,
+.action-card.primary p {
+  color: white;
+}
+
+.action-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.action-content h3 {
   font-size: 1.2rem;
-  line-height: 1.8;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #1A1A1A;
 }
 
-.buttons button,
-.buttons .btn {
-  font-size: 1.1rem !important;
-  padding: 10px 16px !important;
+.action-content p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
 }
 
-.ms-auto,
-  nav .nav-item {
-    display: none !important;
+@media (max-width: 768px) {
+  .welcome-section h1 {
+    font-size: 1.5rem;
   }
 
-/* na telefonach jeszcze większe */
-@media (max-width: 1024px) {
-  .welcome-big {
-    width: 95vw !important;
-    max-width: 100vw !important;
-    padding: 70px 20px !important;
-    font-size: 2rem !important;
+  .action-cards {
+    grid-template-columns: 1fr;
   }
 
-  .welcome-big h2 {
-    font-size: 3.2rem !important;
-  }
-
-  .welcome-big p {
-    font-size: 2rem !important;
-    line-height: 1.7 !important;
-  }
-
-  .buttons .btn {
-    font-size: 2rem !important;
-    padding: 18px 26px !important;
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

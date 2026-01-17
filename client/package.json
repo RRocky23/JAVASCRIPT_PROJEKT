@@ -5,13 +5,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build-production": "vite build --mode production", 
+    "build-production": "vite build --mode production",
     "preview": "vite preview"
   },
   "dependencies": {
     "axios": "1.13.2",
     "bootstrap": "5.3.8",
     "bootstrap-vue-next": "0.40.7",
+    "geolib": "^3.3.4",
+    "leaflet": "^1.9.4",
+    "socket.io-client": "^4.8.3",
     "vue": "3.5.23",
     "vue-router": "4.6.3"
   },

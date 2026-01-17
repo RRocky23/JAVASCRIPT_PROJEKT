@@ -13,6 +13,14 @@ const userPokemonSchema = new Schema({
         type: String,
         required: false
     },
+    height: {
+        type: Number,
+        required: true
+    },
+    weight: {
+        type: Number,
+        required: true
+    },
     level: {
         type: Number,
         required: true

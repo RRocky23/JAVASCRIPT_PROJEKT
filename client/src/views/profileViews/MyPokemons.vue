@@ -51,7 +51,6 @@
   const { fetchUser, isLoggedIn, refresh } = useAuth();
   const router = useRouter();
   const pokemons = ref([]);
-  const searchQuery = ref('');
   const favorites = ref(JSON.parse(localStorage.getItem('favoritePokemons') || "[]"));
   const loading = ref(true);
   const isFilterOpen = ref(false);
@@ -84,7 +83,8 @@
     
       await refresh();
 
-    }catch(error) {
+    }
+    catch(error) {
       console.error('Failed to fetch user:', error);
       router.push('/starter/onboarding4');
     }
@@ -101,89 +101,102 @@
     } finally {
       loading.value = false;
     }
-});
+  });
 
   const handleSearch = (query) => {
-  searchState.searchQuery.value = query;
-};
+    searchState.searchQuery.value = query;
+  };
 
-const handleFilterUpdate = (newFilters) => {
-  searchState.updateFilters(newFilters);
-}
+  const handleFilterUpdate = (newFilters) => {
+    searchState.updateFilters(newFilters);
+  }
 
-const toggleFilterPanel = () => {
-  isFilterOpen.value = !isFilterOpen.value;
-};
+  const toggleFilterPanel = () => {
+    isFilterOpen.value = !isFilterOpen.value;
+  };
 
-const closeFilterPanel = () => {
-  isFilterOpen.value = false;
-};
+  const closeFilterPanel = () => {
+    isFilterOpen.value = false;
+  };
 
   const goToPokemonDetail = (pokedexNumber) => {
     router.push(`/profile/myPokemons/details/${pokedexNumber}`);
   };
 
-const toggleFavourite = (pokemonId) => {
-  const pokemon = pokemons.value.find(p => p._id === pokemonId);
-  if(!pokemon) {
-    return;
-  }
-  
-  const prev = pokemon.isFavourite;
-  const newValue = !prev;
-
-  pokemon.isFavourite = newValue;
-  pokemon.deletedFromFavourites = !newValue;
-  pendingChanges.value.set(pokemonId, { previous: prev, newValue });
-  showConfirmBar.value = pendingChanges.value.size > 0;
-};
-
-const cancelFavouriteChanges = () => {
-  pendingChanges.value.forEach(({ previous }, pokemonId) => {
+  const toggleFavourite = (pokemonId) => {
     const pokemon = pokemons.value.find(p => p._id === pokemonId);
     if(!pokemon) {
       return;
     }
-    
-    pokemon.isFavourite = previous;
-    pokemon.deletedFromFavourites = !previous;
-  });
-
-  pendingChanges.value.clear();
-  showConfirmBar.value = false;
-};
-
-const saveFavouriteChanges = async () => {
-  for(const [pokemonId, { newValue }] of pendingChanges.value) {
-    const pokemon = pokemons.value.find(p => p._id === pokemonId);
-    if(!pokemon) {
-      continue;
+  
+    if(pendingChanges.value.has(pokemonId)) {
+      const { previous } = pendingChanges.value.get(pokemonId);
+      
+      if(pokemon.isFavourite === !previous) {
+        pokemon.isFavourite = previous;
+        pendingChanges.value.delete(pokemonId);
+        delete pokemon.deletedFromFavourites;
+      }
+    } 
+    else {
+      const prev = pokemon.isFavourite;
+      const newValue = !prev;
+      pokemon.isFavourite = newValue;
+      
+      if(!newValue) {
+        pokemon.deletedFromFavourites = true;
+      }
+      
+      pendingChanges.value.set(pokemonId, { previous: prev, newValue });
     }
+    
+    showConfirmBar.value = pendingChanges.value.size > 0;
+  };
 
-    pokemon.deletedFromFavourites = false;
+  const cancelFavouriteChanges = () => {
+    pendingChanges.value.forEach(({ previous }, pokemonId) => {
+      const pokemon = pokemons.value.find(p => p._id === pokemonId);
+      if(!pokemon) {
+        return;
+      }
+      
+      pokemon.isFavourite = previous;
+      delete pokemon.deletedFromFavourites;
+    });
 
-    try {
-      await axiosInstance.patch(
-        `/api/pokedex/changePokemonFavoriteStatus/${pokemonId}/`,
-        { isFavorite: newValue }
-      );
+    pendingChanges.value.clear();
+    showConfirmBar.value = false;
+  };
 
-      if(newValue) {
-        if(!favorites.value.includes(pokemonId)) favorites.value.push(pokemonId);
-      } 
-      else {
-        favorites.value = favorites.value.filter(id => id !== pokemonId);
+  const saveFavouriteChanges = async () => {
+    for(const [pokemonId, { newValue }] of pendingChanges.value) {
+      const pokemon = pokemons.value.find(p => p._id === pokemonId);
+      if(!pokemon) {
+        continue;
       }
 
-    }catch(err) {
-      console.error('Failed to update favourite', err);
-    }
-  }
+      try {
+        await axiosInstance.patch(`/api/pokedex/changePokemonFavoriteStatus/${pokemonId}/`, { isFavorite: newValue });
 
-  localStorage.setItem('favoritePokemons', JSON.stringify(favorites.value));
-  pendingChanges.value.clear();
-  showConfirmBar.value = false;
-};
+        if(newValue) {
+          if(!favorites.value.includes(pokemonId)) favorites.value.push(pokemonId);
+        } 
+        else {
+          favorites.value = favorites.value.filter(id => id !== pokemonId);
+        }
+
+        delete pokemon.deletedFromFavourites;
+
+      }
+      catch(err) {
+        console.error('Failed to update favourite', err);
+      }
+    }
+
+    localStorage.setItem('favoritePokemons', JSON.stringify(favorites.value));
+    pendingChanges.value.clear();
+    showConfirmBar.value = false;
+  };
 </script>
 
 <style scoped>

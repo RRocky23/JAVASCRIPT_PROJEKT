@@ -3,29 +3,26 @@
     <Header header-title="Favourites" />
 
     <div class="content">
-      <!-- Empty State -->
       <EmptyState v-if="!loading && favouritePokemons.length === 0" 
         image-url="/favourite-empty-substitute.png"
         empty-text="YOU DON'T HAVE ANY FAVOURITES YET. LET'S CHANGE THAT."
         button-route="/profile/myPokemons"
         button-text="Search for Pokemons" />
 
-      <!-- Loading -->
       <Spinner v-else-if="loading" />
 
-      <!-- Favourites List (Scrollable) -->
       <div v-else class="pokemon-list-container">
         <div class="pokemon-list">
-          <div class="pokemon-list">
-            <PokemonCard v-for="pokemon in favouritePokemons" 
-              :key="pokemon.pokedexNumber" 
-              :pokemon="pokemon" 
-              :use-favourites="true" 
-              @click="goToPokemonDetail(pokemon._id)"
-              @toggle-favourite="toggleFavourite(pokemon._id)"/>
-          </div>
+          <PokemonCard v-for="pokemon in favouritePokemons" 
+            :key="pokemon.pokedexNumber" 
+            :pokemon="pokemon" 
+            :use-favourites="true" 
+            @click="goToPokemonDetail(pokemon._id)"
+            @toggle-favourite="toggleFavourite(pokemon._id)"/>
         </div>
       </div>
+
+      <ConfirmFavouriteChange v-if="showConfirmBar" :count="pendingChanges.size" @cancel="cancelFavouriteChanges" @save="saveFavouriteChanges" />
     </div>
 
     <BottomNavigation />
@@ -33,97 +30,147 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuth } from '../../composables/useAuth.js';
-import axiosInstance from '../../utils/axios.js';
+  import { ref, computed, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useAuth } from '../../composables/useAuth.js';
+  import axiosInstance from '../../utils/axios.js';
 
-import Header from '../../components/common/Header.vue';
-import EmptyState from '../../components/common/EmptyState.vue';
-import Spinner from '../../components/common/Spinner.vue';
-import PokemonCard from '../../components/pokedex/PokemonCard.vue';
-import BottomNavigation from './BottomNavigation.vue';
+  import Header from '../../components/common/Header.vue';
+  import EmptyState from '../../components/common/EmptyState.vue';
+  import Spinner from '../../components/common/Spinner.vue';
+  import PokemonCard from '../../components/pokedex/PokemonCard.vue';
+  import ConfirmFavouriteChange from '../../components/buttons/ConfirmFavouriteChange.vue';
+  import BottomNavigation from './BottomNavigation.vue';
 
-const { fetchUser, isLoggedIn, refresh } = useAuth();
-const router = useRouter();
-const allPokemons = ref([]);
-const favorites = ref(JSON.parse(localStorage.getItem('favoritePokemons') || '[]'));
-const loading = ref(true);
+  const { fetchUser, isLoggedIn, refresh } = useAuth();
+  const router = useRouter();
+  const allPokemons = ref([]);
+  const favorites = ref(JSON.parse(localStorage.getItem('favoritePokemons') || '[]'));
+  const loading = ref(true);
+  const pendingChanges = ref(new Map());
+  const showConfirmBar = ref(false);
 
-const favouritePokemons = computed(() => {
-  if(!Array.isArray(allPokemons.value)) {
-    return [];
-  }
-
-  return allPokemons.value.filter((pokemon) => pokemon.isFavourite || pokemon.deletedFromFavourites)
-    .map(pokemon => ({...pokemon, name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1).toLowerCase()}));
-});
-
-onMounted(async () => {
-  if(!isLoggedIn.value) {
-    router.push('/starter/onboarding4');
-    return;
-  }
-
-  try {
-    const currentUser = await fetchUser();
-
-    if(currentUser == null) {
-      console.error('User data not found. Try to sign in');
-      router.push('/starter/onboarding4');
+  const favouritePokemons = computed(() => {
+    if(!Array.isArray(allPokemons.value)) {
+      return [];
     }
-    
-    await refresh();
 
-    }catch(error) {
-      console.error('Failed to fetch user:', error);
+    return allPokemons.value.filter((pokemon) => pokemon.isFavourite || pokemon.deletedFromFavourites)
+      .map(pokemon => ({...pokemon, name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1).toLowerCase()}));
+  });
+
+  onMounted(async () => {
+    if(!isLoggedIn.value) {
       router.push('/starter/onboarding4');
+      return;
     }
 
     try {
-      const response = await axiosInstance.get('/api/pokedex/getUserPokemons/');
-      favorites.value = response.data.filter(p => p.isFavorite).map(p => p._id);
+      const currentUser = await fetchUser();
 
-      allPokemons.value = response.data;
+      if(currentUser == null) {
+        console.error('User data not found. Try to sign in');
+        router.push('/starter/onboarding4');
+      }
+      
+      await refresh();
 
-      localStorage.setItem("favoritePokemons", JSON.stringify(favorites))
-    }catch(error) {
-      console.error('Error loading pokemons:', error);
-    }finally {
-      loading.value = false;
-    }
-});
+      }catch(error) {
+        console.error('Failed to fetch user:', error);
+        router.push('/starter/onboarding4');
+      }
 
-const goToPokemonDetail = (pokedexNumber) => {
-  router.push(`/profile/myPokemons/${pokedexNumber}`);
-};
+      try {
+        const response = await axiosInstance.get('/api/pokedex/getUserPokemons/');
+        favorites.value = response.data.filter(p => p.isFavorite).map(p => p._id);
 
-const toggleFavourite = async (pokemonId) => {
+        allPokemons.value = response.data;
+
+        localStorage.setItem("favoritePokemons", JSON.stringify(favorites))
+      }catch(error) {
+        console.error('Error loading pokemons:', error);
+      }finally {
+        loading.value = false;
+      }
+  });
+
+  const goToPokemonDetail = (pokedexNumber) => {
+    router.push(`/profile/myPokemons/${pokedexNumber}`);
+  };
+
+  const toggleFavourite = (pokemonId) => {
     const pokemon = allPokemons.value.find(p => p._id === pokemonId);
-
     if(!pokemon) {
       return;
     }
 
-    pokemon.isFavourite = !pokemon.isFavourite;
-
-    try {
-      await axiosInstance.patch(`/api/pokedex/changePokemonFavoriteStatus/${pokemonId}/`, { isFavorite: pokemon.isFavourite });
-    }catch(error) {
-      pokemon.isFavourite = !pokemon.isFavourite;
-      console.error("Failed to update favorite", error);
-    }
-
-    if(pokemon.isFavourite) {
-      favorites.value.push(pokemonId);
-      pokemon.deletedFromFavourites = false;
-    }
+    if(pendingChanges.value.has(pokemonId)) {
+      const { previous } = pendingChanges.value.get(pokemonId);
+      
+      if(pokemon.isFavourite === !previous) {
+        pokemon.isFavourite = previous;
+        pendingChanges.value.delete(pokemonId);
+        delete pokemon.deletedFromFavourites;
+      }
+    } 
     else {
-      favorites.value = favorites.value.filter(_id => _id !== pokemonId);
-      pokemon.deletedFromFavourites = true;
+      const prev = pokemon.isFavourite;
+      const newValue = !prev;
+      pokemon.isFavourite = newValue;
+      
+      if(!newValue) {
+        pokemon.deletedFromFavourites = true;
+      }
+      
+      pendingChanges.value.set(pokemonId, { previous: prev, newValue });
+    }
+    
+    showConfirmBar.value = pendingChanges.value.size > 0;
+  };
+
+  const cancelFavouriteChanges = () => {
+    pendingChanges.value.forEach(({ previous }, pokemonId) => {
+      const pokemon = allPokemons.value.find(p => p._id === pokemonId);
+      if(!pokemon) {
+        return;
+      }
+      
+      pokemon.isFavourite = previous;
+      delete pokemon.deletedFromFavourites;
+    });
+
+    pendingChanges.value.clear();
+    showConfirmBar.value = false;
+  };
+
+  const saveFavouriteChanges = async () => {
+    for(const [pokemonId, { newValue }] of pendingChanges.value) {
+      const pokemon = allPokemons.value.find(p => p._id === pokemonId);
+      if(!pokemon) {
+        continue;
+      }
+
+      try {
+        await axiosInstance.patch(`/api/pokedex/changePokemonFavoriteStatus/${pokemonId}/`, { isFavorite: newValue });
+
+        if(newValue) {
+          if(!favorites.value.includes(pokemonId)) favorites.value.push(pokemonId);
+        } 
+        else {
+          favorites.value = favorites.value.filter(id => id !== pokemonId);
+        }
+
+        delete pokemon.deletedFromFavourites;
+
+      }
+      catch(error) {
+        console.error("Failed to update favorite", error);
+      }
     }
 
     localStorage.setItem('favoritePokemons', JSON.stringify(favorites.value));
+    pendingChanges.value.clear();
+    showConfirmBar.value = false;
   };
 </script>
 
@@ -147,7 +194,6 @@ const toggleFavourite = async (pokemonId) => {
   overflow: hidden;
 }
 
-/* SCROLLABLE CONTAINER */
 .pokemon-list-container {
   flex: 1;
   overflow-y: auto;
