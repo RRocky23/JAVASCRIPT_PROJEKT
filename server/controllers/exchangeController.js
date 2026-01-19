@@ -83,16 +83,12 @@ export const getExchangeablePokemon = async (req, res) => {
  * Exchange Pokemon for currency
  */
 export const exchangePokemons = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
   try {
     const userId = req.user.id;
     const { pokemonIds } = req.body;
 
     // Validation
     if (!pokemonIds || !Array.isArray(pokemonIds) || pokemonIds.length === 0) {
-      await session.abortTransaction();
       return res.status(400).json({ message: 'Pokemon IDs array is required' });
     }
 
@@ -103,10 +99,9 @@ export const exchangePokemons = async (req, res) => {
     const userPokemons = await UserPokemon.find({
       _id: { $in: objectIds },
       userId
-    }).session(session).lean();
+    }).lean();
 
     if (userPokemons.length !== pokemonIds.length) {
-      await session.abortTransaction();
       return res.status(404).json({
         message: 'Some Pokemon not found or do not belong to this user'
       });
@@ -116,7 +111,7 @@ export const exchangePokemons = async (req, res) => {
     const pokemonDetailsIds = [...new Set(userPokemons.map(up => up.pokemonId))];
     const pokemons = await Pokemon.find({
       pokedexNumber: { $in: pokemonDetailsIds }
-    }).session(session).lean();
+    }).lean();
 
     const pokemonMap = Object.fromEntries(
       pokemons.map(p => [p.pokedexNumber, p])
@@ -140,17 +135,14 @@ export const exchangePokemons = async (req, res) => {
     // Delete the Pokemon
     await UserPokemon.deleteMany({
       _id: { $in: objectIds }
-    }).session(session);
+    });
 
     // Add currency to user
     const user = await User.findByIdAndUpdate(
       userId,
       { $inc: { currency: totalValue } },
-      { new: true, session }
+      { new: true }
     ).select('currency');
-
-    // Commit transaction
-    await session.commitTransaction();
 
     return res.status(200).json({
       success: true,
@@ -161,11 +153,8 @@ export const exchangePokemons = async (req, res) => {
     });
 
   } catch (err) {
-    await session.abortTransaction();
     console.error('Error exchanging Pokemon:', err);
     return res.status(500).json({ message: 'Server error' });
-  } finally {
-    session.endSession();
   }
 };
 

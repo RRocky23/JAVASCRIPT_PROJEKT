@@ -1,13 +1,18 @@
 import express from "express";
-import { 
-  getUsers, 
+import {
+  getUsers,
   getCurrentUser,
   getAllPokemons,
   getPokemonById,
   getPokemonStats,
   getPokemonMoves,
   getPokemonEvolutions,
-  getPokemonLocations
+  getPokemonLocations,
+  getTutorialStatus,
+  selectStarterPokemon,
+  completeTutorial,
+  getPokemonCount,
+  getDiscoveryCount
 } from "../controllers/profileController.js";
 
 const router = express.Router();
@@ -189,6 +194,161 @@ router.get("/list", async (req, res) => {
  */
 router.get("/details", (req, res) => {
     res.send("Details GET page");
+});
+
+/**
+ * @swagger
+ * /api/profile/tutorial-status:
+ *   get:
+ *     summary: Get user's tutorial status
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Returns tutorial status
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/tutorial-status", async (req, res) => {
+    try {
+        const status = await getTutorialStatus(req.user.id);
+        res.status(200).json(status);
+    }
+    catch(err) {
+        console.error(err);
+        if (err.message === 'User not found') {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/profile/select-starter:
+ *   post:
+ *     summary: Select starter Pokemon
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               starter:
+ *                 type: string
+ *                 enum: [bulbasaur, charmander, squirtle]
+ *     responses:
+ *       200:
+ *         description: Starter Pokemon selected successfully
+ *       400:
+ *         description: Invalid starter choice or user already has starter
+ *       401:
+ *         description: Unauthorized
+ */
+router.post("/select-starter", async (req, res) => {
+    try {
+        const { starter } = req.body;
+
+        if (!starter) {
+            return res.status(400).json({ message: 'Starter choice is required' });
+        }
+
+        const result = await selectStarterPokemon(req.user.id, starter);
+        res.status(200).json(result);
+    }
+    catch(err) {
+        console.error(err);
+        if (err.message === 'Invalid starter Pokemon choice') {
+            return res.status(400).json({ message: 'Invalid starter choice. Choose bulbasaur, charmander, or squirtle.' });
+        }
+        if (err.message === 'User already has a starter Pokemon') {
+            return res.status(400).json({ message: 'You already have a starter Pokemon' });
+        }
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/profile/complete-tutorial:
+ *   post:
+ *     summary: Mark tutorial as completed
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Tutorial completed successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.post("/complete-tutorial", async (req, res) => {
+    try {
+        const result = await completeTutorial(req.user.id);
+        res.status(200).json(result);
+    }
+    catch(err) {
+        console.error(err);
+        if (err.message === 'User not found') {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/profile/pokemon/count:
+ *   get:
+ *     summary: Get count of user's Pokemon
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Returns count of user's Pokemon
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/pokemon/count", async (req, res) => {
+    try {
+        const result = await getPokemonCount(req.user.id);
+        res.status(200).json(result);
+    }
+    catch(err) {
+        console.error(err);
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/profile/discoveries/count:
+ *   get:
+ *     summary: Get count of user's discoveries
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Returns count of user's discoveries
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/discoveries/count", async (req, res) => {
+    try {
+        const result = await getDiscoveryCount(req.user.id);
+        res.status(200).json(result);
+    }
+    catch(err) {
+        console.error(err);
+        res.status(500).json({ message: 'Something went wrong' });
+    }
 });
 
 export default router;
