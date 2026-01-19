@@ -321,7 +321,7 @@ onMounted(async () => {
 
   const socketUrl =
     hostname === 'localhost'
-      ? `${protocol}//${hostname}:8080`
+      ? `${protocol}//${hostname}:8000`
       : window.location.origin;
 
     console.log(socketUrl)
