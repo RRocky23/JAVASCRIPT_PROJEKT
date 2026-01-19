@@ -28,11 +28,25 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const token = tokenService.getAccessToken();
-  
+
   if (to.path === '/') {
     if (token) {
+      // Check if user needs to select starter Pokemon
+      try {
+        const response = await fetch('/api/profile/tutorial-status', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.isNewUser && !data.hasCompletedTutorial) {
+            return next({ path: '/starter/select-pokemon', replace: true });
+          }
+        }
+      } catch (error) {
+        console.error('Error checking tutorial status:', error);
+      }
       return next({ path: '/home', replace: true });
     }
     return next({ path: '/starter/onboarding1', replace: true });
@@ -40,6 +54,23 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !token) {
     return next({ path: '/starter/onboarding4', replace: true });
+  }
+
+  // Check if authenticated user needs to complete tutorial
+  if (token && to.path === '/home') {
+    try {
+      const response = await fetch('/api/profile/tutorial-status', {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.isNewUser && !data.hasCompletedTutorial) {
+          return next({ path: '/starter/select-pokemon', replace: true });
+        }
+      }
+    } catch (error) {
+      console.error('Error checking tutorial status:', error);
+    }
   }
 
   next();

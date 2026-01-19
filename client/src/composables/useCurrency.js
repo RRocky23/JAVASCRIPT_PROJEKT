@@ -27,11 +27,16 @@ export const useCurrency = () => {
     currency.value += amount;
   };
 
+  const resetCurrency = () => {
+    currency.value = 0;
+  };
+
   return {
     currency,
     loading,
     fetchCurrency,
     updateCurrency,
-    addCurrency
+    addCurrency,
+    resetCurrency
   };
 };

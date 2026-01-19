@@ -58,6 +58,16 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
+    isNewUser: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    hasCompletedTutorial: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     createdAt: {
         type: Date,
         required: true,
