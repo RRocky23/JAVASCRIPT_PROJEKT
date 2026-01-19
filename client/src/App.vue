@@ -43,7 +43,7 @@ import { useAuth } from "./composables/useAuth.js";
 import { useCurrency } from "./composables/useCurrency.js";
 
 const { isLoggedIn, logout } = useAuth();
-const { currency, fetchCurrency } = useCurrency();
+const { currency, fetchCurrency, resetCurrency } = useCurrency();
 
 onMounted(async () => {
   if (isLoggedIn.value) {
@@ -54,6 +54,8 @@ onMounted(async () => {
 watch(isLoggedIn, async (newValue) => {
   if (newValue) {
     await fetchCurrency();
+  } else {
+    resetCurrency();
   }
 });
 </script>
