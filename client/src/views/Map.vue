@@ -7,8 +7,6 @@
       </button>
     </div>
 
-    <div v-if="geolocationError" class="geo-error">{{ geolocationError }}</div>
-
     <div id="map" ref="mapElement"></div>
 
     <div v-if="selectedPokemon" class="catch-modal">
@@ -27,21 +25,19 @@
         </div>
       </div>
     </div>
-
-    <BottomNav />
   </div>
+  <BottomNav />
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuth } from '../composables/useAuth.js';
 import { getDistance } from 'geolib';
 import L from 'leaflet';
-
 import 'leaflet/dist/leaflet.css';
-import { io } from 'socket.io-client';
-
-import BottomNav from '../components/Buttons/BottomNav.vue';
+import io from 'socket.io-client';
+import BottomNav from '../components/buttons/BottomNav.vue';
 
 const GAME_AREA = [
   [53.12104877931438, 23.14610872616234],
@@ -87,9 +83,8 @@ const userAvatar = ref('https://api.dicebear.com/7.x/avataaars/svg?seed=default'
 const userId = ref(null);
 const watchId = ref(null);
 const playerMarker = ref(null);
-const accuracyCircle = ref(null);
+const accuracyCircle = ref(null)
 const pokemonMarkers = ref(new Map());
-const geolocationError = ref(null);
 
 const isPointInPolygon = (point, polygon) => {
   const [lat, lng] = point;
@@ -156,7 +151,7 @@ const createPlayerIcon = (avatarUrl) => {
 };
 
 const initMap = () => {
-  map.value = L.map(mapElement.value).setView(userLocation.value, 25);
+  map.value = L.map(mapElement.value).setView(userLocation.value, 30);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -183,36 +178,37 @@ const initMap = () => {
 
 const updatePlayerPosition = (lat, lng) => {
   userLocation.value = [lat, lng];
+  
+  if(map.value) {
+    map.value.setView([lat, lng], 30);
+  }
+  
+  if(playerMarker.value) {
+    playerMarker.value.setLatLng([lat, lng]);
+  }
 
-  if (playerMarker.value) playerMarker.value.setLatLng([lat, lng]);
-  if (map.value) map.value.setView([lat, lng], map.value.getZoom());
-  if (accuracyCircle.value) accuracyCircle.value.setLatLng([lat, lng]);
-
-  isInsideBoundary.value = isPointInPolygon([lat, lng], GAME_AREA);
+  if(accuracyCircle.value) {
+    accuracyCircle.value.setLatLng([lat, lng]);
+  }
 
   const radius = accuracyCircle.value ? accuracyCircle.value.getRadius() : 100;
   pokemon.value.forEach(p => {
-    const distance = getDistance(
-        { latitude: lat, longitude: lng },
-        { latitude: p.lat, longitude: p.lng }
-    );
+    const distance = getDistance({ latitude: lat, longitude: lng }, { latitude: p.lat, longitude: p.lng });
 
-    if (p.caughtBy?.includes(userId.value)) {
+    if(p.caughtBy?.includes(userId.value)) {
       removePokemonMarker(p.id);
       return;
     }
 
-    if (distance <= radius) {
-      if (!pokemonMarkers.value.has(p.id)) addPokemonMarker(p);
+    if(distance <= radius) {
+      if(!pokemonMarkers.value.has(p.id)) {
+        addPokemonMarker(p);
+      }
     } 
     else {
       removePokemonMarker(p.id);
     }
   });
-
-  if (socket.value && isInsideBoundary.value) {
-    socket.value.emit('player:move', { lat, lng });
-  }
 };
 
 const addPokemonMarker = (pokemonData) => {
@@ -223,8 +219,7 @@ const addPokemonMarker = (pokemonData) => {
   marker.on('click', () => {
     if (isInsideBoundary.value) {
       selectedPokemon.value = pokemonData;
-    } 
-    else {
+    } else {
       alert('You must be inside the game area to catch Pokemon!');
     }
   });
@@ -283,14 +278,13 @@ const catchPokemon = async () => {
   socket.value.emit('pokemon:catch', {
     pokemonId: selectedPokemon.value.id,
     userId: userId.value,
-    ballType: 'poke',
+    ballType: 'poke-ball',
     catchLocation: { lat: userLocation.value[0], lng: userLocation.value[1] },
   });
 
   socket.value.once('pokemon:catch:success', ({ pokemon: caughtPokemon, isNewDiscovery }) => {
     alert(`Caught ${selectedPokemon.value.name}!${isNewDiscovery ? ' (New Discovery!)' : ''}`);
     removePokemonMarker(selectedPokemon.value.id);
-
     pokemon.value = pokemon.value.filter(p => p.id !== selectedPokemon.value.id);
     selectedPokemon.value = null;
     catchingPokemon.value = false;
@@ -308,17 +302,33 @@ const openGoogleMaps = () => {
 };
 
 onMounted(async () => {
-  const { fetchUser, user: authUser } = useAuth();
-  await fetchUser();
   
+  const router = useRouter();
+  const { fetchUser, user: authUser, refresh } = useAuth();
+  await fetchUser();
   if(authUser.value) {
     userId.value = authUser.value._id;
     userAvatar.value = authUser.value.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${authUser.value.username}`;
   }
+  else {
+    console.error('User data not found. Try to sign in');
+    router.push('/starter/onboarding4');
+  }
 
   initMap();
 
-  socket.value = io("http://localhost:8000/", { transports: ['websocket', 'polling'] });
+  const { protocol, hostname } = window.location;
+
+  const socketUrl =
+    hostname === 'localhost'
+      ? `${protocol}//${hostname}:8000`
+      : window.location.origin;
+
+    console.log(socketUrl)
+
+  socket.value = io(socketUrl, {
+    transports: ['websocket', 'polling'],
+  });
 
   socket.value.on('connect', () => {
     console.log('Connected to server');
@@ -343,20 +353,6 @@ onMounted(async () => {
   });
 
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        updatePlayerPosition(latitude, longitude);
-        geolocationError.value = null;
-      },
-      (error) => {
-        geolocationError.value = `Geolocation error: ${error.message || error.code}`;
-        console.error('Geolocation getCurrentPosition error:', error);
-      },
-      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
-    );
-
-    // Then start watching position
     watchId.value = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -370,17 +366,7 @@ onMounted(async () => {
         }
       },
       (error) => {
-        updatePlayerPosition(GAME_CENTER[0], GAME_CENTER[1]);
-
-        const inside = isPointInPolygon(GAME_CENTER, GAME_AREA);
-        isInsideBoundary.value = inside;
-
-        if (socket.value && inside) {
-          socket.value.emit('player:move', { lat: GAME_CENTER[0], lng: GAME_CENTER[1] });
-        }
-
-        geolocationError.value = `Geolocation watch error: ${error.message || error.code}`;
-        console.error('Geolocation watch error:', error);
+        console.error('Geolocation error:', error);
       },
       {
         enableHighAccuracy: true,
@@ -526,83 +512,5 @@ onUnmounted(() => {
 
 .btn-cancel:hover {
   background: #BDBDBD;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 12px 20px;
-  background-color: #fff;
-  border-top: 1px solid #E0E0E0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-  z-index: 100;
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 16px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
-  min-width: 60px;
-}
-
-.nav-icon {
-  font-size: 1.5rem;
-  transition: transform 0.2s;
-}
-
-.nav-item:hover .nav-icon {
-  transform: scale(1.1);
-}
-
-.nav-label {
-  font-family: "Kode Mono", monospace;
-  font-size: 0.75rem;
-  color: #1A1A1A;
-  font-weight: 600;
-}
-
-.nav-item.active .nav-label {
-  color: #FEC41B;
-}
-
-.nav-item.active .nav-icon {
-  filter: drop-shadow(0 2px 4px rgba(254, 196, 27, 0.3));
-}
-
-.geo-error {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1100;
-  background: rgba(0,0,0,0.75);
-  color: #FFDADA;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-family: "Kode Mono", monospace;
-  font-weight: 600;
-}
-
-@media (max-width: 1024px) {
-  .nav-icon {
-    font-size: 1.8rem;
-  }
-
-  .nav-label {
-    font-size: 0.9rem;
-  }
-
-  .bottom-nav {
-    padding: 16px 20px;
-  }
 }
 </style>

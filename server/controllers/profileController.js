@@ -4,7 +4,10 @@ import PokemonStat from '../models/PokemonStat.js';
 import PokemonMove from '../models/PokemonMove.js';
 import PokemonEvolution from '../models/PokemonEvolution.js';
 import PokemonLocation from '../models/PokemonLocation.js';
-import User from '../models/User.js'
+import User from '../models/User.js';
+import UserPokemon from '../models/UserPokemon.js';
+import UserDiscovery from '../models/UserDiscovery.js';
+import Inventory from '../models/Inventory.js';
 
 export const getUsers = async () => {
   try {
@@ -158,15 +161,181 @@ export const getPokemonEvolutions = async (pokedexNumber) => {
 
 export const getPokemonLocations = async (pokedexNumber) => {
   try {
-    const locations = await PokemonLocation.find({ 
+    const locations = await PokemonLocation.find({
       pokemonId: parseInt(pokedexNumber),
-      active: true 
+      active: true
     });
-    
+
     return locations;
-  } 
+  }
   catch(err) {
     console.error('Error fetching pokemon locations:', err);
+    throw err;
+  }
+};
+
+// TUTORIAL FUNCTIONS
+export const getTutorialStatus = async (userId) => {
+  try {
+    const user = await User.findById(userId).select('isNewUser hasCompletedTutorial');
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return {
+      isNewUser: user.isNewUser,
+      hasCompletedTutorial: user.hasCompletedTutorial
+    };
+  }
+  catch(err) {
+    console.error('Error fetching tutorial status:', err);
+    throw err;
+  }
+};
+
+export const selectStarterPokemon = async (userId, starterChoice) => {
+  try {
+    // Validate starter choice
+    const validStarters = {
+      'bulbasaur': 1,
+      'charmander': 4,
+      'squirtle': 7
+    };
+
+    const pokemonId = validStarters[starterChoice.toLowerCase()];
+    if (!pokemonId) {
+      throw new Error('Invalid starter Pokemon choice');
+    }
+
+    // Check if user already has a Pokemon (prevent multiple starters)
+    const existingPokemon = await UserPokemon.findOne({ userId: userId.toString() });
+    if (existingPokemon) {
+      throw new Error('User already has a starter Pokemon');
+    }
+
+    // Get Pokemon data
+    const pokemon = await Pokemon.findOne({ pokedexNumber: pokemonId });
+    const stats = await PokemonStat.findOne({ pokemonId });
+    const moves = await PokemonMove.find({ pokemonId }).sort({ learnLevel: 1 }).limit(2);
+
+    if (!pokemon || !stats) {
+      throw new Error('Pokemon data not found');
+    }
+
+    // Create starter Pokemon with level 5
+    const level = 5;
+    const baseHp = stats.hp;
+    const maxHp = Math.floor((2 * baseHp * level) / 100 + level + 10);
+
+    const newUserPokemon = new UserPokemon({
+      userId: userId.toString(),
+      pokemonId,
+      customName: null,
+      height: pokemon.height,
+      weight: pokemon.weight,
+      level,
+      experiencePoints: 0,
+      currentHp: maxHp,
+      maxHp,
+      maxPp: 100,
+      attack: Math.floor((2 * stats.attack * level) / 100 + 5),
+      defense: Math.floor((2 * stats.defense * level) / 100 + 5),
+      specialAttack: Math.floor((2 * stats.specialAttack * level) / 100 + 5),
+      specialDefense: Math.floor((2 * stats.specialDefense * level) / 100 + 5),
+      speed: Math.floor((2 * stats.speed * level) / 100 + 5),
+      moveOne: moves[0]?.moveName || 'tackle',
+      moveTwo: moves[1]?.moveName || 'growl',
+      moveThree: null,
+      moveFour: null,
+      isFavourite: true,
+      caughtDate: new Date(),
+      caughtLocationLat: 0,
+      caughtLocationLng: 0,
+      caughtBallType: 'starter'
+    });
+
+    await newUserPokemon.save();
+
+    // Create discovery entry for Pokedex
+    const discovery = new UserDiscovery({
+      userId: userId.toString(),
+      pokemonId,
+      firstTimeCaught: new Date()
+    });
+    await discovery.save();
+
+    // Add starter items to inventory (5 Poke Balls)
+    const pokeBallItem = await Inventory.findOne({
+      userId,
+      itemId: 'poke_ball'
+    });
+
+    if (pokeBallItem) {
+      pokeBallItem.quantity += 5;
+      await pokeBallItem.save();
+    } else {
+      const newInventoryItem = new Inventory({
+        userId,
+        itemId: 'poke_ball',
+        quantity: 5
+      });
+      await newInventoryItem.save();
+    }
+
+    return {
+      pokemon: newUserPokemon,
+      message: `You received ${pokemon.name}!`
+    };
+  }
+  catch(err) {
+    console.error('Error selecting starter Pokemon:', err);
+    throw err;
+  }
+};
+
+export const completeTutorial = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    user.isNewUser = false;
+    user.hasCompletedTutorial = true;
+    await user.save();
+
+    return {
+      success: true,
+      message: 'Tutorial completed successfully'
+    };
+  }
+  catch(err) {
+    console.error('Error completing tutorial:', err);
+    throw err;
+  }
+};
+
+// STATISTICS FUNCTIONS
+export const getPokemonCount = async (userId) => {
+  try {
+    const count = await UserPokemon.countDocuments({ userId: userId.toString() });
+    return { count };
+  }
+  catch(err) {
+    console.error('Error counting user pokemon:', err);
+    throw err;
+  }
+};
+
+export const getDiscoveryCount = async (userId) => {
+  try {
+    const count = await UserDiscovery.countDocuments({ userId: userId.toString() });
+    return { count };
+  }
+  catch(err) {
+    console.error('Error counting user discoveries:', err);
     throw err;
   }
 };
