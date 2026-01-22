@@ -62,5 +62,5 @@ const isActive = (path) => {
 </script>
 
 <style scoped>
-@import '../../styles/BottomNavigationStyles.css';
+@import '../client/src/styles/BottomNavigationStyles.css';
 </style>

@@ -161,6 +161,5 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-@import "../client/src/styles/SharedStyles.css";
-@import "../client/src/styles/LoginPageStyles.css";
+@import '../client/src/styles/LoginFormStyles.css';
 </style>
