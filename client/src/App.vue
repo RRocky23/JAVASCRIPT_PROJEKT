@@ -2,21 +2,6 @@
   <div class="app-background">
     <div class="app-phone-frame">
       <div class="app-content d-flex flex-column">
-        <nav class="navbar navbar-expand-lg navbar-opaque">
-            <div class="ms-auto">
-              <ul class="navbar-nav">
-                <li v-if="!isLoggedIn" class="nav-item">
-                  <router-link class="nav-link" to="/account/register">Sign Up</router-link>
-                </li>
-                <li v-if="!isLoggedIn" class="nav-item">
-                  <router-link class="nav-link" to="/account/login">Sign In</router-link>
-                </li>
-                <li v-if="isLoggedIn" class="nav-item">
-                  <button class="nav-link btn btn-link text-danger" @click="logout">Sign Out</button>
-                </li>
-              </ul>
-            </div>
-        </nav>
 
         <main class="flex-grow-1 my-4 d-flex justify-content-center align-items-center">
           <router-view /> 

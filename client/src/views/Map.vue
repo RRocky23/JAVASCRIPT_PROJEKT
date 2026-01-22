@@ -392,11 +392,13 @@ onUnmounted(() => {
   position: relative;
   height: 100vh;
   width: 100%;
+  z-index: 1;
 }
 
 #map {
   height: 100%;
   width: 100%;
+  z-index: 1;
 }
 
 .out-of-bounds-warning {
