@@ -1,0 +1,13 @@
+@import "./LoginPageStyles.module.css";
+
+.register-title {
+  color: #22c55e;
+}
+
+.register-button {
+  background: #22c55e;
+}
+
+.register-button:hover {
+  background: #16a34a;
+}

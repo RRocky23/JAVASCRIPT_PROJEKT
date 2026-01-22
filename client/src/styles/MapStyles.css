@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;600&display=swap');
+
+.map-container {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+.out-of-bounds-warning {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: #FF5252;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  text-align: center;
+}
+
+.navigate-btn {
+  margin-top: 10px;
+  background: white;
+  color: #FF5252;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.catch-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.catch-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  font-family: "Kode Mono", monospace;
+}
+
+.catch-modal-content h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.8rem;
+  color: #1A1A1A;
+}
+
+.pokemon-sprite {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  margin: 10px 0;
+}
+
+.pokemon-info {
+  margin: 15px 0;
+}
+
+.pokemon-info p {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.catch-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-catch,
+.btn-cancel {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-family: "Kode Mono", monospace;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-catch {
+  background: #FEC41B;
+  color: white;
+}
+
+.btn-catch:hover:not(:disabled) {
+  background: #e0b017;
+}
+
+.btn-catch:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background: #E0E0E0;
+  color: #1A1A1A;
+}
+
+.btn-cancel:hover {
+  background: #BDBDBD;
+}
