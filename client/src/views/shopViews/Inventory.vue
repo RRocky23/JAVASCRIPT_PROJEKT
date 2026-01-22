@@ -1,6 +1,12 @@
 <template>
   <div class="inventory-container">
-    <h2 class="inventory-title">My Inventory</h2>
+    <div class="inventory-header">
+      <h2 class="inventory-title">My Inventory</h2>
+      <div class="top-currency">
+        <span class="currency-icon">💰</span>
+        <span class="currency-amount">{{ currency }}</span>
+      </div>
+    </div>
 
     <div v-if="loading" class="text-center">
       <p>Loading inventory...</p>
@@ -87,11 +93,16 @@
       </div>
     </div>
   </div>
+  <BottomNav />
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axiosInstance from '../../utils/axios.js';
+import { useCurrency } from '../../composables/useCurrency.js';
+import BottomNav from '../../components/buttons/BottomNav.vue';
+
+const { currency, fetchCurrency } = useCurrency();
 
 const inventory = ref([]);
 const loading = ref(true);
@@ -106,12 +117,10 @@ const formatItemType = (type) => {
 const filteredInventory = computed(() => {
   let items = inventory.value;
 
-  // Filter by type
   if (selectedType.value !== 'all') {
     items = items.filter(item => item.itemDetails.itemType === selectedType.value);
   }
 
-  // Sort
   items = [...items].sort((a, b) => {
     switch (sortBy.value) {
       case 'name':
@@ -140,7 +149,6 @@ const totalValue = computed(() => {
 });
 
 const handleUseItem = (item) => {
-  // Placeholder for future implementation
   alert(`Using ${item.itemDetails.itemName} will be implemented in a future update!`);
 };
 
@@ -160,8 +168,8 @@ const loadInventory = async () => {
   }
 };
 
-onMounted(() => {
-  loadInventory();
+onMounted(async () => {
+  await Promise.all([loadInventory(), fetchCurrency()]);
 });
 </script>
 
@@ -172,12 +180,45 @@ onMounted(() => {
   padding: 20px;
 }
 
+.inventory-container {
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+  min-height: 0;
+  padding-bottom: 140px;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
 .inventory-title {
   font-size: 2rem;
   font-weight: 900;
   text-align: center;
   margin-bottom: 30px;
   color: #333;
+}
+
+/* Top header with centered currency */
+.inventory-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.top-currency {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.top-currency .currency-icon {
+  font-size: 1.4rem;
 }
 
 .empty-inventory {

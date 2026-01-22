@@ -3,10 +3,6 @@
     <div class="app-phone-frame">
       <div class="app-content d-flex flex-column">
         <nav class="navbar navbar-expand-lg navbar-opaque">
-            <div v-if="isLoggedIn" class="currency-display">
-              <span class="currency-icon">💰</span>
-              <span class="currency-amount">{{ currency }}</span>
-            </div>
             <div class="ms-auto">
               <ul class="navbar-nav">
                 <li v-if="!isLoggedIn" class="nav-item">
@@ -40,23 +36,15 @@
 <script setup>
 import { onMounted, watch } from 'vue';
 import { useAuth } from "./composables/useAuth.js";
-import { useCurrency } from "./composables/useCurrency.js";
 
 const { isLoggedIn, logout } = useAuth();
-const { currency, fetchCurrency, resetCurrency } = useCurrency();
 
 onMounted(async () => {
-  if (isLoggedIn.value) {
-    await fetchCurrency();
-  }
+  // no global currency fetch here anymore
 });
 
 watch(isLoggedIn, async (newValue) => {
-  if (newValue) {
-    await fetchCurrency();
-  } else {
-    resetCurrency();
-  }
+  // no global currency logic
 });
 </script>
 
@@ -98,9 +86,9 @@ watch(isLoggedIn, async (newValue) => {
     padding: 0 !important;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     background: white !important;
-    font-size: 1.2rem !important;
+    font-size: 1.28rem !important;
   }
 
   nav.navbar {
@@ -138,15 +126,19 @@ watch(isLoggedIn, async (newValue) => {
   .app-content {
     height: 100vh !important;
     display: flex;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     flex-direction: column;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   main {
     flex: 1 1 auto;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -154,7 +146,7 @@ watch(isLoggedIn, async (newValue) => {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .slide-fade-enter-active {
@@ -205,6 +197,67 @@ watch(isLoggedIn, async (newValue) => {
 
   .currency-amount {
     font-size: 1.3rem;
+  }
+}
+</style>
+
+<style>
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+</style>
+
+<!-- Mobile accessibility: larger fonts & touch targets globally -->
+<style>
+@media (max-width: 1024px) {
+  /* increase base font so rem-based sizes grow */
+  html, body {
+    font-size: 1.38rem !important;
+  }
+
+  /* enlarge buttons/controls globally */
+  button, .btn, input[type="button"], input[type="submit"], .confirm-button {
+    font-size: 1.05rem !important;
+    padding: 14px 18px !important;
+    min-height: 52px !important;
+    border-radius: 10px !important;
+    touch-action: manipulation;
+  }
+
+  /* increase navbar / bottom nav touch targets */
+  .bottom-nav .nav-item, .nav-item {
+    padding: 12px 18px !important;
+    min-width: 72px !important;
+  }
+
+  .nav-icon, .home-icon, .action-icon {
+    font-size: 2.2rem !important;
+  }
+
+  .nav-label, .home-label {
+    font-size: 1rem !important;
+  }
+
+  /* action cards (home) larger text */
+  .action-card h3 {
+    font-size: 1.25rem !important;
+  }
+
+  .action-card p, .subtitle, .pokemon-name, .small-name {
+    font-size: 1.05rem !important;
+  }
+
+  /* make modal buttons bigger too */
+  .modal-content .btn, .modal-button {
+    padding: 14px 20px !important;
+    font-size: 1.05rem !important;
   }
 }
 </style>

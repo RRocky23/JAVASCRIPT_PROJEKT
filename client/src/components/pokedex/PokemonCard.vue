@@ -132,4 +132,45 @@
   cursor: pointer;
   padding: 4px;
 }
+
+@media (max-width: 768px) {
+  .pokemon-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .pokemon-sprite {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    margin-right: 0;
+  }
+
+  .pokemon-info {
+    padding-top: 12px;
+    text-align: left;
+  }
+
+  .pokemon-name {
+    font-size: 1.3rem;
+  }
+
+  .pokemon-number {
+    font-size: 0.95rem;
+  }
+
+  .type-badge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+
+  .favorite-btn {
+    top: 10px;
+    right: 10px;
+    width: 46px;
+    height: 46px;
+    padding: 6px;
+  }
+}
 </style>

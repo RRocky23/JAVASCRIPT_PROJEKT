@@ -1,6 +1,12 @@
 <template>
   <div class="shop-container">
-    <h2 class="shop-title">Poké Mart</h2>
+    <div class="shop-header">
+      <h2 class="shop-title">Poké Mart</h2>
+      <div class="top-currency">
+        <span class="currency-icon">💰</span>
+        <span class="currency-amount">{{ currency }}</span>
+      </div>
+    </div>
 
     <div v-if="loading" class="text-center">
       <p>Loading shop items...</p>
@@ -70,6 +76,7 @@
         </div>
       </div>
     </div>
+    <BottomNav />
   </div>
 </template>
 
@@ -77,6 +84,7 @@
 import { ref, onMounted, computed } from 'vue';
 import axiosInstance from '../../utils/axios.js';
 import { useCurrency } from '../../composables/useCurrency.js';
+import BottomNav from '../../components/buttons/BottomNav.vue';
 
 const { currency, fetchCurrency, updateCurrency } = useCurrency();
 
@@ -223,6 +231,15 @@ onMounted(async () => {
   padding: 20px;
 }
 
+.shop-container {
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+  min-height: 0;
+  padding-bottom: 140px;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
 .shop-title {
   font-size: 2rem;
   font-weight: 900;
@@ -230,6 +247,30 @@ onMounted(async () => {
   margin-bottom: 30px;
   color: #333;
 }
+
+  /* Top header with centered currency */
+  .shop-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .top-currency {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  .top-currency .currency-icon {
+    font-size: 1.4rem;
+  }
 
 .shop-items {
   display: flex;
