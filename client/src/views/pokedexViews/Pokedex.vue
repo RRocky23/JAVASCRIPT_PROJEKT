@@ -19,7 +19,8 @@
                 </div>
             </div>
         </div>
-    </div>
+        <BottomNav />
+      </div>
 </template>
 
 <script setup>
@@ -32,6 +33,7 @@
   import axiosInstance from '../../utils/axios.js';
 
   import Header from '../../components/common/Header.vue';
+  import BottomNav from '../../components/buttons/BottomNav.vue';
   import PokemonSearch from '../../components/search/PokemonSearch.vue';
   import PokemonFilter from '../../components/search/PokemonFilter.vue';
   import Spinner from '../../components/common/Spinner.vue';
@@ -123,7 +125,8 @@ const closeFilterPanel = () => {
     display: flex;
     flex-direction: column;
     padding: 20px 24px 0;
-    overflow: hidden;
+    overflow: auto;
+    min-height: 0;
   }
 
   .search-container {

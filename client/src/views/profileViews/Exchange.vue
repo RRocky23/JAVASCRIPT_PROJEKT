@@ -230,7 +230,8 @@ const closeSuccessModal = () => {
   display: flex;
   flex-direction: column;
   padding: 20px 24px 0;
-  overflow: hidden;
+  overflow: auto;
+  min-height: 0;
 }
 
 .exchange-info {

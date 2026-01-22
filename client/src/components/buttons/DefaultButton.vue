@@ -113,4 +113,18 @@
         font-weight: bold;
         margin: 0 15px 0 0;
     }   
+
+    @media (max-width: 768px) {
+        .btn-defaults {
+            height: 76px;
+            font-size: 20px;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .google-icon {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+    }
 </style>

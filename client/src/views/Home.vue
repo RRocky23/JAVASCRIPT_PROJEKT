@@ -64,6 +64,14 @@
             <p>Manage your items</p>
           </div>
         </router-link>
+
+        <router-link to="/shop" class="action-card">
+          <div class="action-icon">🏪</div>
+          <div class="action-content">
+            <h3>Shop</h3>
+            <p>Buy items and supplies</p>
+          </div>
+        </router-link>
       </div>
     </div>
 
@@ -75,7 +83,7 @@
 import { ref, onMounted } from 'vue';
 import { useAuth } from '../composables/useAuth.js';
 import axiosInstance from '../utils/axios.js';
-import BottomNav from '../components/Buttons/BottomNav.vue';
+import BottomNav from '../components/buttons/BottomNav.vue';
 
 const { user, fetchUser } = useAuth();
 const pokemonCount = ref(0);
@@ -114,6 +122,12 @@ onMounted(async () => {
 .home-content {
   max-width: 800px;
   margin: 0 auto;
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+  min-height: 0;
+  padding-bottom: 140px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 .welcome-section {

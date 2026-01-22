@@ -146,7 +146,6 @@ const closeModal = () => {
 };
 
 const proceedToHome = async () => {
-  // Mark tutorial as complete
   try {
     await fetch('/api/profile/complete-tutorial', {
       method: 'POST',
@@ -156,7 +155,6 @@ const proceedToHome = async () => {
     console.error('Error completing tutorial:', error);
   }
 
-  // Navigate to home
   router.push('/home');
 };
 </script>
@@ -176,6 +174,11 @@ const proceedToHome = async () => {
   max-width: 1200px;
   width: 100%;
   text-align: center;
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+  padding-top: 20px;
+  padding-bottom: 220px;
+  box-sizing: border-box;
 }
 
 .title {
@@ -222,18 +225,19 @@ const proceedToHome = async () => {
 }
 
 .pokemon-image {
-  width: 150px;
-  height: 150px;
-  margin: 0 auto 20px;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 12px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .pokemon-image img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  display: block;
 }
 
 .pokemon-name {
@@ -331,7 +335,6 @@ const proceedToHome = async () => {
   font-weight: 600;
 }
 
-/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -389,20 +392,112 @@ const proceedToHome = async () => {
   transform: translateY(-2px);
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .title {
     font-size: 2rem;
   }
 
+  /* Lock page scrolling on mobile by making the wrapper full-viewport and fixed */
+  .starter-selection-wrapper {
+    position: fixed;
+    inset: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 1000;
+  }
+
   .starters-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 20px;
+    align-items: stretch;
+    grid-auto-rows: auto;
+    display: grid !important;
+    grid-auto-flow: row !important;
+    width: 100%;
+  }
+  .starter-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .pokemon-image {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+    margin: 0 0 12px 0;
+    display: block;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  .pokemon-image img {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .pokemon-name {
+    font-size: 1.6rem;
+  }
+
+  .pokemon-description {
+    font-size: 1rem;
   }
 
   .confirm-button {
     width: 100%;
     max-width: 300px;
+  }
+
+  .confirm-button {
+    padding: 18px 30px;
+    font-size: 1.25rem;
+    border-radius: 10px;
+  }
+
+  .starter-container::-webkit-scrollbar,
+  .starters-grid::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .starter-container::-webkit-scrollbar-thumb,
+  .starters-grid::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.12);
+    border-radius: 8px;
+  }
+
+  .starter-container { scrollbar-width: thin; }
+  .starters-grid { scrollbar-width: thin; }
+}
+
+@media (max-width: 1024px) {
+  .starters-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+    align-items: stretch;
+    grid-auto-rows: auto;
+    display: grid !important;
+    grid-auto-flow: row !important;
+    width: 100%;
+  }
+
+  .starter-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px;
+    width: 100% !important;
+    box-sizing: border-box;
   }
 }
 </style>

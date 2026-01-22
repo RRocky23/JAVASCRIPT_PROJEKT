@@ -264,6 +264,12 @@ const rejectTrade = async (tradeId) => {
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
+    max-height: calc(100vh - 140px);
+    overflow: auto;
+    min-height: 0;
+    padding-bottom: 140px;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
 }
 
 .section {
