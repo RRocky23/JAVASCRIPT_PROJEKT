@@ -56,7 +56,8 @@ const goToOnboarding4 = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .static-footer {

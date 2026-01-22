@@ -34,4 +34,14 @@
         height: 100%;
         display: block; 
     }
+
+    @media (max-width: 768px) {
+        .favourite-btn {
+            width: 50px;
+            height: 50px;
+            top: 10px;
+            right: 10px;
+            padding: 6px;
+        }
+    }
 </style>

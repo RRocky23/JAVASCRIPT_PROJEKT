@@ -191,7 +191,8 @@
   display: flex;
   flex-direction: column;
   padding: 20px 24px 0;
-  overflow: hidden;
+  overflow: auto;
+  min-height: 0;
 }
 
 .pokemon-list-container {

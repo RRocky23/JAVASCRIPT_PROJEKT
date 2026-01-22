@@ -76,4 +76,20 @@
     @keyframes spin {
         to { transform: rotate(360deg); }
     }
+
+    @media (max-width: 768px) {
+        .cta-btn {
+            height: 76px;
+            font-size: 20px;
+            max-width: 100%;
+            border-radius: 8px;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .spinner {
+            width: 22px;
+            height: 22px;
+        }
+    }
 </style>
