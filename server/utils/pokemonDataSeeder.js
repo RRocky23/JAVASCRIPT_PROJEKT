@@ -31,11 +31,11 @@ const getEvolutionDetails = async (evolutionChainUrl) => {
                 evolvesFrom: evolvesFrom || null,
                 evolutionMinLevel: minLevel
             });
-
             if(evolvesFrom) {
                 const evolvesFromId = parseInt(chainLink.evolution_details[0]?.species?.url?.split('/').filter(Boolean).pop() || 0);
                 evolutionLinks.push({
-                    pokemonId: evolvesFromId,
+                    chainId: chainId,
+                    pokemonId: speciesId - 1,
                     evolvesToPokemonId: speciesId,
                     minLevel: minLevel,
                     evolutionTrigger: trigger,

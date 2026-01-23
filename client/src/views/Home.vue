@@ -30,6 +30,14 @@
             <div class="stat-label">Trainer Level</div>
           </div>
         </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ money }}</div>
+            <div class="stat-label">Currency Balance</div>
+          </div>
+        </div>
       </div>
 
       <div class="action-cards">
@@ -89,18 +97,21 @@ const { user, fetchUser } = useAuth();
 const pokemonCount = ref(0);
 const discoveryCount = ref(0);
 const level = ref(1);
+const money = ref(0);
 
 onMounted(async () => {
   await fetchUser();
   
   try {
-    const [pokemonRes, discoveryRes] = await Promise.all([
+    const [pokemonRes, discoveryRes, moneyRes] = await Promise.all([
       axiosInstance.get('/api/profile/pokemon/count'),
-      axiosInstance.get('/api/profile/discoveries/count')
+      axiosInstance.get('/api/profile/discoveries/count'),
+      axiosInstance.get('/api/exchange/currency')
     ]);
     
     pokemonCount.value = pokemonRes.data.count || 0;
     discoveryCount.value = discoveryRes.data.count || 0;
+    money.value = moneyRes.data.currency || 0;
     
     level.value = Math.floor(pokemonCount.value / 10) + 1;
   } catch (err) {

@@ -386,5 +386,5 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@import '../client/src/styles/MapStyles.css';
+  @import '../client/src/styles/MapStyles.css';
 </style>
