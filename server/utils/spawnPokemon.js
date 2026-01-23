@@ -14,7 +14,6 @@ export async function spawnPokemonInstance() {
   const pokemon = weightedRandomPokemon(pokemons);
 
   const level = calculateLevel(pokemon, pokemons);
-  console.log(level)
 
   const baseStatsDoc = await PokemonStat.findOne({
     pokemonId: pokemon.pokedexNumber
