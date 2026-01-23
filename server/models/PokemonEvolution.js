@@ -1,6 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const pokemonEvolutionSchema = new Schema({
+    chainId: {
+        type: Number,
+        required: true
+    },
     pokemonId: {
         type: Number,
         required: true
