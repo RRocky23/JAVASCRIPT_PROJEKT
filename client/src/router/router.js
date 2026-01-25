@@ -36,7 +36,12 @@ router.beforeEach(async (to, from, next) => {
       // Check if user needs to select starter Pokemon
       try {
         const response = await fetch('/api/profile/tutorial-status', {
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
         });
         if (response.ok) {
           const data = await response.json();
@@ -60,7 +65,12 @@ router.beforeEach(async (to, from, next) => {
   if (token && to.path === '/home') {
     try {
       const response = await fetch('/api/profile/tutorial-status', {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
       });
       if (response.ok) {
         const data = await response.json();

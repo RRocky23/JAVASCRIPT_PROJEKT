@@ -95,6 +95,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import * as tokenService from "../../utils/tokenService.js";
 
 const router = useRouter();
 const selectedStarter = ref(null);
@@ -102,6 +103,7 @@ const isLoading = ref(false);
 const showSuccessModal = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
+const token = tokenService.getAccessToken();
 
 const selectStarter = (starter) => {
   selectedStarter.value = starter;
@@ -115,10 +117,16 @@ const confirmSelection = async () => {
   errorMessage.value = '';
 
   try {
+    if(!token) {
+      throw Error("Invalid access token")
+    }
+
     const response = await fetch('/api/profile/select-starter', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
       },
       credentials: 'include',
       body: JSON.stringify({ starter: selectedStarter.value })
@@ -147,9 +155,18 @@ const closeModal = () => {
 
 const proceedToHome = async () => {
   try {
+    if(!token) {
+      throw Error("Invalid access token.")
+    }
+
     await fetch('/api/profile/complete-tutorial', {
       method: 'POST',
-      credentials: 'include'
+      credentials: 'include',
+      headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+      },
     });
   } catch (error) {
     console.error('Error completing tutorial:', error);
