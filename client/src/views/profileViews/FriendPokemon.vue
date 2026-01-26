@@ -122,11 +122,6 @@ const loadFriendPokemon = async () => {
         const response = await axiosInstance.get(`/api/friends/${friendId}/pokemon`);
         friendPokemon.value = response.data;
 
-        // Get friend name from first Pokemon if available
-        if (friendPokemon.value.length > 0) {
-            // We don't have friend name in the response, so we'll keep it as "Friend"
-            // You could add an additional API call to get friend details if needed
-        }
     } catch (error) {
         console.error('Error loading friend Pokemon:', error);
         alert(error.response?.data?.error || 'Failed to load Pokemon');
