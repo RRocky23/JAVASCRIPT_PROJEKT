@@ -1,0 +1,140 @@
+.pokemon-details-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.pokemon-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 24px;
+  min-height: 400px;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 200px;
+}
+
+.pokemon-info-header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.pokemon-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.pokemon-number {
+  font-size: 1rem;
+  color: #fff;
+  opacity: 0.7;
+  margin: 2px 0 0 0;
+}
+
+.pokemon-sprite {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  margin-bottom: -100px;
+}
+
+.pokemon-tabs {
+  display: flex;
+  flex-direction: column;
+  margin-top: -34px;
+}
+
+.tab-buttons {
+  display: flex;
+  margin-bottom: 16px;
+  box-sizing: none;
+}
+
+.tab-buttons button {
+  padding: 5px 14px;
+  background-color: transparent;
+  color: white;
+  font-family: "Kode Mono";
+  border: none;
+  cursor: pointer;
+}
+
+.tab-buttons button.active {
+  background-color: #fff;
+  color: black;
+}
+
+.tab-content {
+  border-radius: 12px;
+  padding: 16px 24px;
+  min-height: 200px;
+}
+
+.about-grid, .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  border-bottom: solid 1px #00000020;
+  padding: 12px 0px;
+
+}
+
+.about-item, .stats-item {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 0px 14px;
+}
+
+.about-item-max {
+  grid-column: span 2;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #000000;
+  opacity: 0.7;
+  font-family: "Kode Mono";
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.label-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  object-fit: contain;
+}
+
+
+.value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000000;
+  font-family: "JetBrains Mono";
+  font-weight: 400;
+}
+
+.description {
+  color: #000000;
+  opacity: 0.7;
+}
+
+.about-types .types-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}

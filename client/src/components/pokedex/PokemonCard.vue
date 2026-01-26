@@ -60,18 +60,15 @@
 .pokemon-card {
   display: flex;
   align-items: center;
-  padding: 16px;
-  border-radius: 8px;
+  padding: 0 16px;
   cursor: pointer;
   transition: transform 0.2s;
   position: relative;
-  border: 1px solid #E0E0E0;
   overflow: hidden;
 }
 
 .pokemon-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .pokemon-sprite {

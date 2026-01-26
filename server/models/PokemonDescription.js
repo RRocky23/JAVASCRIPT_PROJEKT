@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const pokemonDescriptionSchema = new Schema ({
+const pokemonDescriptionSchema = new Schema({
     pokedexNumber: {
         type: Number,
         required: true

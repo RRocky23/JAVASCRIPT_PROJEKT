@@ -77,14 +77,12 @@
         width: 70px;
         height: 25px;
         padding: 4px 10px;
-        border-radius: 4px;
         perspective: 800px;
         cursor: pointer;
     }
 
     .type-badge-wrapper:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .type-badge {
@@ -102,7 +100,6 @@
     .type-face {
         position: absolute;
         inset: 0;
-        border-radius: 6px;
         backface-visibility: hidden;
         box-shadow: 0 1px 3px rgba(0,0,0,0.15);
         display: flex;
