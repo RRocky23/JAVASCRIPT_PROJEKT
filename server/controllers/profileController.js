@@ -127,6 +127,30 @@ export const getPokemonMoves = async (pokedexNumber) => {
   }
 };
 
+export const getPokemonSprites = async (pokedexNumber) => {
+  try {
+    const sprite = await PokemonSprite
+      .findOne({ pokedexNumber: Number(pokedexNumber) })
+      .select("pokedexAnimatedSprite");
+
+    const spriteStatic = await PokemonSprite
+      .findOne({ pokedexNumber: Number(pokedexNumber) })
+      .select("frontSprite");
+
+    if (!sprite) return null;
+
+    if(!spriteStatic) return null;
+
+    return {
+      spriteURL: sprite.pokedexAnimatedSprite,
+      sprite: spriteStatic.frontSpirte
+    };
+  } catch (err) {
+    console.error("Error fetching pokemon sprite:", err);
+    throw err;
+  }
+}
+
 export const getPokemonEvolutions = async (pokedexNumber) => {
   try {
     const pokemon = await Pokemon.findOne({ pokedexNumber: parseInt(pokedexNumber) });

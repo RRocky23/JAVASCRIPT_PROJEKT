@@ -4,7 +4,8 @@ import {
     getPokemonById,
     getPokemonStats,
     getPokemonMoves,
-    getPokemonEvolutions
+    getPokemonEvolutions,
+    getPokemonSprites
 } from "../controllers/profileController.js";
 
 import UserPokemon from "../models/UserPokemon.js";
@@ -65,12 +66,15 @@ router.get('/getPokemon/:id', async (req, res) => {
         const stats = await getPokemonStats(pokemonId);
         const moves = await getPokemonMoves(pokemonId);
         const evolutions = await getPokemonEvolutions(pokemonId);
+        const sprite = await getPokemonSprites(pokemonId);
 
         res.status(200).json({
             ...pokemon.toObject(),
             stats,
             moves,
-            evolutions
+            evolutions,
+            spriteURL: sprite?.spriteURL ?? null,
+            sprite: sprite?.sprite ?? null
         });
     } catch (err) {
         console.error('Error fetching pokemon details:', err);
