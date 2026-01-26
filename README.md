@@ -6,15 +6,15 @@ interakcje społeczne oraz eksplorację świata w przyjaznym, pixel‑artowym in
 
 *Funkcjonalności*
 
--Rejestracja i logowanie użytkowników (JWT + refresh token)
--Profil użytkownika
--Pokédex (dane z zewnętrznego API Pokémon)
--System ulubionych Pokémonów
--Lista znajomych i interakcje
--Widok mapy / eksploracji
--Onboarding (kilka ekranów startowych)
--Widok sklepu
--Responsywny interfejs (mobile‑first)
+-Rejestracja i logowanie użytkowników (JWT + refresh token)  
+-Profil użytkownika  
+-Pokédex (dane z zewnętrznego API Pokémon)  
+-System ulubionych Pokémonów  
+-Lista znajomych i interakcje  
+-Widok mapy / eksploracji  
+-Onboarding (kilka ekranów startowych)  
+-Widok sklepu  
+-Responsywny interfejs (mobile‑first)  
 
 *Wykorzystne technologie*
 
