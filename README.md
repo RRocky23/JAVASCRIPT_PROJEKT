@@ -42,12 +42,13 @@ Zewnętrzne API
 Przykładowa konfiguracja plików .env:
 
 client:
-
+```
 VITE_API_URL="http://localhost:(port_server)"
 VITE_PORT=(port_client)
+```
 
 server:
-
+```
 PORT = (port_server)
 NODE_ENV = "development"
 
@@ -63,10 +64,15 @@ JWT_EXPIRES_REMEMBER = "30m"
 JWT_REFRESH_SECRET = "TOP-SECRET_TOP-SECRET"
 REFRESH_EXPIRES = "12h"
 REFRESH_EXPIRES_REMEMBER = "14d"
+```
 
 *Uruchomienie projektu*  
 w roocie projektu  
+```
+
 npm run dev 
+```
+
 
 *Przykładowe widoki*  
 

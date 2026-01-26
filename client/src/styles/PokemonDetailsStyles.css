@@ -46,6 +46,7 @@
   height: 300px;
   object-fit: contain;
   margin-bottom: -100px;
+  image-rendering: pixelated;
 }
 
 .pokemon-tabs {
