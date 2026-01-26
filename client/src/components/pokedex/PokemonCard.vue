@@ -65,6 +65,7 @@
   transition: transform 0.2s;
   position: relative;
   overflow: hidden;
+  min-width: 340px;
 }
 
 .pokemon-card:hover {

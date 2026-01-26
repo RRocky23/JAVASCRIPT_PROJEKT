@@ -42,12 +42,14 @@
       <p>Nie znaleziono pokemona</p>
     </div>
   </div>
+  <BottomNav />
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axiosInstance from '../../utils/axios.js';
+import BottomNav from '../../components/buttons/BottomNav.vue';
 import AboutTab from './AboutTab.vue';
 import StatsTab from './StatsTab.vue';
 import MovesTab from './MovesTab.vue';
